@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  {% load static %}
+<div class="wrapper ">
+    {% include 'Nitor/sidebar.html' %}
+    <div class="main-panel">
+    	{% include 'Nitor/navbar.html'  %}
+    	<div class="content" >
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="card text-center" >  
+               <div class="card-header card-header-primary">
+                  <h4 class="card-title">Candidate list</h4>                  
+                </div>   
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          First Name
+                        </th>
+                        <th>
+                          Last Name
+                        </th>
+                        <th>
+                          email
+                        </th>
+                        <th>
+                          Contact
+                        </th>
+                        <th>
+                          View details
+                        </th>
+                      </thead> 
+                      <tbody>                           
+                {% for key,values in candidates.items %}
+                        <tr>
+                          <td>
+                            {{ key}}
+                          </td>
+                          <td>
+                            {{ values.fname}}
+                          </td>
+                          <td>
+                            {{ values.lname}}
+                          </td>
+                          <td class="text-primary">
+                            {{ values.email}}
+                          </td>
+                          <td >
+                            {{ values.contact}}
+                          </td>
+                          <td >
+                             <a href="/candidateProfile/{{values.id}}">
+                             <img src="{% static 'admin/img/eye.png' %}" width="20px" height="20px">
+                             </a>
+                          </td>
+                        </tr>     
+                  {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   
+     
+{% endblock %}
+  
+  

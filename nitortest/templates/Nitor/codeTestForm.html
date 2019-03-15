@@ -1,0 +1,20 @@
+{% load crispy_forms_tags %}  
+
+  <div class="row">
+      <div class="col-md-12"  style="{%if current == 'ct' or not current%}visibility: hidden{%endif%};position: absolute;" id='addmcq'>                          
+        <div class="card">
+          <div class="col-md-12">{{form1.question|as_crispy_field}}</div>
+          <div class="col-md-12">{{form1.total_options|as_crispy_field}}
+              <div class="col-md-12" id='op' style="padding-left: 30px;padding-top: 30px;"></div>        
+          </div>
+          <div class="col-md-12">
+              <div class="col-sm-3">
+              <button type="button" class="btn btn-sm btn-info" onclick="addOptions();" id="add_another">Add options</button>
+            </div>
+          </div>  
+          <div class="col-md-12">{{form1.correct_option|as_crispy_field}}</div>
+          <div class="col-sm-6"><button type="submit" class="btn btn-md btn-success">Add</button>   </div>
+        </div>
+        </div>
+                    
+      </div>

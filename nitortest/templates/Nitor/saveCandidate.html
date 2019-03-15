@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="wrapper ">
+    {% include 'Nitor/sidebar.html' %}
+    <div class="main-panel">
+    	{% include 'Nitor/navbar.html'  %}
+    	<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="card">
+                <span class="label label-success">Candidate saved successfully.</span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>      
+{% endblock %}
