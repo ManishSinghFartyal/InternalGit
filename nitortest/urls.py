@@ -11,5 +11,7 @@ urlpatterns = [
 	url(r'^listCandidate/$',views.listCandidates,name='candidateList'),
 	url(r'^candidateProfile/(?P<userid>\d+)$',views.candidateProfile,name='candidateProfile'),
 	url(r'^removeCandidate/(?P<userid>\d+)$',views.removeCandidate,name='removeCandidate'),
-	url(r'^addCode/$',views.showAddCode,name='addCode'),	
+	url(r'^addCode/$',views.showAddCode,name='addCode'),
+	url(r'^successQue/$',views.successQue,name='successQue'),
+	url(r'^createQuePaper/$',views.createQuePaper,name='createQuePaper'),
 ]

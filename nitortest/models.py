@@ -28,6 +28,8 @@ class Profile(models.Model):
 
 class Question(models.Model):
    qtype = models.CharField(max_length=50)
+   subject = models.CharField(max_length=40)
+   language = models.CharField(max_length=40)
    title = models.CharField(max_length=50,null=True)
    description = models.CharField(max_length=500)
    snippet=models.CharField(max_length=100,null=True)
@@ -35,3 +37,14 @@ class Question(models.Model):
    correct_option=models.CharField(max_length=2,null=True)
    testcases=models.CharField(max_length=300,null=True)     
    level=models.CharField(max_length=10,null=True)
+
+
+#############################################################################################################
+''' Question paper model to create question paper for exam '''
+#############################################################################################################
+
+class QuestionPaper(models.Model):
+   total_question = models.PositiveIntegerField(null=True)
+   mcq = models.CharField(max_length=1000,null=True)
+   coding=models.CharField(max_length=1000,null=True)
+   max_time=models.PositiveIntegerField(null=True)

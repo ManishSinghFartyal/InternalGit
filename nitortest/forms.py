@@ -80,6 +80,18 @@ level = (
     ('hard','Hard'),
     )
 
+
+sub = (
+    ('select','select subject'),
+    ('sql','Sql'),
+    ('code','Code'),
+    ('networking','Networking'),
+    ('aptitude','Aptitude'),
+    ('english','English'),
+    ('gk','Computer awareness'),   
+
+    )
+
 valid_username = letters + '._' + digits
 valid_password = letters + digits + punctuation
 
@@ -122,7 +134,6 @@ class UserRegisterForm(forms.Form):
         last_name=cleaned_data['last_name']        
         password=generate_Password()        
         username=generate_userid(first_name) 
-        print(username,"   ",password)       
         newUser=User.objects.create_user(username,email,password)        
         newUser.first_name = first_name
         newUser.last_name=last_name
@@ -164,12 +175,14 @@ class UserLoginForm(forms.Form):
             raise forms.ValidationError("Invalid username/password")
         return user
 
+
 #####################################
 '''Add Question  forms'''
 #####################################
 
 # MCQ question form
 class addMcqForm(forms.Form):
+    subject = forms.ChoiceField(choices=sub)
     question = forms.CharField(max_length=500,help_text='(Question)',widget=forms.Textarea )    
     correct_option=forms.ChoiceField(choices=correct_option)
     total_options = forms.CharField(max_length=20,widget = forms.TextInput(attrs={'readonly':'readonly'})) #,widget=forms.HiddenInput()
@@ -185,8 +198,11 @@ class addMcqForm(forms.Form):
 
     def clean_question(self):
         question = self.cleaned_data['question']
-        print(question)
-        if not question:
+        if question:
+            print('yes question')
+            question = self.cleaned_data['question']
+        else:
+            print('no question')
             raise forms.ValidationError('*Question missing.')
         return question
     
@@ -196,18 +212,16 @@ class addMcqForm(forms.Form):
         if options <2:
             raise forms.ValidationError('*Atleast needs two options for a question.')
         return options
-    
-
-    
-
 
 
 # coding test form
-class addCodingTestForm(forms.Form):    
+class addCodingTestForm(forms.Form):
+
     title = forms.CharField(max_length=500,required=True)
     description = forms.CharField(max_length=500,widget=forms.Textarea,required=True)
     snippet=forms.CharField(max_length=100,widget=forms.Textarea)
-    total_testcases_count=forms.CharField(max_length=300,) #widget=forms.HiddenInput()
+    language=forms.ChoiceField(choices=languages,required=True)
+    total_testcases_count=forms.CharField(max_length=300,widget = forms.TextInput(attrs={'readonly':'readonly'})) #widget=forms.HiddenInput()
     level=forms.ChoiceField(choices=level,required=True)
     def __init__(self, *args, **kwargs):
         extra_fields = kwargs.pop('extra', 0)
@@ -221,3 +235,9 @@ class addCodingTestForm(forms.Form):
                 forms.CharField()
             self.fields['outputs_{index}'.format(index=index)] = \
                 forms.CharField()
+
+class createQuestionPaper(forms.Form):
+    """docstring for createQuestionPaper"forms.rm def __init__(self, arg):
+        super (createQuestionPaper,forms.Form.__init__()
+        sexlf.arg = arg"""   
+    total_questions = forms.CharField(max_length=300,widget = forms.TextInput(attrs={'readonly':'readonly'}))

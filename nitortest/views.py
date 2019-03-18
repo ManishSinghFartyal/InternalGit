@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import UserRegisterForm,UserLoginForm,addCodingTestForm,addMcqForm
+from .forms import UserRegisterForm,UserLoginForm,addCodingTestForm,addMcqForm,createQuestionPaper
 from .models import Profile,Question
 from django.db.models import Q
 from django import forms
@@ -162,7 +162,8 @@ def showAddCode(request):
 					level=request.POST.get('level')
 					description=request.POST.get('description')
 					snippet=request.POST.get('snippet')
-					total_test_cases=int(request.POST.get('total_testcases_count'))					
+					language=request.POST.get('language')
+					total_test_cases=int(request.POST.get('total_testcases_count'))
 					if total_test_cases:
 						total_test_cases+=1
 						for index in range(1,total_test_cases):
@@ -171,19 +172,17 @@ def showAddCode(request):
 							output_str = 'output_'+str(index)
 							test_cases[case]={'testcase':request.POST.get(input_str),'output':request.POST.get(output_str)}
 					testcases=test_cases
-					#print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases)
-					question=Question(qtype=qtype,title=title,level=level,description=description,snippet=snippet,testcases=testcases)					
-					#question.save()
-					return HttpResponse("coding question saved")
+					print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases,'\n',language)
+					question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)					
+					question.save()
+					return HttpResponseRedirect("/successQue/")
 
 			#code to add mcq in database
 
 				elif qtype == 'mcq':
-					print('Question is mcq type')
-					form1 = addMcqForm(request.POST, extra=request.POST.get('total_options'))
-					print(form1.is_valid())
+					print(request.POST.get('total_options'))
+					form1 = addMcqForm(request.POST, {'extra':int(request.POST.get('total_options'))})
 					if form1.is_valid():
-						print('form is valid')
 						test_options={}
 						question=request.POST.get('question')
 						total_options=int(request.POST.get('total_options'))
@@ -194,12 +193,13 @@ def showAddCode(request):
 								test_options[option]=request.POST.get(option)
 						options = test_options
 						correct_option = request.POST.get('correct_option')
-						question=Question(qtype=qtype,description=question,options=options,correct_option=correct_option)
-						print(qtype,'\n',question,'\n',options,'\n',correct_option)
-						#question.save()					
-						return HttpResponse("MCQ saved")
+						subject= request.POST.get('subject')
+						question=Question(qtype=qtype,subject=subject,description=question,options=options,correct_option=correct_option)
+						print(qtype,'\n',question,'\n',options,'\n',correct_option,'\n',subject)
+						question.save()
+						return HttpResponseRedirect("/successQue/")
 					else:
-						return render(request,'Nitor/addCodingQuiz.html',{'form1':form1,'form2':form2,'current':'mcq'})						
+						return render(request,'Nitor/addCodingQuiz.html',{'form1':form1,'form2':form2,'current':'mcq'})
 
 				form = addCodingTestForm(request.POST, extra=request.POST.get('total_testcases_count'))
 				return HttpResponse("Data needs to be saved.")
@@ -210,3 +210,27 @@ def showAddCode(request):
 				return render(request,'Nitor/addCodingQuiz.html',context)
 	return index(request)
 
+
+
+# To show the success message after adding a question
+def successQue(request):
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			return render(request,'Nitor/queSuccessMessage.html')
+	return index(request)
+
+
+# To create question paper
+def createQuePaper(request):
+	questions = Question.objects.all()
+	form = createQuestionPaper()
+	context={'form':form,'questions':questions}
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			if request.method is 'POST':
+				print('mehod')
+			else:
+				return render(request,'Nitor/createQuestion.html',context)
+	return index(request)

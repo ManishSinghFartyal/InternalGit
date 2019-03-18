@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="wrapper ">
+    {% include 'Nitor/sidebar.html' %}
+    <div class="main-panel">
+    	{% include 'Nitor/navbar.html'  %}
+    	<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10" id='id_questions'>
+              <div class="card">
+                <div class="row">
+                  <div class="col-md-12 text-center" style="padding-top: 20px;">
+                    <h3> Create test  </h3>
+                     <hr>
+                  </div>
+                  <div class="col-md-12">                    
+                    <select class="form-control" onchange="showRelatedQue();" id='qtype' style="padding: 10px 10px 10px 10px;">
+                      <option selected="true" disabled="true" >Select question type</option>
+                      <option value='mcq'>Multiple choice questions</option>
+                      <option value="ct">Coding Questions</option>
+                    </select>                    
+                  </div>  
+                  <div class="col-md-12">                  
+                      <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          Type
+                        </th>                        
+                        <th>
+                          Question
+                        </th>                        
+                        <th>
+                          Subject
+                        </th>
+                        <th>
+                         Level
+                        </th>
+                      </thead> 
+                      <tbody>                           
+               {% for question in questions %}
+                        <tr>
+                          <td>
+                            {{question.qtype}}
+                          </td>
+                          <td>
+                          {% if question.title %}
+                              {{question.title}}
+                          {% else %}
+                              {{question.description}}
+                          {% endif %}
+                          </td>
+                          <td>
+                            {% if question.subject %}
+                              {{question.subject}}
+                          {% else %}
+                              {{question.language}}
+                          {% endif %}
+                          </td>
+                          <td>
+                            {% if question.level %}
+                              {{question.level}}                         
+                          {% endif %}
+                          </td>
+                          <td class="text-primary">
+                            <a href="#">Add</a>
+                          </td>
+                        </tr>     
+                  {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>                
+                </div>
+              </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<script type="text/javascript">  
+function showRelatedQue(){
+  qtype = document.getElementById('qtype')
+  if(qtype.value==='mcq'){
+   
+  }
+  else{
+   console.log('ct') 
+  }
+}
+</script>
+
+{% endblock %}

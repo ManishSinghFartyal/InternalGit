@@ -214,13 +214,3 @@ function showAddQuestion(){
 
 
 
-function showQuestionFormFrame() {
-   type=document.getElementById('qtype').value; 
-  if(type == 'ct')
-  {
-    document.getElementById('formFrame').src = '/mcqForm';
-  }    
-  else if(type == 'mcq'){
-    document.getElementById('formFrame').src = '/codeTestForm';
-  }  
-};
