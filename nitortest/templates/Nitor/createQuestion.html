@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="wrapper ">
+<style type="text/css">
+  strong{
+    font-size: 16px;
+    font-weight: bolder;
+  }
+
+</style>
+
     {% include 'Nitor/sidebar.html' %}
     <div class="main-panel">
     	{% include 'Nitor/navbar.html'  %}
@@ -9,71 +16,116 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-10" id='id_questions'>
-              <div class="card">
-                <div class="row">
-                  <div class="col-md-12 text-center" style="padding-top: 20px;">
-                    <h3> Create test  </h3>
-                     <hr>
-                  </div>
-                  <div class="col-md-12">                    
-                    <select class="form-control" onchange="showRelatedQue();" id='qtype' style="padding: 10px 10px 10px 10px;">
-                      <option selected="true" disabled="true" >Select question type</option>
-                      <option value='mcq'>Multiple choice questions</option>
-                      <option value="ct">Coding Questions</option>
-                    </select>                    
-                  </div>  
-                  <div class="col-md-12">                  
+              <div class="card" style="width: 120%">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-12 text-center" style="padding-top: 20px;">
+                      <div class="card-header card-header-primary">
+                        <h4 class="card-title"><u>Create Test</u></h4>
+                      </div>   
+                    </div>
+                    <div class="col-md-12">
+                      {% for message in messages %}
+                       <strong>{{message}}</strong>
+                      {% endfor %}
+                    </div>     
+                    <div class="col-md-12" style="padding-top: 20px;">
+                      {{form.title_qp|as_crispy_field}}
+                       
+                    </div>            
+                    <div class="col-md-12">
+                      {{form.totalquestions|as_crispy_field}}
+                    </div>
+                    
+                      
+                     <div class="col-md-12 text-center">
+                       <input type="checkbox" name="" checked="true" > All
+                       &nbsp;&nbsp;&nbsp;&nbsp;
+                       <input type="checkbox" name="" > MCQ
+                       &nbsp;&nbsp;&nbsp;&nbsp;
+                       <input type="checkbox" name="" > Coding Questions
+                     </div>                                      
+                    {% with questions as questions1 %} 
+                    <div class="col-md-12">                  
                       <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>
-                          Type
-                        </th>                        
-                        <th>
-                          Question
-                        </th>                        
-                        <th>
-                          Subject
-                        </th>
-                        <th>
-                         Level
-                        </th>
-                      </thead> 
-                      <tbody>                           
-               {% for question in questions %}
-                        <tr>
-                          <td>
-                            {{question.qtype}}
-                          </td>
-                          <td>
-                          {% if question.title %}
-                              {{question.title}}
-                          {% else %}
-                              {{question.description}}
-                          {% endif %}
-                          </td>
-                          <td>
-                            {% if question.subject %}
-                              {{question.subject}}
-                          {% else %}
-                              {{question.language}}
-                          {% endif %}
-                          </td>
-                          <td>
-                            {% if question.level %}
-                              {{question.level}}                         
-                          {% endif %}
-                          </td>
-                          <td class="text-primary">
-                            <a href="#">Add</a>
-                          </td>
-                        </tr>     
-                  {% endfor %}
-                      </tbody>
-                    </table>
+                      <table class="table">
+                        <thead class=" text-primary">
+                          <th></th>
+                          <th>
+                            Type
+                          </th>
+                          <th>
+                            Subject
+                          </th>                        
+                          <th>
+                            Question
+                          </th>                        
+                          <th>
+                           Level
+                          </th>
+                        </thead> 
+                        <tbody>
+                 {% for key,value in questions1.items %}
+                          <tr>
+                            <td class="text-primary">
+                              <input type="checkbox" name="questionid" onchange="changeTotal(this)"  value={{key}} >
+                            </td>                          
+                            <td>
+                              {{value.qtype}}
+                            </td>                        
+                            <td>
+                            {% if value.subject%}
+                                {{value.subject}}
+                              {% else %}
+                                  ---
+                              {% endif %}
+                            </td>
+                            <td>
+                               
+                               <div id='div{{key}}'>
+                                {{value.pre}}
+                                 <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                                              document.getElementById('div{{key}}').style.display = 'none';         
+                                              return false;
+                                          })();"><u>show more</u></button>
+                                  </a>
+                               </div>                                
+                                <div id="demo{{key}}" class="collapse">
+                               {{value.post}}
+                               <ol>
+                                {% if value.qtype == 'mcq' %}
+                                 {% for k,v in value.options.items %}
+                                    <li>{{v}}</li>
+                                 {% endfor %}
+                                {% endif %}
+                               </ol>
+                                </div>
+
+                            </td>
+                            <td>
+                              {% if value.level%}
+                                {{value.level}}
+                              {% else %}
+                                  ---
+                              {% endif %}
+                            </td>
+                          </tr>                         
+                    {% endfor %}
+                         
+                       {% endwith %} 
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+                     <div class="col-md-12">
+                      {{form.max_time|as_crispy_field}}
+                    </div>
+                    <div class="col-md-12">
+                       <button type="submit" class="btn btn-md btn-success">Create</button>
+                    </div>
                   </div>
-                  </div>                
-                </div>
+                </form>
               </div>
             </div> 
           </div>
@@ -81,14 +133,35 @@
       </div>
     </div>
 </div>
-<script type="text/javascript">  
+<script type="text/javascript">
+ 
+  (function () {
+    fetch('/getQuestions')
+      .then(response => response.json())
+      .then(json => {
+        console.log(json.questions)
+      })
+  })();
+  
 function showRelatedQue(){
-  qtype = document.getElementById('qtype')
-  if(qtype.value==='mcq'){
-   
+  qtype = document.getElementById('qtype').value;
+  console.log('questions =>', JSON.stringify("{{ questions }}"))
+  {% for question in questions %}
+  type="{{question.qtype}}"
+    if(type==qtype){
+      
+    }
+  {% endfor %}
+};
+
+function changeTotal(cb){
+  total = parseInt(document.getElementById("id_totalquestions").value);
+
+  if(cb.checked){
+    document.getElementById("id_totalquestions").value = total+1;
   }
   else{
-   console.log('ct') 
+   document.getElementById("id_totalquestions").value =total-1; 
   }
 }
 </script>

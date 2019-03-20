@@ -8,6 +8,8 @@ user who has been registered by admin
 '''
 import string
 import secrets as sc
+import json
+import ast
 
 
 '''
@@ -76,3 +78,59 @@ def saveMCQ(request):
 	correct_option = request.POST.get('correct_option')
 	question=Question(qtype=type,description=description,options=options,correct_option=correct_option)					
 	question.save()	
+
+
+# Create question object with string as json
+def createQuestionObject():
+	questions = Question.objects.all()
+	que={}
+	js=None
+	tc= None
+	for question in questions:
+		if question.options:
+			#question.options.replace("'",'"')
+			js=ast.literal_eval(question.options)
+			js = json.dumps(js)			
+			js= json.loads(js)
+		if question.testcases:
+			#question.testcases.replace("'",'"')
+			tc = ast.literal_eval(question.testcases)
+			tc = json.dumps(tc)			
+			tc= json.loads(tc)
+		desc= question.description
+		l = len(desc)
+		if question.title:
+			pre = question.title
+			post= desc
+		else:
+			pre = desc[:25]
+			post =desc[:l]
+		que[question.id] = {"qtype":question.qtype,"subject":question.subject or None,"language":question.language or None,"title":question.title or None,"description":question.description or None,"snippet":question.snippet or None,"options":js,"correct_option":question.correct_option or None,"testcases":tc,"level":question.level or None,"pre":pre,"post":post}	
+		
+	return que
+
+'''
+ Function takes input mixed questions list and part them into mcq and coding test
+'''
+def getCategorizedQuestions(questions):
+	mcq = []
+	ct= []
+	for question in questions:
+		que = Question.objects.get(id=question)
+		qtype = que.qtype
+		if qtype == 'mcq':
+			mcq.append(question)
+		elif qtype == 'ct':
+			ct.append(question)
+	return mcq,ct
+
+
+'''
+To get all candidates list
+'''
+def getAllCandidates():
+	candidates_list = Profile.objects.all()
+	candidate_dict = {}
+	for candidate in candidates_list:
+		candidate_dict[candidate.id] = candidate_profile(candidate.id)
+	return candidate_dict

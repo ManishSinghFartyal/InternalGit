@@ -27,16 +27,18 @@ class Profile(models.Model):
 #############################################################################################################
 
 class Question(models.Model):
-   qtype = models.CharField(max_length=50)
-   subject = models.CharField(max_length=40)
-   language = models.CharField(max_length=40)
+   qtype = models.CharField(max_length=50,null=True)
+   subject = models.CharField(max_length=40,null=True)
+   language = models.CharField(max_length=40,null=True)
    title = models.CharField(max_length=50,null=True)
    description = models.CharField(max_length=500)
    snippet=models.CharField(max_length=100,null=True)
    options = models.CharField(max_length=500,null=True)
    correct_option=models.CharField(max_length=2,null=True)
-   testcases=models.CharField(max_length=300,null=True)     
+   testcases=models.CharField(max_length=300,null=True)
    level=models.CharField(max_length=10,null=True)
+
+
 
 
 #############################################################################################################
@@ -44,7 +46,25 @@ class Question(models.Model):
 #############################################################################################################
 
 class QuestionPaper(models.Model):
+   title_qp = models.CharField(max_length=500,null=True)
    total_question = models.PositiveIntegerField(null=True)
    mcq = models.CharField(max_length=1000,null=True)
    coding=models.CharField(max_length=1000,null=True)
    max_time=models.PositiveIntegerField(null=True)
+
+
+
+
+
+################################################################################
+''' Candidate status for test '''
+################################################################################
+class CandidateStatus(models.Model):
+   candidate = models.PositiveIntegerField(null=True)
+   exam_date = models.DateField()
+   question_paper = models.PositiveIntegerField(null=True)
+   attempted = models.BooleanField(default=False)
+   score = models.CharField(max_length=1000,null=True,default=0)
+   total_time =models.PositiveIntegerField(null=True,default=0)
+   correct_mcq=models.PositiveIntegerField(null=True,default=0)
+   correct_ct=models.PositiveIntegerField(null=True,default=0)

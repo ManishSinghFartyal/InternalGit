@@ -14,4 +14,5 @@ urlpatterns = [
 	url(r'^addCode/$',views.showAddCode,name='addCode'),
 	url(r'^successQue/$',views.successQue,name='successQue'),
 	url(r'^createQuePaper/$',views.createQuePaper,name='createQuePaper'),
+	url(r'^assignTest/$',views.assignTest,name='assignTest'),
 ]

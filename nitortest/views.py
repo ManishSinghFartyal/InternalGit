@@ -1,12 +1,12 @@
 from django.shortcuts import render,redirect
 from .forms import UserRegisterForm,UserLoginForm,addCodingTestForm,addMcqForm,createQuestionPaper
-from .models import Profile,Question
+from .models import Profile,Question,QuestionPaper,CandidateStatus
 from django.db.models import Q
 from django import forms
 from django.contrib import messages
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ
+from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -34,7 +34,6 @@ def index1(request,next_url=None):
 #To check if user has admin rights
 def is_admin(userid):		
 	try:
-		print(userid)
 		userProfile = Profile.objects.get(userid=userid)
 		role=userProfile.role
 		if role == 1:
@@ -53,7 +52,7 @@ def add_user(request):
 			form = UserRegisterForm(request.POST)
 			if form.is_valid():
 				newUserProfile=form.save()
-				return saveUserSuccessNotification(request)
+				return successMessage(request,"Candidate saved successfully")
 			else:
 				return render(request,'Nitor/register.html',{'form':form})
 		form=UserRegisterForm()
@@ -103,6 +102,7 @@ def listCandidates(request):
 	return render(request,'/login')
 
 
+
 ##################### To view candidate profile using id #############################
 def candidateProfile(request,userid):
 	user=request.user
@@ -113,6 +113,7 @@ def candidateProfile(request,userid):
 	return index(request)
 
 
+##################### Code to show profile of a user ###############################
 def show_profile(request,profile):
 	if request.user.is_authenticated:
 		if request.user.is_superuser:			
@@ -135,6 +136,9 @@ def removeCandidate(request,userid):
 				return HttpResponseRedirect('/listCandidate')
 	return index(request)
 
+
+
+# save candidate method
 def saveCandidate(request):
 	if request.user.is_authenticated:
 		if request.user.is_superuser:
@@ -154,28 +158,29 @@ def showAddCode(request):
 		if user.is_superuser:
 			if request.method == 'POST':
 				qtype = request.POST.get('qtype')
-			#code to add coding test in database			
+			#code to add coding test in database
 				if qtype == 'ct':
 					form2 = addCodingTestForm(request.POST, extra=request.POST.get('total_testcases_count'))
-					test_cases={}
-					title= request.POST.get('title')
-					level=request.POST.get('level')
-					description=request.POST.get('description')
-					snippet=request.POST.get('snippet')
-					language=request.POST.get('language')
-					total_test_cases=int(request.POST.get('total_testcases_count'))
-					if total_test_cases:
-						total_test_cases+=1
-						for index in range(1,total_test_cases):
-							case='case'+str(index)
-							input_str = 'input_'+str(index)
-							output_str = 'output_'+str(index)
-							test_cases[case]={'testcase':request.POST.get(input_str),'output':request.POST.get(output_str)}
-					testcases=test_cases
-					print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases,'\n',language)
-					question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)					
-					question.save()
-					return HttpResponseRedirect("/successQue/")
+					if form2.is_valid():
+						test_cases={}
+						title= request.POST.get('title')
+						level=request.POST.get('level')
+						description=request.POST.get('description')
+						snippet=request.POST.get('snippet')
+						language=request.POST.get('language')
+						total_test_cases=int(request.POST.get('total_testcases_count'))
+						if total_test_cases:
+							total_test_cases+=1
+							for index in range(1,total_test_cases):
+								case='case'+str(index)
+								input_str = 'input_'+str(index)
+								output_str = 'output_'+str(index)
+								test_cases[case]={'testcase':request.POST.get(input_str),'output':request.POST.get(output_str)}
+						testcases=test_cases
+						print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases,'\n',language)
+						question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)					
+						question.save()
+						return successMessage(request,"One coding question saved successfully.")
 
 			#code to add mcq in database
 
@@ -197,7 +202,7 @@ def showAddCode(request):
 						question=Question(qtype=qtype,subject=subject,description=question,options=options,correct_option=correct_option)
 						print(qtype,'\n',question,'\n',options,'\n',correct_option,'\n',subject)
 						question.save()
-						return HttpResponseRedirect("/successQue/")
+						return successMessage(request,"One multiple choice question saved successfully.")
 					else:
 						return render(request,'Nitor/addCodingQuiz.html',{'form1':form1,'form2':form2,'current':'mcq'})
 
@@ -222,15 +227,79 @@ def successQue(request):
 
 
 # To create question paper
+def getQuestions(request):
+	# fetching all the questions from database to manage in interpolation
+	questions = Question.objects.values()
+	return JsonResponse({'questions': list(questions)})
+
+
+# To create question paper
 def createQuePaper(request):
+	# fetching all the questions from database to manage in interpolation
+	user=request.user
 	questions = Question.objects.all()
+	que = createQuestionObject()
 	form = createQuestionPaper()
-	context={'form':form,'questions':questions}
+	context={'form':form,'questions':que}
 	user=request.user
 	if user.is_authenticated:
 		if user.is_superuser:
-			if request.method is 'POST':
-				print('mehod')
+			if request.method == 'POST':
+				form = createQuestionPaper(request.POST)
+				total = int(request.POST.get('totalquestions'))
+				if total == 0:
+					messages.error(request,'**Questions not selected.')
+					return render(request,'Nitor/createQuestion.html',context)
+				title = request.POST.get('title_qp')
+				if not title:
+					messages.error(request,'**Please enter title.')
+					return render(request,'Nitor/createQuestion.html',context)
+				questions = request.POST.getlist('questionid')
+				mcq,ct=getCategorizedQuestions(questions)
+				maxtime = int(request.POST.get('max_time'))
+				if maxtime == 0:
+					messages.error(request,'**Enter max time')
+					return render(request,'Nitor/createQuestion.html',context)
+				qp = QuestionPaper(title_qp=title,total_question=total,mcq=mcq,coding=ct,max_time=maxtime)
+				qp.save()
+				return successMessage(request,"Question paper created successfully.")
 			else:
 				return render(request,'Nitor/createQuestion.html',context)
+	return index(request)
+
+
+
+# to show success message on completing some event.
+def successMessage(request,message):
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			return render(request,'Nitor/successMessage.html',{'message':message})
+	return index(request)
+
+def assignTest(request):
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			candidates=getAllCandidates()
+			question_papers = QuestionPaper.objects.all()
+			context = {'candidates':candidates,'papers':question_papers}
+			if request.method == 'POST':
+				ids= request.POST.getlist('candidate_id')
+				if ids is None:
+					messages.error(request,'**No candidate selected.')
+					return render(request,'Nitor/assignTest.html',context)
+				for i in ids:
+					test_str = i+"-paper"
+					date_str = i+"-date"
+					assigned_test = request.POST.get(test_str)
+					assigned_date =  request.POST.get(date_str)
+					if assigned_date == "" or assigned_test is None:
+						messages.error(request,' Either date of test or exam not selected.')
+						return render(request,'Nitor/assignTest.html',context)
+					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test)
+					c.save()
+				return HttpResponse("<h1>POST METHOD CALLED</h1>")
+			else:
+				return render(request,'Nitor/assignTest.html',context)
 	return index(request)

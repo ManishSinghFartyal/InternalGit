@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style type="text/css">
+  strong{
+    font-size: 16px;
+    font-weight: bolder;
+  }
+
+</style>
+
+<div class="wrapper ">
+    {% include 'Nitor/sidebar.html' %}
+    <div class="main-panel">
+    	{% include 'Nitor/navbar.html'  %}
+    	<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
+                {% csrf_token %}
+              <div class="card" >
+                <div class="col-md-12">
+                      {% for message in messages %}
+                       <strong>Error : {{message}}</strong>
+                      {% endfor %}
+                    </div> 
+              <!--
+                Candidates list to be select first
+               -->
+                <div id='c_list' class="col-md-12">
+                  <div class="col-md-12 text-info text-center">
+                    <h3 > <b>Candidates list</b></h3>
+                    <hr>
+                  </div>
+                  <form>
+                    <div class="table-responsive">
+                          <table class="table">
+                            <thead class=" text-primary">  
+                              <th></th>                        
+                              <th>
+                                Name
+                              </th>
+                              <th>
+                                Email
+                              </th>                        
+                              <th>
+                                Skills
+                              </th>                        
+                              <th>
+                               Exp.
+                              </th>                                            
+                              <th>
+                               Dept.
+                              </th>
+                              <th>
+                               Assign Test
+                              </th>
+                              <th>
+                                Test Date
+                              </th>
+                            </thead> 
+                            <tbody>
+                     {% for key,value in candidates.items %}
+                              <tr id='{{key}}-td'>
+                                <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{key}}" id="{{key}}-check"></td>      
+                                <td>{{value.fname}}&nbsp;{{value.lname}}</td>
+                                <td>{{value.email}}</td>
+                                <td>{{value.skill|upper}}</td>
+                                <td>{{value.experience}}</td>
+                                <td>{{value.department|upper}}</td>
+                                <td>
+                                  <select class="form-control form-control-sm browser-default custom-select" name="{{key}}-paper" id="{{key}}-paper" disabled="true">
+                                    <option disabled="true" selected="true" value="">Select test</option>
+                                  {% for question in papers %}
+                                    <option value={{question.id}}>{{question.title_qp}}</option>
+                                  {% endfor %}
+                                  </select>
+                                </td>
+                                 <td><input type="date" id="{{key}}-date" name="{{key}}-date" class="form-control form-control-sm" disabled="true"></td>
+                              </tr>                         
+                      {% endfor %}
+                              <tr>
+                                <td><button class="btn btn-primary">Submit</button></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div> 
+                    </form>            
+                   </div>
+                  <div>
+                 </div>                
+              </div>
+            </form>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    function dynamicRow(cb,key){
+        date_str = key+'-date';
+        paper_str = key+'-paper';
+        row=key+'-td';
+        date=document.getElementById(date_str);
+        paper=document.getElementById(paper_str);
+        if(!cb.checked){
+           paper.disabled=true
+           date.disabled = true
+           document.getElementById(row).style.background = '#fff'
+        }
+        else{
+          date.disabled = false
+          paper.disabled=false
+          document.getElementById(row).style.background = '#ff93'       
+        }
+        return false;
+    };
+    $(function() {
+      {% for key,value in candidates.items %}
+        key = '{{key}}'
+        date_str = key+'-date';
+        paper_str = key+'-paper';
+        row=key+'-td';
+        check_str = key+"-check";
+        if(!document.getElementById(check_str).checked){
+          document.getElementById(date_str).disabled=true;
+          document.getElementById(paper_str).disabled=true;
+          document.getElementById(row).style.background = '#fff'
+        }
+        else{
+          document.getElementById(date_str).disabled=false;
+          document.getElementById(paper_str).disabled=false;
+          document.getElementById(row).style.background = '#ff93'       
+        }        
+      {% endfor %}
+      return false;
+      });
+
+    function checkBeforeSubmit(){
+      {% for key,value in candidates.items %}
+        key = '{{key}}'
+        date_str = key+'-date';
+        paper_str = key+'-paper';
+        row=key+'-td';
+        check_str = key+"-check";
+        error = key+"-error";
+        if(document.getElementById(check_str).checked)
+        {
+          date=document.getElementById(date_str).value
+          paper=document.getElementById(paper_str).value
+
+            if((date=="")||(paper==""))
+            {
+              if(document.getElementById(error))
+                {
+                   document.getElementById(row).removeChild('strong');              
+                }
+             er =  document.createElement('strong');
+             er.setAttribute('id','{{key}}-error')
+             er.innerHTML = "Need to fill this first"; 
+             document.getElementById(row).appendChild(er);
+             document.getElementById(row).focus();
+             return false;
+            }
+            document.getElementById(row).style.background = '#ff93'
+            return false;          
+         }         
+      {% endfor %}      
+    }
+    </script>
+{% endblock %}

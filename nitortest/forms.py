@@ -105,36 +105,36 @@ class UserRegisterForm(forms.Form):
     #           period and underscores only.')
     
     first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)   
+    last_name = forms.CharField(max_length=30)
     email = forms.EmailField()     
     education = forms.ChoiceField(choices=education)
     department = forms.ChoiceField(choices=department)
     skill=forms.ChoiceField(choices=languages)
     experience = forms.ChoiceField(choices=experience)
     contact = forms.DecimalField()    
-    def clean_first_name(self):        
-        first_name=self.cleaned_data['first_name']         
+    def clean_first_name(self): 
+        first_name=self.cleaned_data['first_name']
         if first_name.strip(letters):
             raise forms.ValidationError('First Name is invalid')
         return first_name
-    def clean_last_name(self):        
-        last_name=self.cleaned_data['last_name']        
+    def clean_last_name(self): 
+        last_name=self.cleaned_data['last_name']
         if last_name.strip(letters):
             raise forms.ValidationError('Last Name is invalid')
         return last_name
-    def clean_email(self):        
+    def clean_email(self):
         user_email = self.cleaned_data['email']
         if User.objects.filter(email=user_email).exists():
             raise forms.ValidationError("This email already exists, Please use different email")
         return user_email
     def save(self,commit=True,*args,**kwargs):
         cleaned_data=self.cleaned_data
-        email=cleaned_data['email']        
-        first_name=cleaned_data['first_name']                
-        last_name=cleaned_data['last_name']        
-        password=generate_Password()        
-        username=generate_userid(first_name) 
-        newUser=User.objects.create_user(username,email,password)        
+        email=cleaned_data['email']
+        first_name=cleaned_data['first_name']
+        last_name=cleaned_data['last_name']
+        password=generate_Password()
+        username=generate_userid(first_name)
+        newUser=User.objects.create_user(username,email,password)
         newUser.first_name = first_name
         newUser.last_name=last_name
         newUser.save()
@@ -239,5 +239,7 @@ class addCodingTestForm(forms.Form):
 class createQuestionPaper(forms.Form):
     """docstring for createQuestionPaper"forms.rm def __init__(self, arg):
         super (createQuestionPaper,forms.Form.__init__()
-        sexlf.arg = arg"""   
-    total_questions = forms.CharField(max_length=300,widget = forms.TextInput(attrs={'readonly':'readonly'}))
+        sexlf.arg = arg""" 
+    title_qp = forms.CharField(max_length=500,help_text="Question paper explanation like (For candidates/Level of difficulty etc.)",label='Title')  
+    totalquestions = forms.CharField(max_length=10,widget = forms.TextInput(attrs={'readonly':'readonly'}),initial=0,label='Total questions you have selected.')
+    max_time = forms.DecimalField(label='Maximum time to solve test(minutes)',initial=0)
