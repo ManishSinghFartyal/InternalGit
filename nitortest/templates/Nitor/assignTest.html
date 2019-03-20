@@ -4,8 +4,9 @@
 
 <style type="text/css">
   strong{
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bolder;
+    color:red;
   }
 
 </style>
@@ -114,6 +115,8 @@
         else{
           date.disabled = false
           paper.disabled=false
+          paper.setAttribute('required',true)
+          date.setAttribute('required',true)
           document.getElementById(row).style.background = '#ff93'       
         }
         return false;
@@ -139,37 +142,5 @@
       return false;
       });
 
-    function checkBeforeSubmit(){
-      {% for key,value in candidates.items %}
-        key = '{{key}}'
-        date_str = key+'-date';
-        paper_str = key+'-paper';
-        row=key+'-td';
-        check_str = key+"-check";
-        error = key+"-error";
-        if(document.getElementById(check_str).checked)
-        {
-          date=document.getElementById(date_str).value
-          paper=document.getElementById(paper_str).value
-
-            if((date=="")||(paper==""))
-            {
-              if(document.getElementById(error))
-                {
-                   er1 = document.getElementById(error);
-                   er1.parentNode.removeChild(er1);
-                }
-             er =  document.createElement('strong');
-             er.setAttribute('id','{{key}}-error')
-             er.innerHTML = "Need to fill this first"; 
-             document.getElementById(row).appendChild(er);
-             document.getElementById(row).focus();
-             return false;
-            }
-            document.getElementById(row).style.background = '#ff93'
-            return false;          
-         }         
-      {% endfor %}      
-    }
     </script>
 {% endblock %}
