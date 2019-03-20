@@ -286,7 +286,8 @@ def assignTest(request):
 			context = {'candidates':candidates,'papers':question_papers}
 			if request.method == 'POST':
 				ids= request.POST.getlist('candidate_id')
-				if ids is None:
+				print(ids)
+				if not ids:
 					messages.error(request,'**No candidate selected.')
 					return render(request,'Nitor/assignTest.html',context)
 				for i in ids:
