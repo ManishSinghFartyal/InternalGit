@@ -156,7 +156,8 @@
             {
               if(document.getElementById(error))
                 {
-                   document.getElementById(row).removeChild('strong');              
+                   er1 = document.getElementById(error);
+                   er1.parentNode.removeChild(er1);
                 }
              er =  document.createElement('strong');
              er.setAttribute('id','{{key}}-error')
