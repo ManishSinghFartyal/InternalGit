@@ -6,7 +6,7 @@ from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates
+from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -94,7 +94,7 @@ def listCandidates(request):
 	user = request.user
 	if user.is_authenticated:
 		if user.is_superuser:
-			candidates = list_of_candidates()			
+			candidates = list_of_candidates()
 			return render(request,'Nitor/candidatesList.html',{'candidates':candidates})
 		else:
 			return index(request)
@@ -277,6 +277,7 @@ def successMessage(request,message):
 			return render(request,'Nitor/successMessage.html',{'message':message})
 	return index(request)
 
+# Code to assign the test for canidates.
 def assignTest(request):
 	user=request.user
 	if user.is_authenticated:
@@ -300,7 +301,20 @@ def assignTest(request):
 						return render(request,'Nitor/assignTest.html',context)
 					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test)
 					c.save()
-				return HttpResponse("<h1>POST METHOD CALLED</h1>")
+				return successMessage(request,"Successfully asssigned")
 			else:
 				return render(request,'Nitor/assignTest.html',context)
 	return index(request)
+
+# Code to show question papers
+def questionPapers(request):
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			qp = getQuestionPaper()
+			return render(request,'Nitor/questionPaper.html',{'paper':qp})
+	return index(request)
+
+def fetchQuestionPaper(request,questionid):
+	print(questionid)
+	return render(request,'Nitor/showQuestion.html')

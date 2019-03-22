@@ -1,6 +1,6 @@
+{% load static %}
 
-
-<div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg" >
+<div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -39,7 +39,7 @@
           <li class="nav-item " >
             <a class="nav-link" href="/listCandidate">
               <i class="material-icons">person</i>
-              <p>List all candidates</p>
+              <p>List candidates</p>
             </a>
           </li>
           <li class="nav-item ">
@@ -60,12 +60,19 @@
               <i class="material-icons">note_add</i>
               <p>Create question paper</p>
             </a>
-          </li>  <li class="nav-item ">
+          </li>
+          <li class="nav-item ">
             <a class="nav-link" href="/assignTest" id='addcode'>
               <i class="material-icons">code</i>
               <p>Assign test</p>
             </a>
-          </li>         
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/questionPapers" id='addcode'>
+              <i class="material-icons">forum</i>
+              <p>Question papers</p>
+            </a>
+          </li>
           {% endif %}    
           {% endif %}
            {%if request.user.is_authenticated%}

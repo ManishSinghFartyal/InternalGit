@@ -32,7 +32,7 @@
                -->
                 <div id='c_list' class="col-md-12">
                   <div class="col-md-12 text-info text-center">
-                    <h3 > <b>Candidates list</b></h3>
+                    <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Candidate list</u></b></h3>
                     <hr>
                   </div>
                   <form>
@@ -52,25 +52,26 @@
                               <th>
                                Exp.
                               </th>                                            
-                              <th>
-                               Dept.
-                              </th>
+                              
                               <th>
                                Assign Test
                               </th>
                               <th>
                                 Test Date
                               </th>
+                              <th>
+                                Assigned
+                              </th>
                             </thead> 
                             <tbody>
                      {% for key,value in candidates.items %}
                               <tr id='{{key}}-td'>
-                                <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{key}}" id="{{key}}-check"></td>      
+                                <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{key}}" id="{{key}}-check"></td>
                                 <td>{{value.fname}}&nbsp;{{value.lname}}</td>
                                 <td>{{value.email}}</td>
                                 <td>{{value.skill|upper}}</td>
                                 <td>{{value.experience}}</td>
-                                <td>{{value.department|upper}}</td>
+                                
                                 <td>
                                   <select class="form-control form-control-sm browser-default custom-select" name="{{key}}-paper" id="{{key}}-paper" disabled="true">
                                     <option disabled="true" selected="true" value="">Select test</option>
@@ -80,6 +81,7 @@
                                   </select>
                                 </td>
                                  <td><input type="date" id="{{key}}-date" name="{{key}}-date" class="form-control form-control-sm" disabled="true"></td>
+                                 <td style="{%if value.status == 'Already Assigned' %}color: green;{%else%}color: red;{%endif%}">{{value.status}}</td>
                               </tr>                         
                       {% endfor %}
                               <tr>
@@ -93,7 +95,7 @@
                   <div>
                  </div>                
               </div>
-            </form>
+             </form>
             </div> 
           </div>
         </div>
@@ -117,7 +119,7 @@
           paper.disabled=false
           paper.setAttribute('required',true)
           date.setAttribute('required',true)
-          document.getElementById(row).style.background = '#ff93'       
+          document.getElementById(row).style.background = '#0013'       
         }
         return false;
     };
@@ -136,7 +138,7 @@
         else{
           document.getElementById(date_str).disabled=false;
           document.getElementById(paper_str).disabled=false;
-          document.getElementById(row).style.background = '#ff93'       
+          document.getElementById(row).style.background = '#f093'       
         }        
       {% endfor %}
       return false;

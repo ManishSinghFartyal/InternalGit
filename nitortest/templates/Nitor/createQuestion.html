@@ -67,9 +67,9 @@
                         </thead> 
                         <tbody>
                  {% for key,value in questions1.items %}
-                          <tr>
+                          <tr id="{{key}}-row">
                             <td class="text-primary">
-                              <input type="checkbox" name="questionid" onchange="changeTotal(this)"  value={{key}} >
+                              <input type="checkbox" name="questionid" onchange="changeTotal(this,'{{key}}')"  value={{key}} >
                             </td>                          
                             <td>
                               {{value.qtype}}
@@ -154,16 +154,20 @@ function showRelatedQue(){
   {% endfor %}
 };
 
-function changeTotal(cb){
+function changeTotal(cb,key){
+  row = key+"-row";
   total = parseInt(document.getElementById("id_totalquestions").value);
 
   if(cb.checked){
     document.getElementById("id_totalquestions").value = total+1;
+    document.getElementById(row).style.background = '#0007';
   }
   else{
-   document.getElementById("id_totalquestions").value =total-1; 
+   document.getElementById("id_totalquestions").value =total-1;
+   document.getElementById(row).style.background = '#fff'; 
   }
-}
+};
+
 </script>
 
 {% endblock %}

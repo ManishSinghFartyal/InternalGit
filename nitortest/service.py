@@ -1,4 +1,4 @@
-from .models import Profile,Question
+from .models import Profile,Question,CandidateStatus,QuestionPaper
 from django.contrib.auth.models import User
 
 
@@ -44,11 +44,17 @@ To get all the candidates list from database
 '''
 def list_of_candidates():
 	candidates={}
-	allProfiles = Profile.objects.all()
+	try:
+		allProfiles = Profile.objects.all()
+	except:
+		return candidates
 	for profile in allProfiles:
 		if profile.role == 2:
-			user= User.objects.get(username=profile.userid)
-			candidates[profile.userid] = {'id':user.id,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department}
+			try:
+				user= User.objects.get(username=profile.userid)
+				candidates[profile.userid] = {'id':user.id,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department}
+			except:
+				return candidates
 	#print(candidates['Prashant_??&']['fname'],'  ',candidates['Prashant_??&']['lname'],'  ',candidates['Prashant_??&']['email'])
 	return candidates
 
@@ -57,9 +63,17 @@ def list_of_candidates():
 # Show candidate profile
 def candidate_profile(userid):
 	candidate={}
-	profile = Profile.objects.get(user_id=userid)
-	user= User.objects.get(id=userid)
-	candidate = {'id':user.id,'userid':profile.userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department}
+	try:
+		profile = Profile.objects.get(user_id=userid)
+		try:
+			c_status = CandidateStatus.objects.get(candidate=userid)
+			cs='Already Assigned'
+		except:
+			cs = 'Not assigned'
+		user= User.objects.get(id=userid)
+		candidate = {'id':user.id,'userid':profile.userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
+	except:
+		return candidate
 	return candidate
 
 
@@ -74,7 +88,6 @@ def saveMCQ(request):
 			option='option_'+str(index)							
 			test_options[option]=request.POST.get(option)
 	options = test_options
-	print(options)
 	correct_option = request.POST.get('correct_option')
 	question=Question(qtype=type,description=description,options=options,correct_option=correct_option)					
 	question.save()	
@@ -82,7 +95,10 @@ def saveMCQ(request):
 
 # Create question object with string as json
 def createQuestionObject():
-	questions = Question.objects.all()
+	try:
+		questions = Question.objects.all()
+	except:
+		return que
 	que={}
 	js=None
 	tc= None
@@ -113,15 +129,15 @@ def createQuestionObject():
  Function takes input mixed questions list and part them into mcq and coding test
 '''
 def getCategorizedQuestions(questions):
-	mcq = []
-	ct= []
+	mcq = {}
+	ct= {}
 	for question in questions:
 		que = Question.objects.get(id=question)
 		qtype = que.qtype
 		if qtype == 'mcq':
-			mcq.append(question)
+			mcq[que.id] = {'desc':que.description,'options': que.options}
 		elif qtype == 'ct':
-			ct.append(question)
+			ct[que.id] = que.description
 	return mcq,ct
 
 
@@ -129,8 +145,25 @@ def getCategorizedQuestions(questions):
 To get all candidates list
 '''
 def getAllCandidates():
-	candidates_list = Profile.objects.all()
-	candidate_dict = {}
+	candidate_dict = {}	
+	try:
+		candidates_list = Profile.objects.all()
+	except:
+		return candidates_dict
 	for candidate in candidates_list:
-		candidate_dict[candidate.id] = candidate_profile(candidate.id)
+		if candidate.role == 2:
+			candidate_dict[candidate.id] = candidate_profile(candidate.id)
 	return candidate_dict
+
+'''
+To get all question paper details
+'''
+def getQuestionPaper():
+	q_paper={}
+	try:
+		q_paper_db = QuestionPaper.objects.all()
+		for paper in q_paper_db:			
+			q_paper[paper.id] = {'title':paper.title_qp,'total_q':paper.total_question,'mcq':paper.mcq,'coding':paper.coding,'max_time':paper.max_time}
+	except:
+		return q_paper
+	return q_paper
