@@ -51,11 +51,10 @@ def list_of_candidates():
 	for profile in allProfiles:
 		if profile.role == 2:
 			try:
-				user= User.objects.get(username=profile.userid)
+				user= User.objects.get(id=profile.user_id)
 				candidates[profile.userid] = {'id':user.id,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department}
 			except:
-				return candidates
-	#print(candidates['Prashant_??&']['fname'],'  ',candidates['Prashant_??&']['lname'],'  ',candidates['Prashant_??&']['email'])
+				continue
 	return candidates
 
 
@@ -70,7 +69,7 @@ def candidate_profile(userid):
 		else:
 			cs = 'Not assigned'
 		user= User.objects.get(id=userid)
-		candidate = {'id':user.id,'userid':profile.userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
+		candidate = {'id':user.id,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
 	except:
 		return candidate
 	return candidate
@@ -151,7 +150,8 @@ def getAllCandidates():
 		return candidates_dict
 	for candidate in candidates_list:
 		if candidate.role == 2:
-			candidate_dict[candidate.id] = candidate_profile(candidate.id)
+			print(candidate.user_id)		
+			candidate_dict[candidate.id] = candidate_profile(candidate.user_id)
 	return candidate_dict
 
 '''

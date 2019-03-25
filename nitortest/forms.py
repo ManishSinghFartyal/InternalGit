@@ -132,13 +132,15 @@ class UserRegisterForm(forms.Form):
         email=cleaned_data['email']
         first_name=cleaned_data['first_name']
         last_name=cleaned_data['last_name']
+        username = first_name+""+last_name
+        print("Username = ",username)
         password=generate_Password()
-        username=generate_userid(first_name)
         newUser=User.objects.create_user(username,email,password)
         newUser.first_name = first_name
         newUser.last_name=last_name
         newUser.save()
-        userid=username
+        userid=email
+        print("userid =",userid)
         education=cleaned_data['education']
         department=cleaned_data['department']
         experience=cleaned_data['experience']

@@ -17,10 +17,7 @@
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
-                      <thead class=" text-primary">
-                        <th>
-                          ID
-                        </th>
+                      <thead class=" text-primary">                      
                         <th>
                           First Name
                         </th>
@@ -40,9 +37,6 @@
                       <tbody>                           
                 {% for key,values in candidates.items %}
                         <tr>
-                          <td>
-                            {{ key}}
-                          </td>
                           <td>
                             {{ values.fname}}
                           </td>
