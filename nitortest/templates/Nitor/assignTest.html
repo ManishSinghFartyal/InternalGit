@@ -65,9 +65,10 @@
                             </thead> 
                             <tbody>
                      {% for key,value in candidates.items %}
+
                               <tr id='{{key}}-td'>
                                 <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{key}}" id="{{key}}-check"></td>
-                                <td>{{value.fname}}&nbsp;{{value.lname}}</td>
+                                <td>{{value.fname}}&nbsp;{{value.lname}} </td>
                                 <td>{{value.email}}</td>
                                 <td>{{value.skill|upper}}</td>
                                 <td>{{value.experience}}</td>
@@ -81,7 +82,15 @@
                                   </select>
                                 </td>
                                  <td><input type="date" id="{{key}}-date" name="{{key}}-date" class="form-control form-control-sm" disabled="true"></td>
-                                 <td style="{%if value.status == 'Already Assigned' %}color: green;{%else%}color: red;{%endif%}">{{value.status}}</td>
+                                 <td>
+                                  {%if value.status == 'Already Assigned' %}
+                                    <a href="/candidatestatus/{{key}}" style="color: green;">
+                                     {{value.status}}
+                                    </a>
+                                   {% else %}
+                                    {{value.status}}
+                                  {% endif %}
+                                </td>
                               </tr>                         
                       {% endfor %}
                               <tr>

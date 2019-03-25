@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <div class="card">
+ 	<div class="row text-center">
+ 		<div class="col-lg-12">
+ 			 	{% include 'Nitor/navbar.html'  %}
+ 			 	<br><br>
+ 		</div>
+ 		{% for key,value in status.items %}
+ 		<div class="col-lg-6" style="padding: 20px 20px 20px 20px;">			
+ 			<div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,0,0,0.5){%else%}background-color: rgba(0,255,0,0.5);{%endif%}">
+ 				<table>
+ 					<tr><td>Test Assigned</td><td>:</td><td><a href="/fetchQuestionPaper/{{value.paperId}}">{{value.paper_title}}</a></td></tr>
+ 					<tr><td>Scheduled in : </td><td>:</td><td>{{value.date}}</td></tr>
+ 					<tr><td>Total score : </td><td>:</td><td>{{value.score}}</td></tr>
+ 					<tr><td>Total time taken</td><td>:</td><td>{{value.time_taken}}</td></tr>
+ 					<tr><td>Correct mcq</td><td>:</td><td>{{value.mcq_correct}}</td></tr>
+ 					<tr><td>Coding correct</td><td>:</td><td>{{value.coding_correct}}</td> </tr>
+ 					<tr>{% if value.attempted == False%}
+ 					  <strong><u>Not attempted</u></strong>
+ 					  {%else%}
+ 					  <strong><u>Attempted</u></strong>
+ 					 {% endif %}
+ 					 <hr>
+ 					</tr>
+ 					 <tr>
+ 					 	<td><hr><a href="" class="btn btn-primary btn-sm">Remove</a></td>
+ 					 </tr>		 				
+ 				</table>
+ 			</div>
+ 		</div>
+ 		{% endfor %}
+ 	</div>
+ </div>
+{% endblock %}

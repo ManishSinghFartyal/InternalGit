@@ -65,10 +65,9 @@ def candidate_profile(userid):
 	candidate={}
 	try:
 		profile = Profile.objects.get(user_id=userid)
-		try:
-			c_status = CandidateStatus.objects.get(candidate=userid)
+		if CandidateStatus.objects.filter(candidate=userid).count() >= 1:
 			cs='Already Assigned'
-		except:
+		else:
 			cs = 'Not assigned'
 		user= User.objects.get(id=userid)
 		candidate = {'id':user.id,'userid':profile.userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
@@ -167,3 +166,37 @@ def getQuestionPaper():
 	except:
 		return q_paper
 	return q_paper
+
+def getPaper(q_paper):
+	paper = {}
+	mcqjson={}
+	mcq=ast.literal_eval(q_paper.mcq)
+	mcq = json.dumps(mcq)			
+	mcq= json.loads(mcq)
+	for key,value in mcq.items():
+		mcqvalues=ast.literal_eval(value['options'])
+		mcqvalues=json.dumps(mcqvalues)
+		mcqvalues=json.loads(mcqvalues)
+		#print(type(mcqvalues))
+		mcq[key]['options'] = mcqvalues
+	
+	coding=ast.literal_eval(q_paper.coding)
+	coding = json.dumps(coding)			
+	coding= json.loads(coding)
+	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':coding,'max_time':q_paper.max_time}
+	return paper
+
+def getCandidateStatus(candidateid):
+	candidate_status = {}
+	try:		
+		status=CandidateStatus.objects.filter(candidate=candidateid)
+		for i in status:
+			paper = QuestionPaper.objects.filter(id=i.question_paper)
+			title = ""
+			for p in paper:
+				title = p.title_qp
+			candidate_status[i.id] = {'paperId':i.question_paper,'paper_title':title,'date':i.exam_date,'attempted':i.attempted,'score':i.score,'time_taken':i.total_time,'mcq_correct':i.correct_mcq,'coding_correct':i.correct_ct}
+	except:
+		candidate_status = {}
+	return candidate_status
+

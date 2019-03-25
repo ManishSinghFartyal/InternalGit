@@ -16,5 +16,7 @@ urlpatterns = [
 	url(r'^createQuePaper/$',views.createQuePaper,name='createQuePaper'),
 	url(r'^assignTest/$',views.assignTest,name='assignTest'),
 	url(r'^questionPapers/$',views.questionPapers,name='questionPapers'),	
-	url(r'^fetchQuestionPaper/(?P<questionid>\d+)$$',views.fetchQuestionPaper,name='fetchQuestionPaper'),	
+	url(r'^fetchQuestionPaper/(?P<questionid>\d+)',views.fetchQuestionPaper,name='fetchQuestionPaper'),	
+	url(r'^candidatestatus/(?P<candidateid>\d+)',views.candidatestatus,name='candidatestatus'),	
+
 ]

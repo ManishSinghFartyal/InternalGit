@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+{% block content %}
+{% load static %}
+
+<!-- Button trigger modal -->
+<a href="/fetchQuestionPaper" type="button" class="btn btn-primary openBtn" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</a>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">       
+    </div>
+  </div>
+</div>
+<script>
+$('.openBtn').on('click',function(){
+    $('.modal-body').load('/fetchQuestionPaper',function(){
+        $('#exampleModal').modal({show:true});
+    });
+});
+</script>
+{% endblock %}

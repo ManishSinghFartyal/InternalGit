@@ -62,10 +62,10 @@
                             <tbody>
                      {% for key,value in paper.items %} 
                               <tr id='{{key}}-td' onmouseover="focusCell(this)" onmouseleave="unfocusCell(this)">
-                              	<td><li>
-                              		<a href="/fetchQuestionaPaper/{{key}}"  data-toggle="modal" data-target="#myModal" >{{key}}
+                              	<td>
+                              		<a href="/fetchQuestionPaper/{{key}}"><span class="glyphicon glyphicon-eye-open"></span>Show
                               		</a>
-                              	</li></td>
+                                </td>
                                 <td>{{value.title}}</td>
                                 <td>{{value.total_q}}</td>                               
                                 <td>{{value.max_time}}</td>

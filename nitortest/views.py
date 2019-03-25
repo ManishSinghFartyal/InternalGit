@@ -6,7 +6,7 @@ from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper
+from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -287,7 +287,6 @@ def assignTest(request):
 			context = {'candidates':candidates,'papers':question_papers}
 			if request.method == 'POST':
 				ids= request.POST.getlist('candidate_id')
-				print(ids)
 				if not ids:
 					messages.error(request,'**No candidate selected.')
 					return render(request,'Nitor/assignTest.html',context)
@@ -316,5 +315,14 @@ def questionPapers(request):
 	return index(request)
 
 def fetchQuestionPaper(request,questionid):
-	print(questionid)
-	return render(request,'Nitor/showQuestion.html')
+	id = int(questionid)
+	q_paper = QuestionPaper.objects.get(id=questionid)
+	paper = getPaper(q_paper)
+	return render(request,'Nitor/showQuestion.html',{'paper':paper,'id':id})
+
+def candidatestatus(request,candidateid):
+	id = int(candidateid)
+	cst = getCandidateStatus(id)
+	print(cst)
+	return render(request,'Nitor/candidateStatus.html',{'status':cst})
+
