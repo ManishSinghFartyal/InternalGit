@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nitortest',
     'crispy_forms',
-
+    'candidate',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'   

@@ -13,6 +13,7 @@
                      <div class="card-header card-header-primary">
                   <h4 class="card-title">Candidate list</h4>                  
                 </div> 
+                {{candidate.user_id}}
                 <div>
                   <b>
                   <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> First Name:{{candidate.fname}}</p> 
@@ -31,10 +32,10 @@
                    <hr>
                   <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> Department :{{candidate.department}}</p> 
                    <hr>
-                  </b>
+                  </b>                  
                    <div class="row">                 
                   <div class="col-sm-12">
-                    <a href='/removeCandidate/{{candidate.id}}'>
+                    <a href='/removeCandidate/{{candidate.user_id}}'>
                       <button type="reset" class="btn btn-danger">Remove</button>
                     </a>
                   </div>

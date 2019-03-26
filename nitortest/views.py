@@ -16,7 +16,7 @@ def index(request,next_url=None):
 	user =request.user
 	if user.is_superuser:		
 			return render(request,'Nitor/adminHome.html')
-	return render(request,'Nitor/candidateHome.html')
+	return HttpResponseRedirect('/candidate')
 
 def saveUserSuccessNotification(request):	
 	user =request.user	
@@ -71,8 +71,9 @@ def login(request):
 		form = UserLoginForm(request.POST)
 		if form.is_valid():
 			user = form.cleaned_data
+			print(user)
 			auth_login(request, user)
-			return index(request,next_url)	
+			return index(request,next_url)
 		else:
 			context={'form':form}
 	else:
@@ -103,6 +104,7 @@ def listCandidates(request):
 
 
 
+
 ##################### To view candidate profile using id #############################
 def candidateProfile(request,userid):
 	user=request.user
@@ -113,8 +115,10 @@ def candidateProfile(request,userid):
 	return index(request)
 
 
+
+
 ##################### Code to show profile of a user ###############################
-def show_profile(request,profile):
+def show_profile(request,profile):	
 	if request.user.is_authenticated:
 		if request.user.is_superuser:			
 			return render(request,'Nitor/candidateProfile.html',{'candidate':profile})
@@ -126,11 +130,13 @@ def show_profile(request,profile):
 
 ########## Removing candidate by using id #####################
 def removeCandidate(request,userid):
+	print(userid)
 	if request.user.is_authenticated:
 		if request.user.is_superuser:
 			try:
-				Profile.objects.get(id=userid).delete()
+				Profile.objects.get(user_id=userid).delete()
 				User.objects.get(id=userid).delete()
+				CandidateStatus.objects.filter(candidate=userid).delete()
 				return HttpResponseRedirect('/listCandidate')
 			except:
 				return HttpResponseRedirect('/listCandidate')
@@ -282,7 +288,7 @@ def assignTest(request):
 	user=request.user
 	if user.is_authenticated:
 		if user.is_superuser:
-			candidates=getAllCandidates()
+			candidates=getAllCandidates()			
 			question_papers = QuestionPaper.objects.all()
 			context = {'candidates':candidates,'papers':question_papers}
 			if request.method == 'POST':

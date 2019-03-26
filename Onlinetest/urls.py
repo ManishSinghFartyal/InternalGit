@@ -19,5 +19,6 @@ from django.conf.urls import url,include
 
 urlpatterns = [
 	url('',include('nitortest.urls')),
+	url('candidate/',include('candidate.urls')),
     path('admin/', admin.site.urls),
 ]

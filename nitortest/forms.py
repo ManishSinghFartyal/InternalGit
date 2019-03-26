@@ -132,8 +132,7 @@ class UserRegisterForm(forms.Form):
         email=cleaned_data['email']
         first_name=cleaned_data['first_name']
         last_name=cleaned_data['last_name']
-        username = first_name+""+last_name
-        print("Username = ",username)
+        username = email
         password=generate_Password()
         newUser=User.objects.create_user(username,email,password)
         newUser.first_name = first_name

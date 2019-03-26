@@ -21,6 +21,7 @@ ascii letters and digits and return the string with length 8
 def generate_Password():	
 	keys2=string.ascii_letters + string.digits
 	pwd = ''.join(sc.choice(keys2) for i in range(8))
+	print(pwd)
 	return pwd
 
 
@@ -60,7 +61,7 @@ def list_of_candidates():
 
 
 # Show candidate profile
-def candidate_profile(userid):
+def candidate_profile(userid,id=1):
 	candidate={}
 	try:
 		profile = Profile.objects.get(user_id=userid)
@@ -68,8 +69,8 @@ def candidate_profile(userid):
 			cs='Already Assigned'
 		else:
 			cs = 'Not assigned'
-		user= User.objects.get(id=userid)
-		candidate = {'id':user.id,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
+		user= User.objects.get(id=userid)		
+		candidate = {'id':profile.id,'user_id':userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
 	except:
 		return candidate
 	return candidate
@@ -149,9 +150,8 @@ def getAllCandidates():
 	except:
 		return candidates_dict
 	for candidate in candidates_list:
-		if candidate.role == 2:
-			print(candidate.user_id)		
-			candidate_dict[candidate.id] = candidate_profile(candidate.user_id)
+		if candidate.role == 2:			
+			candidate_dict[candidate.id] = candidate_profile(candidate.user_id,candidate.id)
 	return candidate_dict
 
 '''

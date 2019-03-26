@@ -67,24 +67,24 @@
                      {% for key,value in candidates.items %}
 
                               <tr id='{{key}}-td'>
-                                <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{key}}" id="{{key}}-check"></td>
+                                <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{value.user_id}}" id="{{key}}-check"></td>
                                 <td>{{value.fname}}&nbsp;{{value.lname}} </td>
                                 <td>{{value.email}}</td>
                                 <td>{{value.skill|upper}}</td>
                                 <td>{{value.experience}}</td>
                                 
                                 <td>
-                                  <select class="form-control form-control-sm browser-default custom-select" name="{{key}}-paper" id="{{key}}-paper" disabled="true">
+                                  <select class="form-control form-control-sm browser-default custom-select" name="{{value.user_id}}-paper" id="{{key}}-paper" disabled="true">
                                     <option disabled="true" selected="true" value="">Select test</option>
                                   {% for question in papers %}
                                     <option value={{question.id}}>{{question.title_qp}}</option>
                                   {% endfor %}
                                   </select>
                                 </td>
-                                 <td><input type="date" id="{{key}}-date" name="{{key}}-date" class="form-control form-control-sm" disabled="true"></td>
+                                 <td><input type="date" id="{{key}}-date" name="{{value.user_id}}-date" class="form-control form-control-sm" disabled="true"></td>
                                  <td>
                                   {%if value.status == 'Already Assigned' %}
-                                    <a href="/candidatestatus/{{key}}" style="color: green;">
+                                    <a href="/candidatestatus/{{value.user_id}}" style="color: green;">
                                      {{value.status}}
                                     </a>
                                    {% else %}
