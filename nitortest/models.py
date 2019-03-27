@@ -68,3 +68,5 @@ class CandidateStatus(models.Model):
    total_time =models.PositiveIntegerField(null=True,default=0)
    correct_mcq=models.PositiveIntegerField(null=True,default=0)
    correct_ct=models.PositiveIntegerField(null=True,default=0)
+   mcq_ans = models.CharField(max_length=1000,null=True,default=0)
+   code_ans = models.CharField(max_length=1000,null=True,default=0)

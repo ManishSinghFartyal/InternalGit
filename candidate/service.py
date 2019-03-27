@@ -1,4 +1,6 @@
 from nitortest.models import Profile,CandidateStatus,QuestionPaper
+import ast
+import json
 
 def get_id(user):	
 	try:
@@ -21,3 +23,33 @@ def get_test(candidate_id):
 	except:
 		candidate_status = {}	
 	return candidate_status
+
+def get_question_paper(testid):
+	i=1;
+	paper={}
+	try:
+		q_paper = QuestionPaper.objects.get(id=testid)
+	except:
+		paper={}
+	mcqjson={}
+	mcq=ast.literal_eval(q_paper.mcq)
+	mcq = json.dumps(mcq)			
+	mcq= json.loads(mcq)
+	for key,value in mcq.items():
+		mcqvalues=ast.literal_eval(value['options'])
+		mcqvalues=json.dumps(mcqvalues)
+		mcqvalues=json.loads(mcqvalues)
+		#print(type(mcqvalues))
+		mcq[key]['sr']=i
+		mcq[key]['options'] = mcqvalues
+		i=i+1
+	
+	coding=ast.literal_eval(q_paper.coding)
+	coding = json.dumps(coding)			
+	coding= json.loads(coding)
+	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':coding,'max_time':q_paper.max_time}
+	return paper
+
+
+
+

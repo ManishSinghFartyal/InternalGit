@@ -14,9 +14,13 @@ from django.contrib.auth.models import User
 
 def index(request,next_url=None):	
 	user =request.user
-	if user.is_superuser:		
+	if user.is_authenticated:
+		if user.is_superuser:
 			return render(request,'Nitor/adminHome.html')
-	return HttpResponseRedirect('/candidate')
+		return HttpResponseRedirect('/candidate')
+	print("Manishd")
+	return redirect('/login')
+
 
 def saveUserSuccessNotification(request):	
 	user =request.user	

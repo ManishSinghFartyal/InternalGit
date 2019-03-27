@@ -18,5 +18,4 @@ urlpatterns = [
 	url(r'^questionPapers/$',views.questionPapers,name='questionPapers'),	
 	url(r'^fetchQuestionPaper/(?P<questionid>\d+)',views.fetchQuestionPaper,name='fetchQuestionPaper'),	
 	url(r'^candidatestatus/(?P<candidateid>\d+)',views.candidatestatus,name='candidatestatus'),	
-
 ]

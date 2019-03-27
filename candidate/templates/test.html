@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="wrapper" style="margin-left: -250px;">
+	<form>
+		{% csrf_token %}
+    <div class="main-panel">
+    	{% include 'navbar.html'  %}
+    	<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title">{{paper.title}}</h4>
+                  <p class="card-title">Total questions : {{paper.total}}</p>
+                  <p class="card-title">Max_time : {{paper.max_time}} minutes</p>
+                </div>
+
+                <!-- Question paper for mcq -->
+                <div class="card-body">
+                  <br><br>          
+                {% for ke,va in pages.items %}
+                 <div class="row">
+                   <div class="col-md-1"><span>{{va.sr}}</span></div>
+                   <div class="col-md-11">
+                      <textarea {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+                        rows = "7" {% elif va.desc|length > 100 %} 
+                        rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
+                        {% for k,v in va.options.items %}
+                      <div><input type="radio" name="correct" value="{{ke}}|{{v}}" onclick="radioClicked(this);"> &nbsp;&nbsp;{{v}}</div>
+                        {% endfor %}    
+                   </div>
+                   </div>
+                   <br>
+                   <hr>
+                {%endfor%}                
+                  </div>                    
+                </div>
+                <div class="container">                  
+                  {% if paginator.has_other_pages %}
+                    <ul class="pagination">
+                      {% if paginator.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo;</a></li>
+                      {% else %}
+                        <li class="disabled page-item page-link"><span>&laquo;</span></li>
+                      {% endif %}
+                      {% for i in paginator.paginator.page_range %}
+                        {% if paginator.number == i %}
+                          <li class="active page-item page-link"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      {% if paginator.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ paginator.next_page_number }}">&raquo;</a></li>
+                      {% else %}
+                        <li class="disabled page-item page-link"><span>&raquo;</span></li>
+                      {% endif %}
+                    </ul>
+                  {% endif %}                
+                </div>
+              </div>
+
+              <!--Counter List of question -->
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      {% for key,value in paper.mcq.items %}
+                       <div class="col-md-3 text-center" style="border: solid;border-width: 1px;border-radius: 8px;margin-top: 5px;" id="{{key}}-count">{{value.sr}}</div>&nbsp;
+                      {% endfor %}                      
+                       </div>                    
+                    <div class="row text-center">
+                      <div class="col-sd-12 text-center">
+                        <br>
+                        <input type="submit" name="Submit" value="Submit test" class="btn btn-md btn-success">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+	</form>
+  <script type="text/javascript">    
+    function radioClicked(key){
+      key_split = key.value
+      arr=  key_split.split("|")
+      arr = arr[0]
+      str = arr + "-count"
+      document.getElementById(str).style.background = '#0006';
+      console.log(document.getElementById(str).style.background);
+      console.log(str)
+    };
+  </script>
+{% endblock %}
+  

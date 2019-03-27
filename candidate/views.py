@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from .service import get_id,get_test
-from django.http import HttpResponseRedirect
+from django.shortcuts import render,redirect
+from .service import get_id,get_test,get_question_paper
+from django.http import HttpResponseRedirect,HttpResponse
+from django.contrib.auth import login as auth_login, logout, authenticate
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def index(request,next_url=None):	
@@ -14,3 +16,21 @@ def candidateHome(request):
 	id = get_id(user)
 	tests = get_test(id)
 	return render(request,'candidateHome.html',{'tests':tests})
+
+def test(request,testid):
+	user = request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			return index(request)
+		else:
+			page = request.GET.get('page', 1)
+			i = testid
+			paper = get_question_paper(i)
+			#print(paper['mcq'])
+			t = tuple(paper['mcq'].items())
+			p = Paginator(t,1)
+			paginate = p.page(page)
+			pages = dict(paginate)
+			print(paper)
+			return render(request,'test.html',{'paper':paper,'pages':pages,'paginator':paginate})
+	return redirect("/login")
