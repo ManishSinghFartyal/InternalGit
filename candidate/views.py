@@ -26,11 +26,15 @@ def test(request,testid):
 			page = request.GET.get('page', 1)
 			i = testid
 			paper = get_question_paper(i)
-			#print(paper['mcq'])
-			t = tuple(paper['mcq'].items())
+			question = {'mcq':paper['mcq'],'code':paper["coding"]}
+			question_paper = {}
+			for key,value in question.items():
+				for k,v in value.items():
+					question_paper[k] = v
+			t = tuple(question_paper.items())
 			p = Paginator(t,1)
 			paginate = p.page(page)
 			pages = dict(paginate)
-			print(paper)
-			return render(request,'test.html',{'paper':paper,'pages':pages,'paginator':paginate})
+			print(question_paper)
+			return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate})
 	return redirect("/login")

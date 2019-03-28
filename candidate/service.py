@@ -42,14 +42,14 @@ def get_question_paper(testid):
 		#print(type(mcqvalues))
 		mcq[key]['sr']=i
 		mcq[key]['options'] = mcqvalues
-		i=i+1
-	
+		mcq[key]['type'] = "mcq"
+		i=i+1	
+	code = {}
 	coding=ast.literal_eval(q_paper.coding)
 	coding = json.dumps(coding)			
 	coding= json.loads(coding)
-	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':coding,'max_time':q_paper.max_time}
+	for key,value in coding.items():
+		code[key]={"title":value,"sr":i,"type":"code"}
+		i=i+1
+	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':code,'max_time':q_paper.max_time}
 	return paper
-
-
-
-

@@ -122,13 +122,11 @@ def candidateProfile(request,userid):
 
 
 ##################### Code to show profile of a user ###############################
-def show_profile(request,profile):	
+def show_profile(request,profile):
 	if request.user.is_authenticated:
-		if request.user.is_superuser:			
+		if request.user.is_superuser:
 			return render(request,'Nitor/candidateProfile.html',{'candidate':profile})
-	return index(request)	
-
-
+	return index(request)
 
 
 
@@ -335,4 +333,3 @@ def candidatestatus(request,candidateid):
 	cst = getCandidateStatus(id)
 	print(cst)
 	return render(request,'Nitor/candidateStatus.html',{'status':cst})
-
