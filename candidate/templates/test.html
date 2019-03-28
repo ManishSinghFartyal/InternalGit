@@ -6,11 +6,11 @@
 		{% csrf_token %}
     <div class="main-panel">
     	{% include 'navbar.html'  %}
-    	<div class="content">
-        <div class="row text-center">
-          <p class="lead">Test will ends in : {{paper_details.max_time}}</p>
-        </div>
+    	<div class="content">        
         <div class="container-fluid">
+          <div class="row text-center" style="font-family: sans-serif;text-align: center;">
+          <p class="lead">Test will ends in ( &nbsp;&nbsp;&nbsp;</p><p class="lead" id="hours"></p><p class="lead">&nbsp;&nbsp; :&nbsp;&nbsp; </p><p class="lead" id="minutes"></p><p class="lead">&nbsp;&nbsp; :&nbsp;&nbsp; </p><p class="lead" id="seconds"></p><p class="lead">&nbsp;&nbsp;) </p>
+        </div>
           <div class="row">
             <div class="col-md-8">
               <div class="card">
@@ -28,16 +28,16 @@
                    <div class="col-md-1"><span>{{va.sr}}</span></div>
                    {% if va.type == 'mcq'%}
                    <div class="col-md-11">
-                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;font-size: 15px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
                         rows = "7" {% elif va.desc|length > 100 %} 
-                        rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
+                        rows = "3" {% else %} rows="1" {% endif %} cols="80" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
                         {% for k,v in va.options.items %}
                       <div><input type="radio" name="correct-{{ke}}" value="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked(this);"> &nbsp;&nbsp;{{v}}</div>
                         {% endfor %}    
                    </div>
                    {%elif va.type == 'code' %}
                     <div class="col-md-11">                      
-                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;size: 14px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
                         rows = "7" {% elif va.title|length > 100 %} 
                         rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">{{va.title}} {{va.title|length}}</textarea> 
                         <div><input type="button" name="" value="Start this activity" class="btn btn-sm btn-info"></div>                      
@@ -98,6 +98,10 @@
     </div>
 	</form>
   <script type="text/javascript">    
+    var time = "{{paper_details.max_time}}"
+    hours = Math.floor(time/60);
+    minutes = time%60;
+    seconds = 10;
     function radioClicked(key){
       key_split = key.value
       arr=  key_split.split("|")
@@ -106,15 +110,28 @@
       document.getElementById(str).style.background = '#0002';
       console.log(document.getElementById(str).style.background);
       console.log(str)
-    };
-    window.onload = function(){
-      time = "{{paper_details.max_time}}";
-      setInterval(timer(),1000);
-    };
-    function timer(){
-      console.log("print");
-      return true;
-    }
+    };    
+    var downloadTimer = setInterval(function(){
+      if(seconds>0){
+        seconds--;
+      }
+      else if(minutes>0){
+        minutes--;
+        seconds=60
+      }
+      else if(hours>0){
+        hours--;
+        minutes=60;
+        seconds=60;
+      }
+     document.getElementById("hours").innerHTML = hours;
+     document.getElementById("minutes").innerHTML = minutes;
+     document.getElementById("seconds").innerHTML =seconds;
+      if(timeleft <= 0){
+        clearInterval(downloadTimer);
+        console.log("finished")
+      }
+    }, 1000);
   </script>
 {% endblock %}
   
