@@ -18,11 +18,13 @@ def candidateHome(request):
 	return render(request,'candidateHome.html',{'tests':tests})
 
 def test(request,testid):
-	user = request.user
+	time = 0
+	user = request.user	
 	if user.is_authenticated:
 		if user.is_superuser:
 			return index(request)
 		else:
+			print(request.GET.get('page'))
 			page = request.GET.get('page', 1)
 			i = testid
 			paper = get_question_paper(i)
@@ -35,6 +37,5 @@ def test(request,testid):
 			p = Paginator(t,1)
 			paginate = p.page(page)
 			pages = dict(paginate)
-			print(question_paper)
 			return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate})
 	return redirect("/login")

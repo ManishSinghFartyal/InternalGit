@@ -9,7 +9,13 @@
     	<div class="content">        
         <div class="container-fluid">
           <div class="row text-center" style="font-family: sans-serif;text-align: center;">
-          <p class="lead">Test will ends in ( &nbsp;&nbsp;&nbsp;</p><p class="lead" id="hours"></p><p class="lead">&nbsp;&nbsp; :&nbsp;&nbsp; </p><p class="lead" id="minutes"></p><p class="lead">&nbsp;&nbsp; :&nbsp;&nbsp; </p><p class="lead" id="seconds"></p><p class="lead">&nbsp;&nbsp;) </p>
+          <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
+            <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+              :
+            <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+              :
+            <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+          </p>
         </div>
           <div class="row">
             <div class="col-md-8">
@@ -28,89 +34,125 @@
                    <div class="col-md-1"><span>{{va.sr}}</span></div>
                    {% if va.type == 'mcq'%}
                    <div class="col-md-11">
+                     <p class="lead">
                       <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;font-size: 15px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
                         rows = "7" {% elif va.desc|length > 100 %} 
                         rows = "3" {% else %} rows="1" {% endif %} cols="80" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
                         {% for k,v in va.options.items %}
-                      <div><input type="radio" name="correct-{{ke}}" value="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked(this);"> &nbsp;&nbsp;{{v}}</div>
-                        {% endfor %}    
-                   </div>
+                      <div>
+                       
+                          <input type="radio" name="correct-{{ke}}" value="{{ke}}|{{v}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked2('{{ke}}',this)"> &nbsp;&nbsp;{{v}}                          
+                        </p>                        
+                      </div>
+                        {% endfor %}
+                      </div>
                    {%elif va.type == 'code' %}
                     <div class="col-md-11">                      
                       <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;size: 14px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
                         rows = "7" {% elif va.title|length > 100 %} 
                         rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">{{va.title}} {{va.title|length}}</textarea> 
-                        <div><input type="button" name="" value="Start this activity" class="btn btn-sm btn-info"></div>                      
+                        <div><input type="button" name="" value="Start this activity" class="btn btn-sm btn-info">
+                      </div>
                    </div>
-                   {% endif %}                   
+                   {% endif %}
                    </div>
                    <br>
                    <hr>
-                {%endfor%}                
-                  </div>                    
+                {%endfor%}
+                  </div>
                 </div>
-         
               </div>
                     <div class="col-md-4">
-                        <div class="card" style="background: rgba(1,1,100,0.1);"> 
+                        <div class="card" > 
                           <div class="card-body"> 
                           {% if paginator.has_other_pages %}
-                              <ul class="pagination"> 
+                              <ul class="pagination">
                                <div class="row">
-                            
                                 <div class="col-md-12 text-center" style="margin-top: 10px;">
                                 {% if paginator.has_previous %}
-                                <li class="page-item" style="font-family: cursive;font-weight: bolder;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
-                                {% else %}         
-                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;"><span>&laquo; Previous</span></li>
+                                <li class="page-item" style="font-family: cursive;font-weight: bolder;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
+                                {% else %}
+                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;color: black;"><span>&laquo; Previous</span></li>
                                 {% endif %}
                                 </div> 
                               {% for i in paginator.paginator.page_range %}
                               {% if paginator.number == i %}
                                 <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                <li class="active page-item page-link" id="{{i}}-count" style="font-family: cursive;font-weight: bolder;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
+                                <li class="active page-item page-link" id="{{i}}-count" style="font-family: cursive;font-weight: bolder;color: black;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
                                 </div>
                               {% else %}
                                 <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                <li class="page-item" style="font-family: cursive;font-weight: bolder;"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item" style="font-family: cursive;font-weight: bolder;color: #000;"><a class="page-link" href="?page={{ i }}" onclick="answerChange();">{{ i }}</a></li>
                                 </div>
                               {% endif %}
                               {% endfor %}
 
                                <div class="col-md-12 text-center" style="margin-top: 10px;">
-                              {% if paginator.has_next %}                               
-                                <li class="page-item " style="font-family: cursive;font-weight: bolder;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
+                              {% if paginator.has_next %}
+                                <li class="page-item " style="font-family: cursive;font-weight: bolder;color: black;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
                               {% else %}
-                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;"><span>Next &raquo;</span></li>
-                                </div>
+                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;color: black;"><span>Next &raquo;</span></li>
+                              </div>
                               {% endif %}
                               </div>
                             </div>
                               </ul>
                             {% endif %} 
-                            </div>                              
+                            </div>
                           </div>
                     </div> 
-               </div>            
+               </div>
           </div>
         </div>
       </div>
     </div>
 	</form>
-  <script type="text/javascript">    
+  <script type="text/javascript">
     var time = "{{paper_details.max_time}}"
     hours = Math.floor(time/60);
     minutes = time%60;
     seconds = 10;
+
+    window.onload = checkThis();
+    function checkThis(){
+      {% for ke,va in pages.items %}
+        key = "{{ke}}"
+      {%endfor%}
+      if(key in localStorage){
+        id = localStorage.getItem(key)
+        document.getElementById(id).checked = true;
+      }
+      for(var a in localStorage){
+        radioClicked(localStorage[a])
+      }
+    }
+
     function radioClicked(key){
-      key_split = key.value
+      key_split=key
       arr=  key_split.split("|")
       arr = arr[2]
       str = arr + "-count"
       document.getElementById(str).style.background = '#0002';
-      console.log(document.getElementById(str).style.background);
-      console.log(str)
-    };    
+    };
+
+    function radioClicked2(value,key){
+      localStorage.setItem(value,key.value)
+      key.setAttribute("id",value)    
+      radioClicked(key);
+    };
+    
+
+    function answerChange(){
+      hours=document.getElementById('hours').value; 
+      minutes=document.getElementById('minutes').value;
+      seconds= document.getElementById('seconds').value;
+      localStorage.setItem("hours",hours)
+      localStorage.setItem("minutes",minutes)
+      localStorage.setItem("seconds",seconds)      
+      return true;
+    };
+
+    
     var downloadTimer = setInterval(function(){
       if(seconds>0){
         seconds--;
@@ -124,13 +166,10 @@
         minutes=60;
         seconds=60;
       }
-     document.getElementById("hours").innerHTML = hours;
-     document.getElementById("minutes").innerHTML = minutes;
-     document.getElementById("seconds").innerHTML =seconds;
-      if(timeleft <= 0){
-        clearInterval(downloadTimer);
-        console.log("finished")
-      }
+
+     document.getElementById("hours").value = hours;
+     document.getElementById("minutes").value = minutes;
+     document.getElementById("seconds").value =seconds;     
     }, 1000);
   </script>
 {% endblock %}
