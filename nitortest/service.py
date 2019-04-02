@@ -134,9 +134,9 @@ def getCategorizedQuestions(questions):
 		que = Question.objects.get(id=question)
 		qtype = que.qtype
 		if qtype == 'mcq':
-			mcq[que.id] = {'desc':que.description,'options': que.options}
+			mcq[que.id] = {'desc':que.description,'options': que.options,'correct_option':que.correct_option}
 		elif qtype == 'ct':
-			ct[que.id] = que.description
+			ct[que.id] = {'desc':que.description,'title':que.title,'language':que.language,'snippet':que.snippet,'testcases':que.testcases}
 	return mcq,ct
 
 

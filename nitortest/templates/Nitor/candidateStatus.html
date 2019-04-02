@@ -7,7 +7,7 @@
  			 	{% include 'Nitor/navbar.html'  %}
  			 	<br><br>
  		</div>
- 		{% for key,value in status.items %}
+ 		{% for key,value in status.items %} 
  		<div class="col-lg-6" style="padding: 20px 20px 20px 20px;">			
  			<div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,0,0,0.5){%else%}background-color: rgba(0,255,0,0.5);{%endif%}">
  				<table>
@@ -25,8 +25,8 @@
  					 <hr>
  					</tr>
  					 <tr>
- 					 	<td><hr><a href="" class="btn btn-primary btn-sm">Remove</a></td>
- 					 </tr>		 				
+ 					 	<td><hr><a href="/remassigned/{{cid}}/{{value.paperId}}" class="btn btn-danger btn-sm">Remove</a></td>
+ 					 </tr>
  				</table>
  			</div>
  		</div>

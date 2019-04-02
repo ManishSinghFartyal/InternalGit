@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+  {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
 <div class="wrapper" style="margin-left: -250px;" >
 	<form onload="timer2();">
 		{% csrf_token %}
@@ -8,17 +9,22 @@
     	{% include 'navbar.html'  %}
     	<div class="content">        
         <div class="container-fluid">
-          <div class="row text-center" style="font-family: sans-serif;text-align: center;">
-          <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
-            <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true">
-              :
-            <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true">
-              :
-            <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true">
-          </p>
+          <div class="row text-center" style="font-family: sans-serif;">
+            <div class="col-md-6">
+             <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
+                <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+                  :
+                <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+                  :
+                <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+              </p>
+            </div>
+            <div class="col-md-6 text-center">
+              <input type="submit" name="submit" value="Submit test" class="btn btn-md btn-warning">
+            </div>
         </div>
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
               <div class="card">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title">{{paper_details.title}}</h4>
@@ -32,113 +38,158 @@
                 {% for ke,va in pages.items %}
                  <div class="row">
                    <div class="col-md-1"><span>{{va.sr}}</span></div>
+                   
+        <!-- If question is mcq -->
                    {% if va.type == 'mcq'%}
-                   <div class="col-md-11">
-                     <p class="lead">
-                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;font-size: 15px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+                   <div class="col-md-11"  style="margin-left: -30px;" onsh>
+                      <p class="lead">
+                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
                         rows = "7" {% elif va.desc|length > 100 %} 
                         rows = "3" {% else %} rows="1" {% endif %} cols="80" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
-                        {% for k,v in va.options.items %}
-                      <div>
-                       
-                          <input type="radio" name="correct-{{ke}}" value="{{ke}}|{{v}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked2('{{ke}}',this)"> &nbsp;&nbsp;{{v}}                          
-                        </p>                        
-                      </div>
+                      </p>
+                        {% for k,v in va.options.items %}    
+                        <p>
+                        <div>                                                               
+                          <input type="radio" name="correct-{{ke}}" value="{{ke}}|{{v}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked2('{{ke}}',this)"> &nbsp;&nbsp;{{v}}
+                        </div>                          
+                        </p>                       
                         {% endfor %}
                       </div>
+                    </div>
+
+       <!-- If question is coding test -->
                    {%elif va.type == 'code' %}
-                    <div class="col-md-11">                      
-                      <textarea style="background: black;color: red;padding: 10px 10px 10px 10px;size: 14px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+                    <div class="col-md-11" style="margin-left: -30px;">
+                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
                         rows = "7" {% elif va.title|length > 100 %} 
-                        rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">{{va.title}} {{va.title|length}}</textarea> 
-                        <div><input type="button" name="" value="Start this activity" class="btn btn-sm btn-info">
+                        rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
+                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
+                        rows = "7" {% elif va.desc|length > 100 %} 
+                        rows = "7" {% else %} rows="7" {% endif %} cols="100" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
+                        <div><p class="lead"><u>Write your code</u>
+                        <hr>
+                        </p>
                       </div>
                    </div>
+                   <div class="col-md-11">
+                    <textarea id="code">{{va.snippet}}</textarea>
+                    <hr>
+                   </div>                   
+                    <div class="col-md-11 text-center">
+                      <input type="submit" class="btn btn-success btn-md" id='runajax' value = "Run"> 
+                    </div> 
+                     <div class="col-md-11 text-center" > 
+                            <h5 style="font-family: inherit;">Input:</h5>
+                            <textarea style="background: black;color: white; font-weight: bold;" rows="2" cols="95" disabled="true"></textarea>
+                            <h5 style="font-family: inherit;">Output:</h5>
+                            <textarea style="background: black;color: white; font-weight: bold;" rows="10" cols="95" disabled="true" id="output"></textarea>
+                    </div>
+                 </div>
                    {% endif %}
                    </div>
-                   <br>
-                   <hr>
                 {%endfor%}
                   </div>
                 </div>
-              </div>
-                    <div class="col-md-4">
-                        <div class="card" > 
-                          <div class="card-body"> 
-                          {% if paginator.has_other_pages %}
-                              <ul class="pagination">
-                               <div class="row">
-                                <div class="col-md-12 text-center" style="margin-top: 10px;">
-                                {% if paginator.has_previous %}
-                                <li class="page-item" style="font-family: cursive;font-weight: bolder;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
-                                {% else %}
-                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;color: black;"><span>&laquo; Previous</span></li>
-                                {% endif %}
-                                </div> 
-                              {% for i in paginator.paginator.page_range %}
-                              {% if paginator.number == i %}
-                                <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                <li class="active page-item page-link" id="{{i}}-count" style="font-family: cursive;font-weight: bolder;color: black;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
-                                </div>
-                              {% else %}
-                                <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                <li class="page-item" style="font-family: cursive;font-weight: bolder;color: #000;"><a class="page-link" href="?page={{ i }}" onclick="answerChange();">{{ i }}</a></li>
-                                </div>
-                              {% endif %}
-                              {% endfor %}
 
-                               <div class="col-md-12 text-center" style="margin-top: 10px;">
-                              {% if paginator.has_next %}
-                                <li class="page-item " style="font-family: cursive;font-weight: bolder;color: black;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
-                              {% else %}
-                                <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;color: black;"><span>Next &raquo;</span></li>
-                              </div>
-                              {% endif %}
-                              </div>
-                            </div>
+
+      <!-- For pagination -->
+                    <div class="col-md-3">
+                        <div class="card" > 
+                              <div class="card-body"> 
+                              {% if paginator.has_other_pages %}
+                                  <ul class="pagination">
+                                   <div class="row">
+                                    <div class="col-md-12 text-center" style="margin-top: 10px;">
+                                    {% if paginator.has_previous %}
+                                    <li class="page-item" style="background-color: #9111;font-family: cursive;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
+                                    {% else %}
+                                    <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;font-size: 12px;color: black;background-color: #9111;"><span>&laquo; Previous</span></li>
+                                    {% endif %}
+                                    </div> 
+                                  {% for i in paginator.paginator.page_range %}
+                                  {% if paginator.number == i %}
+                                    <div class="col-md-3 text-center" style="margin-top: 10px;">
+                                    <li class="active page-item page-link" id="{{i}}-count" style="font-size: 12px;font-family: cursive;color: black;background-color: #9111;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
+                                    </div>
+                                  {% else %}
+                                    <div class="col-md-3 text-center" style="margin-top: 10px;">
+                                    <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();">{{ i }}</a></li>
+                                    </div>
+                                  {% endif %}
+                                  {% endfor %}
+
+                                   <div class="col-md-12 text-center" style="margin-top: 10px;">
+                                  {% if paginator.has_next %}
+                                    <li class="page-item " style="font-family: cursive;background-color: #9111;font-weight: bolder;font-size: 12px;color: black;font-family: cursive;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
+                                  {% else %}
+                                    <li class="disabled page-item page-link" style="background: #0007;background-color: #9111;opacity: 0.3;color: black;font-family: cursive;"><span>Next &raquo;</span></li>
+                                  </div>
+                                  {% endif %}
+                                  </div>
+                                </div>
                               </ul>
                             {% endif %} 
-                            </div>
-                          </div>
-                    </div> 
+                        </div>
+                </div> 
                </div>
           </div>
         </div>
       </div>
     </div>
 	</form>
+
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
   <script type="text/javascript">
-    var time = "{{paper_details.max_time}}"
-    hours = Math.floor(time/60);
-    minutes = time%60;
-    seconds = 10;
+   
 
     window.onload = checkThis();
     function checkThis(){
+       var time = "{{paper_details.max_time}}";
+       if(sessionStorage.getItem("hours")==null){
+       hours = Math.floor(time/60);                        
+       }
+       else{
+        hours = sessionStorage["hours"]
+        console.log(hours) 
+       }
+       if(sessionStorage.getItem("minutes")==null){
+         minutes = time%60;                
+       }else{
+        minutes = sessionStorage["minutes"]
+       }
+       if(sessionStorage.getItem("seconds")==null){
+         seconds = 10;
+       }        
+       else{
+        seconds=sessionStorage["seconds"]       
+       }
       {% for ke,va in pages.items %}
         key = "{{ke}}"
       {%endfor%}
-      if(key in localStorage){
-        id = localStorage.getItem(key)
+      if(key in sessionStorage){
+        id = sessionStorage.getItem(key)
         document.getElementById(id).checked = true;
       }
-      for(var a in localStorage){
-        radioClicked(localStorage[a])
+      for(var a in sessionStorage){
+        if(!isNaN(a)){
+          radioClicked(sessionStorage[a])          
+        }        
       }
     }
 
     function radioClicked(key){
-      key_split=key
+      console.log(key)
+      key_split=key;
       arr=  key_split.split("|")
       arr = arr[2]
       str = arr + "-count"
-      document.getElementById(str).style.background = '#0002';
+      document.getElementById(str).style.background = '#9119';
     };
 
     function radioClicked2(value,key){
-      localStorage.setItem(value,key.value)
+      sessionStorage.setItem(value,key.value)
       key.setAttribute("id",value)    
-      radioClicked(key);
+      radioClicked(key.value); 
     };
     
 
@@ -146,10 +197,10 @@
       hours=document.getElementById('hours').value; 
       minutes=document.getElementById('minutes').value;
       seconds= document.getElementById('seconds').value;
-      localStorage.setItem("hours",hours)
-      localStorage.setItem("minutes",minutes)
-      localStorage.setItem("seconds",seconds)      
-      return true;
+      sessionStorage.setItem("hours",hours)
+      sessionStorage.setItem("minutes",minutes)
+      sessionStorage.setItem("seconds",seconds)      
+      return false;
     };
 
     
@@ -166,11 +217,49 @@
         minutes=60;
         seconds=60;
       }
-
      document.getElementById("hours").value = hours;
      document.getElementById("minutes").value = minutes;
      document.getElementById("seconds").value =seconds;     
     }, 1000);
-  </script>
+
+     var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
+      lineNumbers: true,
+      mode:  "java",
+      theme: 'duotone-light',
+    });  
+
+  /* (function() {
+    var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
+      lineNumbers: true,
+      mode:  "java",
+      theme: 'duotone-light',
+    });   
+  })();
+*/
+ $("#runajax").click(function(){
+  code = editor.getValue()
+  $.ajax({
+    type : "GET",
+    url : "http://127.0.0.1:8000/candidate/hello/",
+    dataType :"text",
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+    data:{
+      "code" : code,
+    },
+    success : function(data){
+      $("#output").val(data);  
+    },
+    failure: function(data) { 
+        console.log("Got error");
+        },
+        error: function(xhr,status,error) { 
+        console.log(xhr.responseText + " error  "+error);
+        }
+  });
+   return false;
+ });
+</script>
+ 
+
 {% endblock %}
   

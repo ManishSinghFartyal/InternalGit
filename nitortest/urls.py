@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from nitortest import views
 from django.views.generic.base import TemplateView
+from django.urls import path
 
 urlpatterns = [
 	url(r'^$',views.index,name='index'),
@@ -18,4 +19,6 @@ urlpatterns = [
 	url(r'^questionPapers/$',views.questionPapers,name='questionPapers'),	
 	url(r'^fetchQuestionPaper/(?P<questionid>\d+)',views.fetchQuestionPaper,name='fetchQuestionPaper'),	
 	url(r'^candidatestatus/(?P<candidateid>\d+)',views.candidatestatus,name='candidatestatus'),	
+	path('remassigned/<cid>/<pid>',views.remcandidatestatus,name='remcandidatestatus'),
+	path('removeQuestionPaper/<pid>',views.removeQuestionPaper,name='removeQuestionPaper'),
 ]

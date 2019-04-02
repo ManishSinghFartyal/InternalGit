@@ -331,5 +331,16 @@ def fetchQuestionPaper(request,questionid):
 def candidatestatus(request,candidateid):
 	id = int(candidateid)
 	cst = getCandidateStatus(id)
-	print(cst)
-	return render(request,'Nitor/candidateStatus.html',{'status':cst})
+	return render(request,'Nitor/candidateStatus.html',{'status':cst,'cid':candidateid})
+
+def remcandidatestatus(request,cid,pid):
+	print(cid,"   ",pid)
+	CandidateStatus.objects.get(candidate=cid,question_paper=pid).delete()
+	url = "/candidatestatus/"+cid
+	print(url)
+	return HttpResponseRedirect(url)
+
+def removeQuestionPaper(request,pid):
+	id = int(pid)
+	q_paper = QuestionPaper.objects.get(id=pid).delete()
+	return HttpResponseRedirect("/questionPapers")

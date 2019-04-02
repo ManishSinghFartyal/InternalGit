@@ -87,7 +87,6 @@
   
    (function() {
     document.getElementById('id_total_options').value = 0
-    console.log('doc is ready!')
     var editor = CodeMirror.fromTextArea(document.querySelector('#id_snippet'), {
       lineNumbers: true,
       mode:  "javascript"
@@ -95,5 +94,5 @@
   })();
   
  </script>
-  
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
 {% endblock %}

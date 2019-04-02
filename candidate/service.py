@@ -49,7 +49,10 @@ def get_question_paper(testid):
 	coding = json.dumps(coding)			
 	coding= json.loads(coding)
 	for key,value in coding.items():
-		code[key]={"title":value,"sr":i,"type":"code"}
+		testcases=ast.literal_eval(value['testcases'])
+		testcases=json.dumps(testcases)
+		testcases=json.loads(testcases)		
+		code[key]={'desc':value['desc'],'title':value['title'],'language':value['language'],'snippet':value['snippet'],"testcases":testcases,"sr":i,"type":"code"}
 		i=i+1
 	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':code,'max_time':q_paper.max_time}
 	return paper

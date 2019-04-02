@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
+from . import checkCodePython as cPython
 
 def index(request,next_url=None):	
 	user =request.user
@@ -24,7 +25,6 @@ def test(request,testid):
 		if user.is_superuser:
 			return index(request)
 		else:
-			print(request.GET.get('page'))
 			page = request.GET.get('page', 1)
 			i = testid
 			paper = get_question_paper(i)
@@ -39,3 +39,13 @@ def test(request,testid):
 			pages = dict(paginate)
 			return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate})
 	return redirect("/login")
+
+
+def ajaxcall(request):
+	code = request.GET['code']
+	output = cPython.run_code(code)
+	return HttpResponse(output)
+
+
+def ex(request):
+		return render(request,'ex.html')
