@@ -1,6 +1,8 @@
 from nitortest.models import Profile,CandidateStatus,QuestionPaper
 import ast
 import json
+from django.db import connection
+from django.db.models import Q
 
 def get_id(user):	
 	try:
@@ -33,7 +35,7 @@ def get_question_paper(testid):
 		paper={}
 	mcqjson={}
 	mcq=ast.literal_eval(q_paper.mcq)
-	mcq = json.dumps(mcq)			
+	mcq = json.dumps(mcq)
 	mcq= json.loads(mcq)
 	for key,value in mcq.items():
 		mcqvalues=ast.literal_eval(value['options'])
@@ -56,3 +58,31 @@ def get_question_paper(testid):
 		i=i+1
 	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':code,'max_time':q_paper.max_time}
 	return paper
+
+def save_answer(answer,userid,testid):	
+	ans_split = answer.split("|")
+	question = ans_split[0]
+	ans=ans_split[1]
+	testid = str(testid)
+	#GETTING CANDIDATE OBJECT
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	try:
+		mcq_ans=ast.literal_eval(candidate.mcq_ans)
+		mcq_ans=json.dumps(mcq_ans)
+		mcq_ans=json.loads(mcq_ans)	
+	except:
+		mcq_ans={}
+	mcq_ans[question] = {"answer":ans}
+	candidate.mcq_ans = mcq_ans	
+	candidate.save()
+	return mcq_ans
+
+def get_answered(userid,testid):
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	try:
+		mcq_ans=ast.literal_eval(candidate.mcq_ans)
+		mcq_ans=json.dumps(mcq_ans)
+		mcq_ans=json.loads(mcq_ans)	
+	except:
+		mcq_ans={}
+	return mcq_ans

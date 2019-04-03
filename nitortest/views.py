@@ -202,8 +202,9 @@ def showAddCode(request):
 						if total_options:
 							total_options+=1
 							for index in range(1,total_options):
-								option='option_'+str(index)	
-								test_options[option]=request.POST.get(option)
+								option=str(index)
+								option_val = "option_"+str(index)
+								test_options[option]=request.POST.get(option_val)
 						options = test_options
 						correct_option = request.POST.get('correct_option')
 						subject= request.POST.get('subject')
@@ -303,10 +304,11 @@ def assignTest(request):
 					date_str = i+"-date"
 					assigned_test = request.POST.get(test_str)
 					assigned_date =  request.POST.get(date_str)
+					mcq_ans = {}
 					if assigned_date == "" or assigned_test is None:
 						messages.error(request,' Either date of test or exam not selected.')
 						return render(request,'Nitor/assignTest.html',context)
-					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test)
+					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans)
 					c.save()
 				return successMessage(request,"Successfully asssigned")
 			else:
