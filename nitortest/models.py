@@ -70,3 +70,5 @@ class CandidateStatus(models.Model):
    correct_ct=models.PositiveIntegerField(null=True,default=0)
    mcq_ans = models.CharField(max_length=1000,null=True,default=0)
    code_ans = models.CharField(max_length=1000,null=True,default=0)
+   starttime=models.DateTimeField(auto_now_add=True, blank=True,null=True)
+   endtime=models.DateTimeField(auto_now_add=True, blank=True,null=True) 

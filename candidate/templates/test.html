@@ -12,11 +12,11 @@
           <div class="row text-center" style="font-family: sans-serif;">
             <div class="col-md-6">
              <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
-                <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+                <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{hour}}">
                   :
-                <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+                <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{minute}}">
                   :
-                <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true">
+                <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{second}}">
               </p>
             </div>
             <div class="col-md-6 text-center">
@@ -37,10 +37,9 @@
                   <br><br>          
                 {% for ke,va in pages.items %}
                  <div class="row">
-                   <div class="col-md-1"><span>{{va.sr}}</span></div>
-                   
+                   <div class="col-md-1"><span>{{va.sr}}</span></div>                   
                  <!-- If question is mcq -->
-        <form method="POST" action="">
+        <form method="POST" action="?page={{ request.session.currentpage }}">
                       {% csrf_token %}
                    {% if va.type == 'mcq'%}
                    <div class="col-md-11"  style="margin-left: -30px;" onsh>
@@ -162,14 +161,24 @@
 
     window.onload = checkThis();
     function checkThis(){
+     pages="{{pages}}";
+     console.log(pages)
+     if(pages=='None'){
+      alert("You have successfully attempted all questions. Please submit the test.")
+     }
+
       {% for key,value in paper.items %}
         {% if key in answered %}
           str= "{{value.sr}}-count";          
           document.getElementById(str).style.background = "#9999";
         {% endif %}
-      {% endfor %}       
+      {% endfor %}    
+      hours=document.getElementById('hours').value; 
+      minutes=document.getElementById('minutes').value;
+      seconds= document.getElementById('seconds').value;
     }
 
+   
     function radioClicked(key){
       console.log(key)
       key_split=key;

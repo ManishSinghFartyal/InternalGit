@@ -3,6 +3,7 @@ import ast
 import json
 from django.db import connection
 from django.db.models import Q
+from django.utils import timezone
 
 def get_id(user):	
 	try:
@@ -82,7 +83,22 @@ def get_answered(userid,testid):
 	try:
 		mcq_ans=ast.literal_eval(candidate.mcq_ans)
 		mcq_ans=json.dumps(mcq_ans)
-		mcq_ans=json.loads(mcq_ans)	
+		mcq_ans=json.loads(mcq_ans)
 	except:
 		mcq_ans={}
 	return mcq_ans
+
+def save_time(starttime,userid,testid):
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	candidate.starttime = starttime
+	paper = get_question_paper(testid)
+	endtime = starttime + timezone.timedelta(minutes=paper["max_time"])
+	candidate.endtime = endtime
+	candidate.save()
+	return endtime
+
+def get_remaining_time(seconds):
+	h = seconds//(60*60)
+	m = (seconds-h*60*60)//60
+	s = seconds-(h*60*60)-(m*60)
+	return h, m, s

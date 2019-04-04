@@ -1,9 +1,13 @@
 from django.shortcuts import render,redirect
-from .service import get_id,get_test,get_question_paper,save_answer,get_answered
+from .service import get_id,get_test,get_question_paper,save_answer,get_answered,save_time,get_remaining_time
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from nitortest.models import CandidateStatus
+from django.db.models import Q
+import datetime
+
 
 # Create your views here.
 from . import checkCodePython as cPython
@@ -20,52 +24,82 @@ def candidateHome(request):
 	tests = get_test(id)
 	return render(request,'candidateHome.html',{'tests':tests})
 
-def test(request,testid):
+
+def starttest(request,testid):
 	answered = {}
-	time = 0
 	user = request.user	
 	if user.is_authenticated:
 		if user.is_superuser:
 			return index(request)
 		#If user submit a mcq answer
-		elif request.method == 'POST':
-			userid = get_id(user)
-			ans = request.POST.get("correct")
-			page = int(request.GET.get('page', 1))
-			answered = save_answer(ans,userid,testid)
-			i = testid
-			paper = get_question_paper(i)
-			question = {'mcq':paper['mcq'],'code':paper["coding"]}			
-			question_paper = {}
-			for key,value in question.items():
-				for k,v in value.items():
-					question_paper[k] = v
-			t = tuple(question_paper.items())
-			p = Paginator(t,1)
-			paginate = p.page(page)
-			pages = dict(paginate)
-			starttime = timezone.now
 		else:
 			userid = get_id(user)
-			answered = get_answered(userid,testid)			
+			starttime = timezone.localtime(timezone.now())
+			endtime = save_time(starttime,userid,testid)
+			test_str="/candidate/test/"+testid
+			request.session['currentpage']=2
+			return HttpResponseRedirect(test_str)
+	return index(request)
+
+
+def test(request,testid):
+	answered = {}
+	user = request.user	
+	if user.is_authenticated:
+		if user.is_superuser:
+			return index(request)
+		#If user submit a mcq answer
+		else:
+			userid = get_id(user)
+			answered = get_answered(userid,testid)
 			page = request.GET.get('page', 1)
 			i = testid
 			paper = get_question_paper(i)
-			question = {'mcq':paper['mcq'],'code':paper["coding"]}
-			question_paper = {}
-			for key,value in question.items():
-				for k,v in value.items():
-					question_paper[k] = v
-			t = tuple(question_paper.items())
-			p = Paginator(t,1)
-			paginate = p.page(page)
-			pages = dict(paginate)
-			starttime = timezone.localtime(timezone.now())
-			endtime = timezone.localtime(timezone.now())
-			endtime = endtime+timezone.timedelta(minutes=paper["max_time"])
-			print(starttime,"   ",endtime)
-		return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'answered':answered,'starttime':starttime})
+			candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+			if request.method == 'POST':	
+				endtime = candidate.endtime
+				remanining = endtime -  timezone.localtime(timezone.now())
+				time = remanining.total_seconds()
+				h,m,s=get_remaining_time(time)				
+				ans = request.POST.get("correct")
+				page=int(request.GET.get('page'))
+				page=page+1
+				request.session['currentpage'] = page
+				save_answer(ans,userid,testid)
+				answered = get_answered(userid,testid)
+				question = {'mcq':paper['mcq'],'code':paper["coding"]}
+				question_paper = {}
+				for key,value in question.items():
+					for k,v in value.items():
+						question_paper[k] = v
+				t = tuple(question_paper.items())
+				p = Paginator(t,1)
+				paginate = p.page(page)
+				if paginate.has_next():
+					pages = dict(paginate)
+				else:
+					pages = None
+			else:
+				print("GET")				
+				endtime = candidate.endtime
+				remanining = endtime -  timezone.localtime(timezone.now())
+				print("remian " ,remanining)
+				page = int(request.GET.get('page',1))
+				time = remanining.total_seconds()
+				h,m,s=get_remaining_time(time)
+				question = {'mcq':paper['mcq'],'code':paper["coding"]}
+				question_paper = {}
+				for key,value in question.items():
+					for k,v in value.items():
+						question_paper[k] = v
+				t = tuple(question_paper.items())
+				p = Paginator(t,1)
+				paginate = p.page(page)
+				pages = dict(paginate)
+		return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'answered':answered,'hour':int(h),'minute':int(m),'second':int(s)})
 	return redirect("/login")
+
+
 
 
 def ajaxcall(request):
