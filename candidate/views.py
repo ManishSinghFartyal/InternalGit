@@ -37,7 +37,7 @@ def starttest(request,testid):
 			starttime = timezone.localtime(timezone.now())
 			endtime = save_time(starttime,userid,testid)
 			test_str="/candidate/test/"+testid
-			request.session['currentpage']=2
+			request.session['currentpage']=1
 			return HttpResponseRedirect(test_str)
 	return index(request)
 
@@ -63,8 +63,6 @@ def test(request,testid):
 				h,m,s=get_remaining_time(time)				
 				ans = request.POST.get("correct")
 				page=int(request.GET.get('page'))
-				page=page+1
-				request.session['currentpage'] = page
 				save_answer(ans,userid,testid)
 				answered = get_answered(userid,testid)
 				question = {'mcq':paper['mcq'],'code':paper["coding"]}
@@ -74,16 +72,19 @@ def test(request,testid):
 						question_paper[k] = v
 				t = tuple(question_paper.items())
 				p = Paginator(t,1)
-				paginate = p.page(page)
-				if paginate.has_next():
+				total_pages = p.num_pages
+				paginate = p.page(page)				
+				if page<total_pages:
+					pages = dict(paginate)
+					request.session['currentpage']=paginate.next_page_number()
+				elif page==total_pages:
 					pages = dict(paginate)
 				else:
 					pages = None
+					request.session['currentpage']=1
 			else:
-				print("GET")				
 				endtime = candidate.endtime
 				remanining = endtime -  timezone.localtime(timezone.now())
-				print("remian " ,remanining)
 				page = int(request.GET.get('page',1))
 				time = remanining.total_seconds()
 				h,m,s=get_remaining_time(time)
@@ -94,6 +95,7 @@ def test(request,testid):
 						question_paper[k] = v
 				t = tuple(question_paper.items())
 				p = Paginator(t,1)
+				request.session['currentpage']=page+1
 				paginate = p.page(page)
 				pages = dict(paginate)
 		return render(request,'test.html',{'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'answered':answered,'hour':int(h),'minute':int(m),'second':int(s)})
@@ -103,8 +105,9 @@ def test(request,testid):
 
 
 def ajaxcall(request):
+	userid = get_id(request.user)
 	code = request.GET['code']
-	output = cPython.run_code(code)
+	output = cPython.run_code(code,userid)
 	return HttpResponse(output)
 
 

@@ -2,158 +2,147 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
-<div class="wrapper" style="margin-left: -250px;" >
-	<form onload="timer2();">
+<div class="wrapper">
+	<form onload="timer2();"></form>    
 	 {% csrf_token %}
     <div class="main-panel">
     	{% include 'navbar.html'  %}
-    	<div class="content">        
-        <div class="container-fluid">
-          <div class="row text-center" style="font-family: sans-serif;">
-            <div class="col-md-6">
-             <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
-                <input type="text" name="hours" id="hours" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{hour}}">
-                  :
-                <input type="text" name="minutes" id="minutes" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{minute}}">
-                  :
-                <input type="text" name="seconds" id="seconds" style="width: 36px;height: 36px;text-align:center;" disabled="true" value="{{second}}">
-              </p>
-            </div>
-            <div class="col-md-6 text-center">
-              <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger">
-            </div>
-        </div>
-          <div class="row">
-            <div class="col-md-9">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title">{{paper_details.title}}</h4>
-                  <p class="card-title">Total questions : {{paper_details.total}}</p>
-                  <p class="card-title">Max_time : {{paper_details.max_time}} minutes</p>
-                </div>
-  </form>
-                <!-- Question paper for mcq -->
-                <div class="card-body">
-                  <br><br>          
-                {% for ke,va in pages.items %}
-                 <div class="row">
-                   <div class="col-md-1"><span>{{va.sr}}</span></div>                   
-                 <!-- If question is mcq -->
-        <form method="POST" action="?page={{ request.session.currentpage }}">
-                      {% csrf_token %}
-                   {% if va.type == 'mcq'%}
-                   <div class="col-md-11"  style="margin-left: -30px;" onsh>
-                      <p class="lead">
-                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
-                        rows = "7" {% elif va.desc|length > 100 %} 
-                        rows = "5" {% else %} rows="1" {% endif %} cols="80" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
-                      </p>
-                        {% for k,v in va.options.items %}                           
-                        <p>
-                        <div>
-                          <input type="radio" name="correct" value="{{ke}}|{{k}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}"
-                          {% for x,y in answered.items %}
-                            {% if x == ke%}
-                              {% if y.answer == k %}
-                                checked="true" 
-                               {%endif%}
-                            {% endif %}
-                           {% endfor %}
-                          >
-                           &nbsp;&nbsp;{{v}}
-                          <!--
-                          <input type="radio" name="correct" value="{{ke}}|{{k}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}" onclick="radioClicked2('{{ke}}',this)"> &nbsp;&nbsp;{{v}}
-                          -->
-                        </div>                          
-                        </p>                       
-                        {% endfor %}
-                      </div>
-                      <div class="col-md-6 text-center">
-                        <input type="submit" name="submit" value="Submit answer" class="btn btn-sm btn-success">
-                      </div>
-                    </div>
-        </form>
-       <!-- If question is coding test -->
-                   {%elif va.type == 'code' %}
-                    <div class="col-md-11" style="margin-left: -30px;">
-                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
-                        rows = "7" {% elif va.title|length > 100 %} 
-                        rows = "3" {% else %} rows="1" {% endif %} cols="100" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
-                      <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
-                        rows = "7" {% elif va.desc|length > 100 %} 
-                        rows = "7" {% else %} rows="7" {% endif %} cols="100" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
-                        <div><p class="lead"><u>Write your code</u>
-                        <hr>
-                        </p>
-                      </div>
-                   </div>
-                   <div class="col-md-11">
-                    <textarea id="code">{{va.snippet}}</textarea>
-                    <hr>
-                   </div>                   
-                    <div class="col-md-11 text-center">
-                      <input type="submit" class="btn btn-success btn-md" id='runajax' value = "Run"> 
-                    </div> 
-                     <div class="col-md-11 text-center" > 
-                            <h5 style="font-family: inherit;">Input:</h5>
-                            <textarea style="background: black;color: white; font-weight: bold;" rows="2" cols="95" disabled="true"></textarea>
-                            <h5 style="font-family: inherit;">Output:</h5>
-                            <textarea style="background: black;color: white; font-weight: bold;" rows="10" cols="95" disabled="true" id="output"></textarea>
-                    </div>
-                 </div>
-                   {% endif %}
-                   </div>
-                {%endfor%}
+    	<div class="content"  style="margin-left: -280px;">
+        <div class="container">
+          <div class="row text-left" style="font-family: sans-serif;">
+            <div class="row ">
+                  <div class="col-sm-11 text-center ">
+                    <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
+                    <input type="text" name="hours" id="hours" style="width: 26px;height: 26px;" disabled="true" value="{{hour}}">
+                      <span>:</span>
+                    <input type="text" name="minutes" id="minutes" style="width: 26px;height: 26px;" disabled="true" value="{{minute}}">
+                      :
+                    <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
+                  </p>
+                  </div>              
+                  <div class="col-sm-1 text-right">
+                    <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                   </div>
-                </div>
-
-      <!-- For pagination -->
-                    <div class="col-md-3">
-                        <div class="card" > 
-                              <div class="card-body"> 
-                              {% if paginator.has_other_pages %}
-                                  <ul class="pagination">
-                                   <div class="row">
-                                    <div class="col-md-12 text-center" style="margin-top: 10px;">
-                                    {% if paginator.has_previous %}
-                                    <li class="page-item" style="background-color: #9111;font-family: cursive;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
-                                    {% else %}
-                                    <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;font-size: 12px;color: black;background-color: #9111;"><span>&laquo; Previous</span></li>
-                                    {% endif %}
-                                    </div> 
-                                  {% for i in paginator.paginator.page_range %}
-                                  {% if paginator.number == i %}
-                                    <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                    <li class="active page-item page-link" id="{{i}}-count" style="font-size: 12px;font-family: cursive;color: black;background-color: #9111;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
-                                    </div>
-                                  
-                                  {% else %}
-                                    <div class="col-md-3 text-center" style="margin-top: 10px;">
-                                    <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();">{{ i }}</a></li>
-                                    </div>
-                                  {% endif %}                                    
-                                  {% endfor %}
-                                                               
-
-                                   <div class="col-md-12 text-center" style="margin-top: 10px;">
-                                  {% if paginator.has_next %}
-                                    <li class="page-item " style="font-family: cursive;background-color: #9111;font-weight: bolder;font-size: 12px;color: black;font-family: cursive;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
-                                  {% else %}
-                                    <li class="disabled page-item page-link" style="background: #0007;background-color: #9111;opacity: 0.3;color: black;font-family: cursive;"><span>Next &raquo;</span></li>
-                                  </div>
-                                  {% endif %}
-                                  </div>
-                                </div>
-                              </ul>
-                            {% endif %} 
+            </div>
+              <div class="row">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                         <h5 class="card-title">{{paper_details.title}}</h5>
+                         <p class="card-title">Total questions : {{paper_details.total}}</p>
+                         <p class="card-title">Max_time : {{paper_details.max_time}} minutes</p>
                         </div>
-                </div> 
-               </div>
+                      <div class="card-body" style="margin-top: 30px;">
+                            {% for ke,va in pages.items %}
+                            <div class="row">
+                              <div class="col-md-1"><span>{{va.sr}}</span></div>                   
+                              <div class="col-md-11" >     
+                              <form method="POST" action="?page={{ request.session.currentpage }}">
+                               {% csrf_token %}
+
+                               <!-- If question is MCQ type -->
+                               {% if va.type == 'mcq'%}
+                                  <textarea style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 17px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+                                  rows = "7" {% elif va.desc|length > 100 %} 
+                                  rows = "5" {% else %} rows="2" {% endif %} cols="60" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
+                                  {% for k,v in va.options.items %}  
+                                  <br>                         
+                                    <div>
+                                        <input type="radio" name="correct" value="{{ke}}|{{k}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}"
+                                        {% for x,y in answered.items %}
+                                          {% if x == ke%}
+                                            {% if y.answer == k %}
+                                              checked="true" 
+                                             {%endif%}
+                                          {% endif %}
+                                         {% endfor %}
+                                        >
+                                       &nbsp;&nbsp;{{v}}
+                                    </div>
+                                  {% endfor %}
+                                    <div class="col-md-6 text-center">
+                                       <input type="submit" name="submit" value="Submit answer" class="btn btn-sm btn-success" onclick="allcheck();">
+                                    </div>
+                                </form>
+                                <!-- For coding type -->
+                               {%elif va.type == 'code' %}
+                               <div class="col-md-12">
+                                 <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+                                  rows = "7" {% elif va.title|length > 100 %} 
+                                  rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
+                                <textarea class="md-textarea"  style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
+                                  rows = "7" {% elif va.desc|length > 100 %} 
+                                  rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
+                                  <div><p class="lead"><u>Write your code</u><hr></p></div>
+                                  <div class="col-md-12">
+                                    <textarea class="md-textarea" id="code">{{va.snippet}}</textarea>
+                                    <hr>
+                                  </div>                   
+                                  <div class="col-md-12 text-center">
+                                    <input type="submit" class="btn btn-success btn-md" id='runajax' value = "Run"> 
+                                  </div> 
+                                   <div class="col-md-11" >                                 
+                                          <h5 style="font-family: inherit;">Output:</h5>
+                                          <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="7" cols="65" disabled="true" id="output"></textarea>
+                                  </div>
+                               </div>
+                                {% endif %}
+                               </div>
+
+
+                               
+                              
+                            </div>
+                           {% endfor %}
+                      </div>                                 
+                    </div>
+                  </div>
+                <div class="col-md-3">
+                  <div class="card">
+                    <div class="card-body"> 
+                      {% if paginator.has_other_pages %}
+                      <ul class="pagination">
+                         <div class="row">
+                          <div class="col-md-12 text-center" style="margin-top: 10px;">
+                          {% if paginator.has_previous %}
+                          <li class="page-item" style="background-color: #9111;font-family: cursive;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
+                          {% else %}
+                          <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;font-size: 12px;color: black;background-color: #9111;"><span>&laquo; Previous</span></li>
+                          {% endif %}
+                          </div> 
+                        {% for i in paginator.paginator.page_range %}
+                        {% if paginator.number == i %}
+                          <div class="col-md-3 text-center" style="margin-top: 10px;">
+                          <li class="active page-item page-link" id="{{i}}-count" style="font-size: 12px;font-family: cursive;color: black;background-color: #9111;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
+                          </div>
+                        
+                        {% else %}
+                          <div class="col-md-3 text-center" style="margin-top: 10px;">
+                          <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();">{{ i }}</a></li>
+                          </div>
+                        {% endif %}                                    
+                        {% endfor %}
+                                                     
+
+                         <div class="col-md-12 text-center" style="margin-top: 10px;">
+                        {% if paginator.has_next %}
+                          <li class="page-item " style="font-family: cursive;background-color: #9111;font-weight: bolder;font-size: 12px;color: black;font-family: cursive;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
+                        {% else %}
+                          <li class="disabled page-item page-link" style="background: #0007;background-color: #9111;opacity: 0.3;color: black;font-family: cursive;"><span>Next &raquo;</span></li>
+                        </div>
+                        {% endif %}
+                        </div>
+                        {% endif %}
+                  </div>
+                </div>   
+            </div>
           </div>
-        </div>
-      </div>
+        </div>        
+      </div>    
     </div>
-	
+</div>
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
   <script type="text/javascript">
@@ -161,12 +150,6 @@
 
     window.onload = checkThis();
     function checkThis(){
-     pages="{{pages}}";
-     console.log(pages)
-     if(pages=='None'){
-      alert("You have successfully attempted all questions. Please submit the test.")
-     }
-
       {% for key,value in paper.items %}
         {% if key in answered %}
           str= "{{value.sr}}-count";          
@@ -176,9 +159,13 @@
       hours=document.getElementById('hours').value; 
       minutes=document.getElementById('minutes').value;
       seconds= document.getElementById('seconds').value;
-    }
+    };
 
-   
+    function allcheck(){
+     {% if paginator.has_next is False %}
+      alert("You have successfully attempted all questions. Please submit the test.")
+     {% endif %}     
+    };
     function radioClicked(key){
       console.log(key)
       key_split=key;

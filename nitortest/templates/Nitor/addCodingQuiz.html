@@ -23,8 +23,8 @@
           <div class="col-md-12">
               <select  id='qtype' class="form-control form-control-lg browser-default custom-select" onchange="showAddQuestion();" name='qtype'>
                 <option disabled="true" selected="true">Select question type here</option>
-                <option value="mcq" {%if current == 'mcq'%}selected="true"{%endif%}>Multiple choice question</option>
-                <option value="ct" {%if current == 'ct'%}selected="true"{%endif%}>Coding test</option>
+                <option value="mcq" {% if current == 'mcq' %}selected="true"{%endif%}>Multiple choice question</option>
+                <option value="ct" {% if current == 'ct' %}selected="true"{%endif%}>Coding test</option>
                 <option value="tha">Theoretical assignments</option>
               </select>              
             </div>

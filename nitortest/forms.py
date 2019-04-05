@@ -226,7 +226,6 @@ class addCodingTestForm(forms.Form):
     level=forms.ChoiceField(choices=level,required=True)
     def __init__(self, *args, **kwargs):
         extra_fields = kwargs.pop('extra', 0)
-
         super(addCodingTestForm, self).__init__(*args, **kwargs)
         self.fields['total_testcases_count'].initial = extra_fields
 
@@ -236,6 +235,8 @@ class addCodingTestForm(forms.Form):
                 forms.CharField()
             self.fields['outputs_{index}'.format(index=index)] = \
                 forms.CharField()
+
+
 
 class createQuestionPaper(forms.Form):
     """docstring for createQuestionPaper"forms.rm def __init__(self, arg):

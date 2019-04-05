@@ -15,7 +15,7 @@ function addTestCase(){
 
       input = document.createElement('input'); 
       input.setAttribute('name','input_'+count)  ;
-      input.setAttribute('id','id_input_'+count) ; 
+      input.setAttribute('id','id_input_'+count) ;       
       document.getElementById('tc').appendChild(input) ;
 
       output_label = document.createElement('label');

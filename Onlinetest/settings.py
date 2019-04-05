@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -145,6 +146,9 @@ DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 STATIC_URL = '/static/'
 
 STATIC_ROOT = 'nitortest/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'code/') # 'data' is my media folder
+MEDIA_URL = '/code/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',    

@@ -168,8 +168,11 @@ def showAddCode(request):
 				qtype = request.POST.get('qtype')
 			#code to add coding test in database
 				if qtype == 'ct':
-					form2 = addCodingTestForm(request.POST, extra=request.POST.get('total_testcases_count'))
+					print(request.POST.get('total_testcases_count'))
+					form2 = addCodingTestForm(request.POST, {'extra':int(request.POST.get('total_testcases_count'))})
+					print(form2.is_valid())					
 					if form2.is_valid():
+						print(qtype)
 						test_cases={}
 						title= request.POST.get('title')
 						level=request.POST.get('level')

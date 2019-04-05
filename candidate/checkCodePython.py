@@ -7,29 +7,29 @@ return the output to be print on UI
 from os.path import join
 import os
 import subprocess
-def run_code(code):
-	'''
-	a contains all the code coming from UI
-	'''
-	a=code
-	# saving this file into .py file	
-	file = open('output.py','w')
-	file.write(a)	
-	file.close()		
-	#To print the file content
-	#print(file.read())
-	#To print the file directory
-	#print(os.path.realpath(file.name))
 
-	# To run the code in python shell
-	#output=os.system('python output.py')
-	#print(output)
+from django.conf import settings
+
+media = settings.MEDIA_ROOT
+def run_code(code,userid):	
+	''' 
+		a contains code user entered in given code editor
+		now this code needs to create a folder which contains the user code into its respective 
+		folder.
+	'''
+	
+	hi_code = media+str(userid)+'.py' 
+	a=code	
+	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
+	with open(hi_code, "w") as f:
+		f.write(a)
+	f.close()
+	command = 'python '+hi_code
 	try:
-		code_output=subprocess.check_output('python output.py',stderr= subprocess.STDOUT,shell=True)
+		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True)
 	except subprocess.CalledProcessError as cl:
 		code_output=cl.output
 		print("Error ",code_output)
 	new_output=code_output.decode()
-	#print(new_output)		
 	return new_output
 	
