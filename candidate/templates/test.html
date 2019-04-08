@@ -23,7 +23,7 @@
                   <div class="col-sm-1 text-right">
                     <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                   </div>
-            </div>
+            </div>            
               <div class="row">
                 <div class="col-md-9">
                     <div class="card">
@@ -64,34 +64,35 @@
                                        <input type="submit" name="submit" value="Submit answer" class="btn btn-sm btn-success" onclick="allcheck();">
                                     </div>
                                 </form>
-                                <!-- For coding type -->
-                               {%elif va.type == 'code' %}
-                               <div class="col-md-12">
-                                 <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
-                                  rows = "7" {% elif va.title|length > 100 %} 
-                                  rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
-                                <textarea class="md-textarea"  style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
-                                  rows = "7" {% elif va.desc|length > 100 %} 
-                                  rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
-                                  <div><p class="lead"><u>Write your code</u><hr></p></div>
-                                  <div class="col-md-12">
-                                    <textarea class="md-textarea" id="code">{{va.snippet}}</textarea>
-                                    <hr>
-                                  </div>                   
-                                  <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-success btn-md" id='runajax' value = "Run"> 
-                                  </div> 
-                                   <div class="col-md-11" >                                 
-                                          <h5 style="font-family: inherit;">Output:</h5>
-                                          <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="7" cols="65" disabled="true" id="output"></textarea>
-                                  </div>
+<!-- For coding type -->
+       {%elif va.type == 'code' %}
+       <div class="col-md-12">
+         <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+          rows = "7" {% elif va.title|length > 100 %} 
+          rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
+        <textarea class="md-textarea"  style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
+          rows = "7" {% elif va.desc|length > 100 %} 
+          rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
+          <div><p class="lead"><u>Write your code</u><hr></p></div>
+          <div class="col-md-12">
+            <textarea class="md-textarea" id="code">{{va.snippet}}</textarea>
+            <hr>
+          </div>   
+          <div class="row">
+            <div class="col-md-6 text-center">
+            <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
+          </div> 
+          <div class="col-md-6">
+            <input type="submit" class="btn btn-success btn-sm"  value = "Submit code"> 
+          </div>                                  
+          </div>                                  
+           <div class="col-md-11" >                                 
+                  <h5 style="font-family: inherit;">Output:</h5>
+                  <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
+          </div>
+       </div>
+        {% endif %}
                                </div>
-                                {% endif %}
-                               </div>
-
-
-                               
-                              
                             </div>
                            {% endfor %}
                       </div>                                 
@@ -114,15 +115,13 @@
                         {% if paginator.number == i %}
                           <div class="col-md-3 text-center" style="margin-top: 10px;">
                           <li class="active page-item page-link" id="{{i}}-count" style="font-size: 12px;font-family: cursive;color: black;background-color: #9111;"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
-                          </div>
-                        
+                          </div>                        
                         {% else %}
                           <div class="col-md-3 text-center" style="margin-top: 10px;">
                           <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();">{{ i }}</a></li>
                           </div>
                         {% endif %}                                    
-                        {% endfor %}
-                                                     
+                        {% endfor %}                                                    
 
                          <div class="col-md-12 text-center" style="margin-top: 10px;">
                         {% if paginator.has_next %}
@@ -135,6 +134,7 @@
                         {% endif %}
                   </div>
                 </div>   
+            
             </div>
           </div>
         </div>        
@@ -208,7 +208,7 @@
       }
      document.getElementById("hours").value = hours;
      document.getElementById("minutes").value = minutes;
-     document.getElementById("seconds").value =seconds;     
+     document.getElementById("seconds").value =seconds;
     }, 1000);
 
      var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
@@ -226,17 +226,21 @@
   })();
 */
  $("#runajax").click(function(){
+  que_id = this.name;
+  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
   code = editor.getValue()
   $.ajax({
     type : "GET",
-    url : "http://127.0.0.1:8000/candidate/hello/",
+    url : url,
     dataType :"text",
     csrfmiddlewaretoken: '{{ csrf_token }}',
     data:{
       "code" : code,
     },
     success : function(data){
-      $("#output").val(data);  
+      $("#output").val(data);
+      console.log(data);
+
     },
     failure: function(data) { 
         console.log("Got error");

@@ -217,7 +217,6 @@ class addMcqForm(forms.Form):
 
 # coding test form
 class addCodingTestForm(forms.Form):
-
     title = forms.CharField(max_length=500,required=True)
     description = forms.CharField(max_length=500,widget=forms.Textarea,required=True)
     snippet=forms.CharField(max_length=100,widget=forms.Textarea)
@@ -235,6 +234,14 @@ class addCodingTestForm(forms.Form):
                 forms.CharField()
             self.fields['outputs_{index}'.format(index=index)] = \
                 forms.CharField()
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if title:
+            title = self.cleaned_data['title']
+        else:
+            raise forms.ValidationError('*Title missing.')
+        return title    
 
 
 

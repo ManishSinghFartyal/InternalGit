@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .service import get_id,get_test,get_question_paper,save_answer,get_answered,save_time,get_remaining_time
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
@@ -104,11 +104,13 @@ def test(request,testid):
 
 
 
-def ajaxcall(request):
+def ajaxcall(request,queid):
 	userid = get_id(request.user)
 	code = request.GET['code']
-	output = cPython.run_code(code,userid)
-	return HttpResponse(output)
+	#json = cPython.run_code2(code,userid,queid)
+	if 'input' in code:
+		print("yes")
+	return HttpResponse("Yes")
 
 
 def ex(request):
