@@ -168,9 +168,9 @@ def showAddCode(request):
 				qtype = request.POST.get('qtype')
 			#code to add coding test in database
 				if qtype == 'ct':
-					print(request.POST.get('total_testcases_count'))
+					print(request.POST)
 					form2 = addCodingTestForm(request.POST, {'extra':int(request.POST.get('total_testcases_count'))})
-					print(form2.is_valid())					
+					print(form2.errors)
 					if form2.is_valid():
 						print(qtype)
 						test_cases={}
@@ -196,7 +196,7 @@ def showAddCode(request):
 			#code to add mcq in database
 
 				elif qtype == 'mcq':
-					print(request.POST.get('total_options'))
+					print(request.POST)
 					form1 = addMcqForm(request.POST, {'extra':int(request.POST.get('total_options'))})
 					if form1.is_valid():
 						test_options={}
@@ -212,7 +212,6 @@ def showAddCode(request):
 						correct_option = request.POST.get('correct_option')
 						subject= request.POST.get('subject')
 						question=Question(qtype=qtype,subject=subject,description=question,options=options,correct_option=correct_option)
-						print(qtype,'\n',question,'\n',options,'\n',correct_option,'\n',subject)
 						question.save()
 						return successMessage(request,"One multiple choice question saved successfully.")
 					else:

@@ -107,10 +107,8 @@ def test(request,testid):
 def ajaxcall(request,queid):
 	userid = get_id(request.user)
 	code = request.GET['code']
-	#json = cPython.run_code2(code,userid,queid)
-	if 'input' in code:
-		print("yes")
-	return HttpResponse("Yes")
+	json = cPython.run_code2(code,userid,queid)	
+	return JsonResponse(json)
 
 
 def ex(request):

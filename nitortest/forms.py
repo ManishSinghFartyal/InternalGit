@@ -200,10 +200,8 @@ class addMcqForm(forms.Form):
     def clean_question(self):
         question = self.cleaned_data['question']
         if question:
-            print('yes question')
             question = self.cleaned_data['question']
         else:
-            print('no question')
             raise forms.ValidationError('*Question missing.')
         return question
     
@@ -215,33 +213,35 @@ class addMcqForm(forms.Form):
         return options
 
 
+
 # coding test form
 class addCodingTestForm(forms.Form):
-    title = forms.CharField(max_length=500,required=True)
-    description = forms.CharField(max_length=500,widget=forms.Textarea,required=True)
-    snippet=forms.CharField(max_length=100,widget=forms.Textarea)
-    language=forms.ChoiceField(choices=languages,required=True)
+    title = forms.CharField(max_length=1500)
+    description = forms.CharField(max_length=1500,widget=forms.Textarea)
+    snippet=forms.CharField(max_length=1500,widget=forms.Textarea)
+    language=forms.ChoiceField(choices=languages)
     total_testcases_count=forms.CharField(max_length=300,widget = forms.TextInput(attrs={'readonly':'readonly'})) #widget=forms.HiddenInput()
-    level=forms.ChoiceField(choices=level,required=True)
-    def __init__(self, *args, **kwargs):
+    level=forms.ChoiceField(choices=level)
+
+    def __init__(self, *args, **kwargs):      
         extra_fields = kwargs.pop('extra', 0)
         super(addCodingTestForm, self).__init__(*args, **kwargs)
         self.fields['total_testcases_count'].initial = extra_fields
 
         for index in range(int(extra_fields)):
             # generate extra fields in the number specified via extra_fields
-            self.fields['testcases_{index}'.format(index=index)] = \
-                forms.CharField()
-            self.fields['outputs_{index}'.format(index=index)] = \
-                forms.CharField()
+            self.fields['testcases_{index}'.format(index=index)] = forms.CharField()
+            self.fields['outputs_{index}'.format(index=index)] =  forms.CharField()
 
-    def clean_title(self):
+    def clean_title(self):        
         title = self.cleaned_data['title']
         if title:
             title = self.cleaned_data['title']
         else:
             raise forms.ValidationError('*Title missing.')
-        return title    
+        return title
+
+
 
 
 

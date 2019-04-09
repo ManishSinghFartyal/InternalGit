@@ -30,12 +30,12 @@ class Question(models.Model):
    qtype = models.CharField(max_length=50,null=True)
    subject = models.CharField(max_length=40,null=True)
    language = models.CharField(max_length=40,null=True)
-   title = models.CharField(max_length=50,null=True)
-   description = models.CharField(max_length=500)
-   snippet=models.CharField(max_length=100,null=True)
-   options = models.CharField(max_length=500,null=True)
+   title = models.CharField(max_length=1500,null=True)
+   description = models.CharField(max_length=1500)
+   snippet=models.CharField(max_length=1500,null=True)
+   options = models.CharField(max_length=1500,null=True)
    correct_option=models.CharField(max_length=2,null=True)
-   testcases=models.CharField(max_length=300,null=True)
+   testcases=models.CharField(max_length=1300,null=True)
    level=models.CharField(max_length=10,null=True)
 
 

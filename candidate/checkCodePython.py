@@ -15,6 +15,9 @@ from nitortest.models import Question
 from .service import get_question_paper
 media = settings.MEDIA_ROOT
 
+
+
+
 def run_code(code,userid):	
 	''' 
 		a contains code user entered in given code editor
@@ -39,6 +42,7 @@ def run_code(code,userid):
 
 
 
+
 def fetch_test_cases(queid):
 	que= Question.objects.get(id=queid)
 	if que.qtype == "ct":
@@ -46,6 +50,8 @@ def fetch_test_cases(queid):
 		testcases=json.dumps(testcases)
 		testcases=json.loads(testcases)
 	return testcases
+
+
 
 def get_output(testcase,code,userid):
 	testcase = str.encode(testcase)
@@ -65,6 +71,8 @@ def get_output(testcase,code,userid):
 	return new_output
 
 
+
+
 def run_code2(code,userid,queid):	
 	''' 
 		a contains code user entered in given code editor
@@ -79,9 +87,9 @@ def run_code2(code,userid,queid):
 		new_output = get_output(value,code,userid)
 		#print("expected = ",len(old_output),"  Your=",len(new_output))
 		if new_output.strip() != old_output.strip():
-			answers[case] = {"result":"correct","output":new_output}
-		else:
 			answers[case] = {"result":"incorrect","output":new_output}
+		else:
+			answers[case] = {"result":"correct","output":new_output}
 	return answers
 
 def show_output(code,userid,queid):

@@ -1,6 +1,13 @@
   {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+<style type="text/css">
+  #testcases-info{
+    color : black;
+    text-align: center;
+  }
+
+</style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
 <div class="wrapper">
 	<form onload="timer2();"></form>    
@@ -24,9 +31,9 @@
                     <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                   </div>
             </div>            
-              <div class="row">
+              <div class="row" >
                 <div class="col-md-9">
-                    <div class="card">
+                    <div class="card" id="testcase">
                         <div class="card-header card-header-primary">
                          <h5 class="card-title">{{paper_details.title}}</h5>
                          <p class="card-title">Total questions : {{paper_details.total}}</p>
@@ -86,10 +93,10 @@
             <input type="submit" class="btn btn-success btn-sm"  value = "Submit code"> 
           </div>                                  
           </div>                                  
-           <div class="col-md-11" >                                 
+           <!-- <div class="col-md-11" >                                 
                   <h5 style="font-family: inherit;">Output:</h5>
                   <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
-          </div>
+          </div> -->
        </div>
         {% endif %}
                                </div>
@@ -237,10 +244,10 @@
     data:{
       "code" : code,
     },
+    contentType: 'application/json',
     success : function(data){
       $("#output").val(data);
-      console.log(data);
-
+      testcases_matched(data)
     },
     failure: function(data) { 
         console.log("Got error");
@@ -251,7 +258,30 @@
   });
    return false;
  });
-</script>
+
+ function testcases_matched(json){
+ json = JSON.parse(json); 
+ check = document.getElementById('testcases-info')
+ if(check){
+  console.log("exists");
+  check.remove();
+ }
+
+ testcases = document.createElement('div');
+ testcases.setAttribute('id','testcases-info');
+ i=1;
+ for (var key in json) {     
+     result = document.createElement('h6');
+     line = document.createElement('hr');
+     result.setAttribute('id','result');     
+     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].output+"<br>"
+     testcases.appendChild(result);
+     i++;
+   }
+     document.getElementById('testcase').appendChild(testcases);   
+ }
+
+</script> 
  
 
 {% endblock %}
