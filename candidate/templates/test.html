@@ -5,6 +5,17 @@
   #testcases-info{
     color : black;
     text-align: center;
+    border: green solid;
+    border-width: 4px;
+    padding: 15px 15px 15px 15px;
+    text-indent: inherit;
+    color: green;
+    font-size:14px;
+    border-radius: 10px;  
+    align-self: center;  
+  }
+   #result{      
+   padding: 5px 15px 5px 15px; 
   }
 
 </style>
@@ -18,6 +29,7 @@
         <div class="container">
           <div class="row text-left" style="font-family: sans-serif;">
             <div class="row ">
+
                   <div class="col-sm-11 text-center ">
                     <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
                     <input type="text" name="hours" id="hours" style="width: 26px;height: 26px;" disabled="true" value="{{hour}}">
@@ -44,7 +56,7 @@
                             <div class="row">
                               <div class="col-md-1"><span>{{va.sr}}</span></div>                   
                               <div class="col-md-11" >     
-                              <form method="POST" action="?page={{ request.session.currentpage }}">
+                              <form method="POST" action="?page={{ request.session.currentpage }}&type={{va.type}}">
                                {% csrf_token %}
 
                                <!-- If question is MCQ type -->
@@ -56,7 +68,7 @@
                                   <br>                         
                                     <div>
                                         <input type="radio" name="correct" value="{{ke}}|{{k}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}"
-                                        {% for x,y in answered.items %}
+                                        {% for x,y in mcq_answered.items %}
                                           {% if x == ke%}
                                             {% if y.answer == k %}
                                               checked="true" 
@@ -70,9 +82,11 @@
                                     <div class="col-md-6 text-center">
                                        <input type="submit" name="submit" value="Submit answer" class="btn btn-sm btn-success" onclick="allcheck();">
                                     </div>
-                                </form>
+                                
 <!-- For coding type -->
        {%elif va.type == 'code' %}
+    
+       {% csrf_token %}
        <div class="col-md-12">
          <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
           rows = "7" {% elif va.title|length > 100 %} 
@@ -82,7 +96,8 @@
           rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
           <div><p class="lead"><u>Write your code</u><hr></p></div>
           <div class="col-md-12">
-            <textarea class="md-textarea" id="code">{{va.snippet}}</textarea>
+            <textarea class="md-textarea" id="code">{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%else%}{{va.snippet}}{% endif %}{% endfor %}
+            </textarea>
             <hr>
           </div>   
           <div class="row">
@@ -90,7 +105,7 @@
             <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
           </div> 
           <div class="col-md-6">
-            <input type="submit" class="btn btn-success btn-sm"  value = "Submit code"> 
+            <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}"> 
           </div>                                  
           </div>                                  
            <!-- <div class="col-md-11" >                                 
@@ -98,7 +113,8 @@
                   <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
           </div> -->
        </div>
-        {% endif %}
+     </form>
+        {% endif %}       
                                </div>
                             </div>
                            {% endfor %}
@@ -153,12 +169,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
   <script type="text/javascript">
-   
-
+    testid = "{{testid}}";
     window.onload = checkThis();
+
     function checkThis(){
       {% for key,value in paper.items %}
-        {% if key in answered %}
+        {% if key in mcq_answered or key in code_answered%}
           str= "{{value.sr}}-count";          
           document.getElementById(str).style.background = "#9999";
         {% endif %}
@@ -168,11 +184,14 @@
       seconds= document.getElementById('seconds').value;
     };
 
+
     function allcheck(){
      {% if paginator.has_next is False %}
       alert("You have successfully attempted all questions. Please submit the test.")
      {% endif %}     
     };
+
+
     function radioClicked(key){
       console.log(key)
       key_split=key;
@@ -181,6 +200,7 @@
       str = arr + "-count"
       document.getElementById(str).style.background = '#9119';
     };
+
 
     function radioClicked2(value,key){
       sessionStorage.setItem(value,key.value)
@@ -243,6 +263,7 @@
     csrfmiddlewaretoken: '{{ csrf_token }}',
     data:{
       "code" : code,
+      "testid" : testid,
     },
     contentType: 'application/json',
     success : function(data){
@@ -259,6 +280,36 @@
    return false;
  });
 
+$("#runajax1").click(function(){
+  console.log("manish")
+  que_id = this.name;
+  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
+  code = editor.getValue()
+  $.ajax({
+    type : "GET",
+    url : url,
+    dataType :"text",
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+    data:{
+      "code" : code,
+      "testid" : testid,
+    },
+    contentType: 'application/json',
+    success : function(data){
+      $("#output").val(data);
+      testcases_matched(data)
+    },
+    failure: function(data) { 
+        console.log("Got error");
+        },
+        error: function(xhr,status,error) { 
+        console.log(xhr.responseText + " error  "+error);
+        }
+  });
+   return true;
+ });
+
+
  function testcases_matched(json){
  json = JSON.parse(json); 
  check = document.getElementById('testcases-info')
@@ -269,20 +320,68 @@
 
  testcases = document.createElement('div');
  testcases.setAttribute('id','testcases-info');
+ testcases.setAttribute('class','col-sm-8 jumbotron');
  i=1;
  for (var key in json) {     
-     result = document.createElement('h6');
-     line = document.createElement('hr');
-     result.setAttribute('id','result');     
-     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].output+"<br>"
+     result = document.createElement('p');
+     if(json[key].result == 'incorrect'){
+       result.setAttribute("class","lead btn-danger")
+       incorrect_output(i,json[key].input,json[key].result,json[key].your_output,json[key].expected_output,testcases)
+       break;
+     }
+     else{
+       result.setAttribute("class","lead btn btn-sm btn-success")
+     }
+     line = document.createElement('br');
+     result.setAttribute('id','result');
+     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result
      testcases.appendChild(result);
+     testcases.appendChild(line);
      i++;
    }
      document.getElementById('testcase').appendChild(testcases);   
  }
 
-</script> 
- 
-
+ function incorrect_output(testcase,input,result1,output,expected,div){
+     console.log(result)
+     line = document.createElement('br');
+     result = document.createElement('p');
+     result.setAttribute("class","lead btn btn-sm btn-danger")
+     result.setAttribute('id','result');
+     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+result1;
+     label1 = document.createElement('label');
+     label1.setAttribute("for","inputvalue");
+     label1.innerHTML = "Input";
+     input1 = document.createElement('input');
+     input1.setAttribute("type","text");
+     input1.setAttribute("class","container");
+     input1.setAttribute("disabled","True");
+     input1.setAttribute("value",input);
+     label2 = document.createElement('label');
+     label2.setAttribute("for","outputvalue");
+     label2.innerHTML = "Your output";
+     output1 = document.createElement('input');
+     output1.setAttribute("type","text");
+     output1.setAttribute("class","container");
+     output1.setAttribute("disabled","True");
+     output1.setAttribute("value",output);
+     label3 = document.createElement('label');
+     label3.setAttribute("for","outputvalue");
+     label3.innerHTML = "Expected output";
+     output2 = document.createElement('input');
+     output2.setAttribute("type","text");
+     output2.setAttribute("class","container");
+     output2.setAttribute("disabled","True");
+     output2.setAttribute("value",expected);
+     div.appendChild(result)
+      div.appendChild(line)
+     div.appendChild(label1);
+     div.appendChild(input1);
+     div.appendChild(label2);
+     div.appendChild(output1);
+     div.appendChild(label3);
+     div.appendChild(output2);
+ }
+</script>
 {% endblock %}
   

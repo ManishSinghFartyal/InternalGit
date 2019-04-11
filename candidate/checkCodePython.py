@@ -87,9 +87,9 @@ def run_code2(code,userid,queid):
 		new_output = get_output(value,code,userid)
 		#print("expected = ",len(old_output),"  Your=",len(new_output))
 		if new_output.strip() != old_output.strip():
-			answers[case] = {"result":"incorrect","output":new_output}
+			answers[case] = {"input":value,"result":"incorrect","your_output":new_output,"expected_output":old_output}
 		else:
-			answers[case] = {"result":"correct","output":new_output}
+			answers[case] = {"result":"correct","your_output":new_output,"expected_output":old_output}	
 	return answers
 
 def show_output(code,userid,queid):
