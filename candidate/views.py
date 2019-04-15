@@ -56,8 +56,8 @@ def test(request,testid):
 			i = testid
 			paper = get_question_paper(i)
 			candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
-			if request.method == 'POST':
-				if request.GET.get("type") == 'mcq':					
+			if request.method == 'POST':				
+				if request.GET.get("type") == 'mcq':
 					endtime = candidate.endtime
 					remanining = endtime -  timezone.localtime(timezone.now())
 					time = remanining.total_seconds()
@@ -80,15 +80,17 @@ def test(request,testid):
 						request.session['currentpage']=paginate.next_page_number()
 					elif page==total_pages:
 						pages = dict(paginate)
+						request.session['currentpage']=paginate.previous_page_number()
 					else:
 						pages = None
 						request.session['currentpage']=1
-				elif request.GET.get("type") == 'code':					
+				elif request.GET.get("type") == 'code':
 					endtime = candidate.endtime
 					remanining = endtime -  timezone.localtime(timezone.now())
 					time = remanining.total_seconds()
-					h,m,s=get_remaining_time(time)					
-					page=int(request.GET.get('page'))					
+					h,m,s=get_remaining_time(time)
+					page=int(request.GET.get('page'))
+					page=page+1
 					mcq_answered,code_answered = get_answered(userid,testid)
 					question = {'mcq':paper['mcq'],'code':paper["coding"]}
 					question_paper = {}
@@ -97,19 +99,18 @@ def test(request,testid):
 							question_paper[k] = v
 					t = tuple(question_paper.items())
 					p = Paginator(t,1)
-					total_pages = p.num_pages					
-					paginate = p.page(page)					
-					paginate=p.page(1)
+					total_pages = p.num_pages
+					paginate = p.page(page)
 					if page<total_pages:
 						paginate = p.page(page)
 						pages = dict(paginate)
-						request.session['currentpage']=paginate.next_page_number()						
+						request.session['currentpage']=paginate.next_page_number()
 					elif page==total_pages:
 						paginate = p.page(page)
 						pages = dict(paginate)
 					else:
 						pages = None
-						request.session['currentpage']=1
+						request.session['currentpage']=3
 			else:
 				endtime = candidate.endtime
 				remanining = endtime -  timezone.localtime(timezone.now())
@@ -123,7 +124,7 @@ def test(request,testid):
 						question_paper[k] = v
 				t = tuple(question_paper.items())
 				p = Paginator(t,1)
-				request.session['currentpage']=page+1
+				request.session['currentpage']=page
 				paginate = p.page(page)
 				pages = dict(paginate)
 		return render(request,'test.html',{'testid':testid,'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'mcq_answered':mcq_answered,'code_answered':code_answered,'hour':int(h),'minute':int(m),'second':int(s)})

@@ -92,6 +92,7 @@ def get_answered(userid,testid):
 		code_ans={}
 	return mcq_ans,code_ans
 
+
 def save_time(starttime,userid,testid):
 	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
 	candidate.starttime = starttime
@@ -101,6 +102,7 @@ def save_time(starttime,userid,testid):
 	candidate.save()
 	return endtime
 
+
 def get_remaining_time(seconds):
 	h = seconds//(60*60)
 	m = (seconds-h*60*60)//60
@@ -108,12 +110,20 @@ def get_remaining_time(seconds):
 	return h, m, s
 
 
-def save_code(queid,code,json,userid,testid):
-	code_ans = {}
+def save_code(queid,code,json1,userid,testid):
+	print('question = ',queid," userid : ",userid," testid : ",testid)
 	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
 	cases = {}
-	for key,value in json.items():
+	for key,value in json1.items():
 		cases[key] = value['result']
-	code_ans[queid] = {"code":code,"cases":cases}
+	try:
+		code_ans=ast.literal_eval(candidate.code_ans)
+		code_ans=json.dumps(code_ans)
+		code_ans=json.loads(code_ans)
+	except Exception as e:
+		print(e)
+		code_ans={}
+	print(code_ans)
+	code_ans[queid] = {"code":code,"cases":cases}	
 	candidate.code_ans = code_ans
 	candidate.save()

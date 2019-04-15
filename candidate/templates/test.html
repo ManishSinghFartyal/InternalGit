@@ -38,10 +38,13 @@
                       :
                     <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
                   </p>
-                  </div>              
-                  <div class="col-sm-1 text-right">
-                    <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
-                  </div>
+                  </div>  
+                  <form>
+                    <div class="col-sm-1 text-right">
+                      <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
+                    </div>                    
+                  </form>            
+                  
             </div>            
               <div class="row" >
                 <div class="col-md-9">
@@ -105,7 +108,7 @@
             <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
           </div> 
           <div class="col-md-6">
-            <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}"> 
+            <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
           </div>                                  
           </div>                                  
            <!-- <div class="col-md-11" >                                 
