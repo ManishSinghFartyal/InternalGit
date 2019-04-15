@@ -56,6 +56,8 @@ def test(request,testid):
 			i = testid
 			paper = get_question_paper(i)
 			candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+			candidate.attempted =True
+			candidate.save()
 			if request.method == 'POST':				
 				if request.GET.get("type") == 'mcq':
 					endtime = candidate.endtime
@@ -130,8 +132,15 @@ def test(request,testid):
 		return render(request,'test.html',{'testid':testid,'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'mcq_answered':mcq_answered,'code_answered':code_answered,'hour':int(h),'minute':int(m),'second':int(s)})
 	return redirect("/login")
 
-
-
+def savetest(request):
+	user = request.user	
+	if user.is_authenticated:
+		if user.is_superuser:
+			return index(request)
+		#If user submit a mcq answer
+		else:
+			candidateHome(request)
+	return redirect("/login")
 
 
 def ajaxcall(request,queid):
@@ -145,3 +154,14 @@ def ajaxcall(request,queid):
 
 def ex(request):
 		return render(request,'ex.html')
+
+
+def rules(request,testid):
+	user = request.user	
+	if user.is_authenticated:
+		if user.is_superuser:
+			return index(request)
+		#If user submit a mcq answer
+		else:
+			return render(request,'rules.html',{'testid':testid})
+	return redirect("/login")

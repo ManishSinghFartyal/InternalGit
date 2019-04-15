@@ -6,19 +6,19 @@
 		{% csrf_token %}		    
     <div class="main-panel">
     	{% include 'navbar.html'  %}
-    	<div class="content">
+    	<div class="content"> 
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-10">
-              <div class="card">
+            <div class="col-md-10 ">
+              <div class="card ">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title">Tests assigned to you</h4>
                 </div>
-                <div class="card-body">
-                  <div class="row">
+                <div class="card-body  jumbotron">
+                  <div class="row lead">
                   {% for key,value in tests.items %}
                     <div class="col-lg-6" style="padding: 20px 20px 20px 20px;">      
-                      <div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,0,0,0.5){%else%}background-color: rgba(0,255,0,0.5);{%endif%}">
+                      <div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,110,110,1){%else%}background-color: rgba(10,240,40,0.6);{%endif%}">
                         <table>
                           <tr><td>Test Assigned</td><td>:</td><td>{{value.paper_title}}</td></tr>
                           <tr><td>Scheduled in : </td><td>:</td><td>{{value.date}}</td></tr> 
@@ -31,7 +31,9 @@
                            <hr>
                           </tr>
                           {% if value.attempted == False%}
-                          <tr><td></td><td><a href="/candidate/starttest/{{value.paperId}}" class="btn btn-success btn-sm">Give test</a></td><td></td></tr>
+                          <tr><td></td><td><a href="/candidate/rules/{{value.paperId}}" class="btn btn-success btn-sm">Give test</a></td><td></td></tr> 
+                          {% else %} 
+                           <tr><td></td><td><button class="btn btn-danger btn-sm" disabled="True">Give test</button></td><td></td></tr>                        
                           {% endif %}
                         </table>
                       </div>

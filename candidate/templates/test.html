@@ -17,7 +17,6 @@
    #result{      
    padding: 5px 15px 5px 15px; 
   }
-
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
 <div class="wrapper">
@@ -39,7 +38,7 @@
                     <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
                   </p>
                   </div>  
-                  <form>
+                  <form action="/candidate/savetest">
                     <div class="col-sm-1 text-right">
                       <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                     </div>                    
@@ -87,8 +86,7 @@
                                     </div>
                                 
 <!-- For coding type -->
-       {%elif va.type == 'code' %}
-    
+       {%elif va.type == 'code' %}    
        {% csrf_token %}
        <div class="col-md-12">
          <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 

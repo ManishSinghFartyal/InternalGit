@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %} 
+<div class="row">
+	<div class="col-sm-12">
+		<div class="jumbotron">
+			<h3><u> Rules and regulations</u></h3>
+			 <p class="lead">
+			  	<h5><i>Beginning the Examination</i></h5>
+					Only those candidates who are required to write the examination will be allowed in the room during the examination.
+					All students are required to have their Photo ID (TCard) present for the duration of the exam.
+					Candidates will be admitted to the examination room two minutes before the hour appointed for the examination. They shall proceed quietly to their desks where they will find all necessary materials for the exam, with the exception of authorized aids.
+					If the examiner considers it necessary, candidates will find on their desks, along with the examination paper, special data such as log books, tabular data, curves or plans. Such special data is not to be written upon or marked up in any way. The data must be returned with the answer books.
+					At the beginning of the exam, answer book(s) must be endorsed as follows: name and student number of the candidate, Faculty, course, instructor, date and room number. If additional answer books are required, each book must be endorsed when received and the books marked “Book 1,” “Book 2”, etc. Place the extra books inside “Book 1” when the candidate is finished writing his or her exam.
+					A candidate is not permitted to either leave the room during the first sixty minutes (escorted washroom breaks permitted), or enter the room after that period. If a candidate arrives more than sixty minutes after the start of the exam, he or she will not be permitted to write the exam and 	will need to submit a petition to the Committee on Examinations.
+		 	 </p>
+		 <p class="lead">
+			  	<h5><i>Conduct during the examination</i></h5>
+			Candidates may not provide assistance to or receive assistance from anyone during the exam. They may not communicate in any manner with any person other than the examiner, presiding examiner or assistants. They may not copy any material or be in possession of unauthorized aids. Failure to comply will be dealt with in accordance to the Code of Behaviour on Academic Matters.
+			Eating and drinking are not permitted in examination rooms.
+			If it is necessary for a candidate to leave the room, he or she may do so and return if accompanied by the presiding examiner or an assistant.
+			A candidate must not write on any paper with the exception of the exam book and must keep all papers on his or her desk.
+			Candidates are not permitted to have wireless communication devices (e.g. cellphones) on their desks under any circumstances.
+		  </p>
+		  <p class="lead">
+			  	<h5><i>Ending the Examination</i></h5>
+					At ten and five minutes before the end of the examination the presiding examiner will announce the number of minutes remaining.
+					Candidates who have finished writing and wish to leave the examination room before the 5 minute announcement must first personally hand in all their answer books, whether used or not, to the presiding examiner’s along with any special data provided.
+					After the five-minute announcement, all candidates still in their seats must remain quietly seated – even if they have finished writing – until all the answer books and special data have been collected and the presiding examiner announces they may leave the room.
+					When the end of the examination is announced, all candidates shall cease writing immediately, assemble their answer books (used or not) and any special data provided and hand it all in to the assistants who will collect all materials from the seated candidates.
+					The examination paper belongs to the candidate unless otherwise stated.
+					When all materials have been collected, the presiding examiner will announce that candidates may leave the room. All rules for the conduct of candidates during examinations remain in full force until this announcement is made.
+		  </p>
+		  <a href="/candidate/starttest/{{testid}}" class="btn btn-success btn-sm">Give test</a>
+		</div>
+	</div>	
+</div>
+
+{% endblock %}

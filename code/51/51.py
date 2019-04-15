@@ -1,16 +1,43 @@
-num = int(input())  
-if num > 1:
-   for i in range(2,num):
-       if (num % i) == 0:  
-           print(num,"is not a prime number")            
-           break
-   else:
-       print(num,"is a prime number")     
+# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result# Python program to find the factorial of a number provided by the user.
+
+# change the value for a different result
+num = 5
+
+# uncomment to take input from the user
+#num = int(input())
+
+factorial = 1
+
+# check if the number is negative, positive or zero
+if num < 0:
+   print("Sorry, factorial does not exist for negative numbers")
+elif num == 0:
+   print("1")
 else:
-   print(num,"is not a prime number")# Python program to check if  
-# given number is prime or not 
-            # Python program to check if  
-# given number is prime or not 
-            # Python program to check if  
-# given number is prime or not 
+   for i in range(1,num + 1):
+       factorial = factorial*i
+   print(factorial)
+            
+            
+            
             
