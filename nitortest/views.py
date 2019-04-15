@@ -307,15 +307,17 @@ def assignTest(request):
 					assigned_test = request.POST.get(test_str)
 					assigned_date =  request.POST.get(date_str)
 					mcq_ans = {}
+					code_ans = {}
 					if assigned_date == "" or assigned_test is None:
 						messages.error(request,' Either date of test or exam not selected.')
 						return render(request,'Nitor/assignTest.html',context)
-					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans)
+					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans,code_ans=code_ans)
 					c.save()
 				return successMessage(request,"Successfully asssigned")
 			else:
 				return render(request,'Nitor/assignTest.html',context)
 	return index(request)
+
 
 # Code to show question papers
 def questionPapers(request):

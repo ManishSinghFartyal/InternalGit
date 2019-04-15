@@ -1,30 +1,10 @@
 # Python program to find the factorial of a number provided by the user.
 
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
-# change the value for a different result# Python program to find the factorial of a number provided by the user.
-
 # change the value for a different result
-num = 5
+num = 7
 
 # uncomment to take input from the user
-#num = int(input())
+num = int(input())
 
 factorial = 1
 
@@ -37,7 +17,3 @@ else:
    for i in range(1,num + 1):
        factorial = factorial*i
    print(factorial)
-            
-            
-            
-            

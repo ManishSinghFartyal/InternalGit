@@ -33,18 +33,16 @@
                           {% if value.attempted == False%}
                           <tr><td></td><td><a href="/candidate/rules/{{value.paperId}}" class="btn btn-success btn-sm">Give test</a></td><td></td></tr> 
                           {% else %} 
-                           <tr><td></td><td><button class="btn btn-danger btn-sm" disabled="True">Give test</button></td><td></td></tr>                        
+                           <tr><td></td><td><button class="btn btn-danger btn-sm" onclick="alertShow();">Give test</button></td><td></td></tr>                        
                           {% endif %}
                         </table>
                       </div>
                     </div>
-                    {% endfor %}
-                    
+                    {% endfor %}                    
                   </div>
                 </div>
               </div>
-            </div>
-            
+            </div>            
           </div>
         </div>
       </div>
@@ -54,6 +52,9 @@
         (function(){
           sessionStorage.clear();
         })();
+        function alertShow() {
+          alert('Already attempted');
+        };
       </script>
 {% endblock %}
   

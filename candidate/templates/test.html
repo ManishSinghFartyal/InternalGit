@@ -1,4 +1,4 @@
-  {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 <style type="text/css">
@@ -38,9 +38,9 @@
                     <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
                   </p>
                   </div>  
-                  <form action="/candidate/savetest">
+                  <form action="/candidate/savetest/{{testid}}">
                     <div class="col-sm-1 text-right">
-                      <input type="submit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
+                      <input type="submit" id="quit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                     </div>                    
                   </form>            
                   
@@ -85,37 +85,37 @@
                                        <input type="submit" name="submit" value="Submit answer" class="btn btn-sm btn-success" onclick="allcheck();">
                                     </div>
                                 
-<!-- For coding type -->
-       {%elif va.type == 'code' %}    
-       {% csrf_token %}
-       <div class="col-md-12">
-         <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
-          rows = "7" {% elif va.title|length > 100 %} 
-          rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
-        <textarea class="md-textarea"  style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
-          rows = "7" {% elif va.desc|length > 100 %} 
-          rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
-          <div><p class="lead"><u>Write your code</u><hr></p></div>
-          <div class="col-md-12">
-            <textarea class="md-textarea" id="code">{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%else%}{{va.snippet}}{% endif %}{% endfor %}
-            </textarea>
-            <hr>
-          </div>   
-          <div class="row">
-            <div class="col-md-6 text-center">
-            <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
-          </div> 
-          <div class="col-md-6">
-            <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
-          </div>                                  
-          </div>                                  
-           <!-- <div class="col-md-11" >                                 
-                  <h5 style="font-family: inherit;">Output:</h5>
-                  <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
-          </div> -->
-       </div>
-     </form>
-        {% endif %}       
+                    <!-- For coding type -->
+                           {%elif va.type == 'code' %}    
+                           {% csrf_token %}
+                           <div class="col-md-12">
+                             <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+                              rows = "7" {% elif va.title|length > 100 %} 
+                              rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
+                            <textarea class="md-textarea"  style="background: black;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 15px;" {% if va.desc|length > 300 %} rows="14" {% elif va.desc|length > 200 %} 
+                              rows = "7" {% elif va.desc|length > 100 %} 
+                              rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
+                              <div><p class="lead"><u>Write your code</u><hr></p></div>
+                              <div class="col-md-12">
+                                <textarea class="md-textarea" id="code">{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%else%}{{va.snippet}}{% endif %}{% endfor %}
+                                </textarea>
+                                <hr>
+                              </div>   
+                              <div class="row">
+                                <div class="col-md-6 text-center">
+                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
+                              </div> 
+                              <div class="col-md-6">
+                                <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
+                              </div>                                  
+                              </div>                                  
+                               <!-- <div class="col-md-11" >                                 
+                                      <h5 style="font-family: inherit;">Output:</h5>
+                                      <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
+                              </div> -->
+                           </div>
+                         </form>
+                            {% endif %}       
                                </div>
                             </div>
                            {% endfor %}
@@ -233,6 +233,9 @@
         hours--;
         minutes=60;
         seconds=60;
+      }
+      else{        
+       document.getElementById("quit").click();
       }
      document.getElementById("hours").value = hours;
      document.getElementById("minutes").value = minutes;

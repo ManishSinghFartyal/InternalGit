@@ -1,4 +1,4 @@
-from nitortest.models import Profile,CandidateStatus,QuestionPaper
+from nitortest.models import Profile,CandidateStatus,QuestionPaper,Question
 import ast
 import json
 from django.db import connection
@@ -60,21 +60,26 @@ def get_question_paper(testid):
 	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':code,'max_time':q_paper.max_time}
 	return paper
 
-def save_answer(answer,userid,testid):	
+def save_answer(answer,userid,testid):
 	ans_split = answer.split("|")
 	question = ans_split[0]
 	ans=ans_split[1]
 	testid = str(testid)
+	
 	#GETTING CANDIDATE OBJECT
-	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))	
+
+	#Saving MCQ answered
 	try:
 		mcq_ans=ast.literal_eval(candidate.mcq_ans)
 		mcq_ans=json.dumps(mcq_ans)
-		mcq_ans=json.loads(mcq_ans)	
+		mcq_ans=json.loads(mcq_ans)
 	except:
 		mcq_ans={}
 	mcq_ans[question] = {"answer":ans}
-	candidate.mcq_ans = mcq_ans	
+	candidate.mcq_ans = mcq_ans
+	
+	
 	candidate.save()
 	return mcq_ans
 
@@ -111,19 +116,42 @@ def get_remaining_time(seconds):
 
 
 def save_code(queid,code,json1,userid,testid):
-	print('question = ',queid," userid : ",userid," testid : ",testid)
 	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	code_ans={}
 	cases = {}
 	for key,value in json1.items():
 		cases[key] = value['result']
 	try:
 		code_ans=ast.literal_eval(candidate.code_ans)
+		print(type(code_ans))
 		code_ans=json.dumps(code_ans)
 		code_ans=json.loads(code_ans)
 	except Exception as e:
-		print(e)
 		code_ans={}
-	print(code_ans)
-	code_ans[queid] = {"code":code,"cases":cases}	
+	print(cases)
+	code_ans[queid] = {"code":code,"cases":cases}
 	candidate.code_ans = code_ans
+	candidate.save()
+
+
+def countScore(userid,testid):
+	count=0
+	correct=0
+	total=0
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	mcq_ans,code_ans  = get_answered(userid,testid)
+	if mcq_ans != 0:
+		for key,value in mcq_ans.items():
+			question = Question.objects.get(id=key)
+			if value['answer'] == question.correct_option:
+				candidate.correct_mcq = candidate.correct_mcq+1
+	if code_ans != 0:
+		for key,value in code_ans.items():
+			for k,v in value['cases'].items():
+				count+=1
+				if v == 'correct':
+					correct+=1
+			total = total + (correct/count) * 100
+		candidate.correct_ct = total
+	candidate.score = candidate.correct_mcq +candidate.correct_ct
 	candidate.save()
