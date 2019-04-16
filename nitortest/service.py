@@ -1,5 +1,6 @@
 from .models import Profile,Question,CandidateStatus,QuestionPaper
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 '''
@@ -92,6 +93,7 @@ def saveMCQ(request):
 	question.save()	
 
 
+
 # Create question object with string as json
 def createQuestionObject():
 	try:
@@ -124,6 +126,7 @@ def createQuestionObject():
 		
 	return que
 
+
 '''
  Function takes input mixed questions list and part them into mcq and coding test
 '''
@@ -140,6 +143,7 @@ def getCategorizedQuestions(questions):
 	return mcq,ct
 
 
+
 '''
 To get all candidates list
 '''
@@ -154,6 +158,7 @@ def getAllCandidates():
 			candidate_dict[candidate.id] = candidate_profile(candidate.user_id,candidate.id)
 	return candidate_dict
 
+
 '''
 To get all question paper details
 '''
@@ -166,6 +171,7 @@ def getQuestionPaper():
 	except:
 		return q_paper
 	return q_paper
+
 
 def getPaper(q_paper):
 	paper = {}
@@ -186,6 +192,7 @@ def getPaper(q_paper):
 	paper= {'title':q_paper.title_qp,'total':q_paper.total_question,'mcq':mcq,'coding':coding,'max_time':q_paper.max_time}
 	return paper
 
+
 def getCandidateStatus(candidateid):
 	candidate_status = {}
 	try:		
@@ -200,3 +207,31 @@ def getCandidateStatus(candidateid):
 		candidate_status = {}
 	return candidate_status
 
+
+
+def get_answered(userid,testid):
+	details = {}
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	details["score"] = candidate.score
+	try:
+		mcq_ans=ast.literal_eval(candidate.mcq_ans)
+		mcq_ans=json.dumps(mcq_ans)
+		mcq_ans=json.loads(mcq_ans)
+		code_ans=ast.literal_eval(candidate.code_ans)
+		code_ans=json.dumps(code_ans)
+		code_ans=json.loads(code_ans)
+	except:
+		mcq_ans={}
+		code_ans={}
+		return mcq_ans,code_ans
+	print(mcq_ans)
+	for key,value in code_ans.items():
+		question = Question.objects.get(id=key)
+		details[key] = {'type':question.qtype,'title':question.title,"description":question.description,"testcases":question.testcases,"code":value['code'],"cases":value['cases']}
+	for key,value in mcq_ans.items():
+		question = Question.objects.get(id=key)
+		options=ast.literal_eval(question.options)
+		options=json.dumps(options)
+		options=json.loads(options)
+		details[key] = {'type':question.qtype,"description":question.description,"selected":value["answer"],"options":options}
+	return details

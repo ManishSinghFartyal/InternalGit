@@ -6,7 +6,7 @@ from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus
+from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -340,7 +340,6 @@ def candidatestatus(request,candidateid):
 	return render(request,'Nitor/candidateStatus.html',{'status':cst,'cid':candidateid})
 
 def remcandidatestatus(request,cid,pid):
-	print(cid,"   ",pid)
 	CandidateStatus.objects.get(candidate=cid,question_paper=pid).delete()
 	url = "/candidatestatus/"+cid
 	print(url)
@@ -350,3 +349,7 @@ def removeQuestionPaper(request,pid):
 	id = int(pid)
 	q_paper = QuestionPaper.objects.get(id=pid).delete()
 	return HttpResponseRedirect("/questionPapers")
+
+def showscore(request,cid,pid):	
+	details = get_answered(cid,pid)
+	return HttpResponse(str(details))

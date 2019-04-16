@@ -21,4 +21,5 @@ urlpatterns = [
 	url(r'^candidatestatus/(?P<candidateid>\d+)',views.candidatestatus,name='candidatestatus'),	
 	path('remassigned/<cid>/<pid>',views.remcandidatestatus,name='remcandidatestatus'),
 	path('removeQuestionPaper/<pid>',views.removeQuestionPaper,name='removeQuestionPaper'),
+	path('showscore/<cid>/<pid>',views.showscore,name='showscore'),
 ]

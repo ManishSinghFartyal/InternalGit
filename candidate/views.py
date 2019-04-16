@@ -57,7 +57,7 @@ def test(request,testid):
 			i = testid
 			paper = get_question_paper(i)
 			candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
-			#candidate.attempted =True
+			candidate.attempted =True
 			candidate.save()
 			if request.method == 'POST':
 				if request.GET.get("type") == 'mcq':
