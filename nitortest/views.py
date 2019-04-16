@@ -352,5 +352,5 @@ def removeQuestionPaper(request,pid):
 	return HttpResponseRedirect("/questionPapers")
 
 def showscore(request,cid,pid):	
-	details = get_answered(cid,pid)
-	return HttpResponse(str(details))
+	details,scores = get_answered(cid,pid)
+	return render(request,'Nitor/answerSheet.html',{'scores':scores,'details':details})

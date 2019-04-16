@@ -211,8 +211,14 @@ def getCandidateStatus(candidateid):
 
 def get_answered(userid,testid):
 	details = {}
+	scores = {}
 	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
-	details["score"] = candidate.score
+	scores["score"] = candidate.score
+	scores["mcq_score"] = candidate.correct_mcq
+	scores["total_mcq_score"] = candidate.total_mcq_score
+	scores["code_score"] = candidate.correct_ct
+	scores["total_code_score"] = candidate.total_code_score
+	scores["total_score"] = candidate.total_score
 	try:
 		mcq_ans=ast.literal_eval(candidate.mcq_ans)
 		mcq_ans=json.dumps(mcq_ans)
@@ -233,8 +239,8 @@ def get_answered(userid,testid):
 		options=ast.literal_eval(question.options)
 		options=json.dumps(options)
 		options=json.loads(options)
-		details[key] = {'type':question.qtype,"description":question.description,"selected":value["answer"],"options":options}
-	return details
+		details[key] = {'type':question.qtype,"description":question.description,"selected":value["answer"],"options":options,"correct":question.correct_option}
+	return details,scores
 
 def get_scores(testid):
 	total =0
