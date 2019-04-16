@@ -144,7 +144,7 @@ def countScore(userid,testid):
 		for key,value in mcq_ans.items():
 			question = Question.objects.get(id=key)
 			if value['answer'] == question.correct_option:
-				candidate.correct_mcq = candidate.correct_mcq+1
+				candidate.correct_mcq = candidate.correct_mcq+10
 	if code_ans != 0:
 		for key,value in code_ans.items():
 			for k,v in value['cases'].items():

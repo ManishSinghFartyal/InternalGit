@@ -6,7 +6,7 @@ from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered
+from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered,get_scores
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -189,7 +189,7 @@ def showAddCode(request):
 								test_cases[case]={'testcase':request.POST.get(input_str),'output':request.POST.get(output_str)}
 						testcases=test_cases
 						print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases,'\n',language)
-						question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)					
+						question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)
 						question.save()
 						return successMessage(request,"One coding question saved successfully.")
 
@@ -305,13 +305,14 @@ def assignTest(request):
 					test_str = i+"-paper"
 					date_str = i+"-date"
 					assigned_test = request.POST.get(test_str)
+					total_score,mcq_score,code_score=get_scores(assigned_test)
 					assigned_date =  request.POST.get(date_str)
 					mcq_ans = {}
 					code_ans = {}
 					if assigned_date == "" or assigned_test is None:
 						messages.error(request,' Either date of test or exam not selected.')
 						return render(request,'Nitor/assignTest.html',context)
-					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans,code_ans=code_ans)
+					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans,code_ans=code_ans,total_score=total_score,total_code_score=code_score,total_mcq_score=mcq_score)
 					c.save()
 				return successMessage(request,"Successfully asssigned")
 			else:

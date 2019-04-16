@@ -202,7 +202,7 @@ def getCandidateStatus(candidateid):
 			title = ""
 			for p in paper:
 				title = p.title_qp
-			candidate_status[i.id] = {'paperId':i.question_paper,'paper_title':title,'date':i.exam_date,'attempted':i.attempted,'score':i.score,'time_taken':i.total_time,'mcq_correct':i.correct_mcq,'coding_correct':i.correct_ct}
+			candidate_status[i.id] = {'paperId':i.question_paper,'paper_title':title,'date':i.exam_date,'attempted':i.attempted,'score':i.score,'time_taken':i.total_time,'mcq_correct':i.correct_mcq,'coding_correct':i.correct_ct,'total_score':i.total_score,'total_mcq_score':i.total_mcq_score,'total_code_score':i.total_code_score}
 	except:
 		candidate_status = {}
 	return candidate_status
@@ -235,3 +235,35 @@ def get_answered(userid,testid):
 		options=json.loads(options)
 		details[key] = {'type':question.qtype,"description":question.description,"selected":value["answer"],"options":options}
 	return details
+
+def get_scores(testid):
+	total =0
+	mcq=0
+	code=0
+	question = QuestionPaper.objects.get(id=testid)
+	try:
+		mcqs=ast.literal_eval(question.mcq)
+		mcqs=json.dumps(mcqs)
+		mcqs=json.loads(mcqs)		
+	except Exception as s:
+		print(s)
+		mcqs={}
+
+	try:
+		codes=ast.literal_eval(question.coding)
+		codes=json.dumps(codes)
+		codes=json.loads(codes)
+	except Exception as s:
+		print(s)		
+		codes={}
+
+	for key,value in mcqs.items():
+		mcq=mcq+10
+
+	for key,value in codes.items():
+		code=code+100
+
+	total =mcq+code
+	print(total,"  ",mcq,"  ",code)
+
+	return total,mcq,code 

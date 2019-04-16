@@ -5,7 +5,6 @@ from django.core.validators import int_list_validator
 #############################################################################################################
 ''' User profile admin and candidate '''
 #############################################################################################################
-
 class Profile(models.Model):
    #exporting user module
    user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -25,7 +24,6 @@ class Profile(models.Model):
 #############################################################################################################
 ''' Question model to store any type of question '''
 #############################################################################################################
-
 class Question(models.Model):
    qtype = models.CharField(max_length=50,null=True)
    subject = models.CharField(max_length=40,null=True)
@@ -44,7 +42,6 @@ class Question(models.Model):
 #############################################################################################################
 ''' Question paper model to create question paper for exam '''
 #############################################################################################################
-
 class QuestionPaper(models.Model):
    title_qp = models.CharField(max_length=500,null=True)
    total_question = models.PositiveIntegerField(null=True)
@@ -71,4 +68,9 @@ class CandidateStatus(models.Model):
    mcq_ans = models.CharField(max_length=1000,null=True,default=0)
    code_ans = models.CharField(max_length=1000,null=True,default=0)
    starttime=models.DateTimeField(auto_now_add=True, blank=True,null=True)
-   endtime=models.DateTimeField(auto_now_add=True, blank=True,null=True) 
+   endtime=models.DateTimeField(auto_now_add=True, blank=True,null=True)
+   total_mcq_score=models.PositiveIntegerField(null=True,default=0)
+   total_code_score=models.PositiveIntegerField(null=True,default=0)
+   mcq_score = models.PositiveIntegerField(null=True,default=0)
+   code_score=models.PositiveIntegerField(null=True,default=0)
+   total_score=models.PositiveIntegerField(null=True,default=0)
