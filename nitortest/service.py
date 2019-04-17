@@ -1,7 +1,7 @@
 from .models import Profile,Question,CandidateStatus,QuestionPaper
 from django.contrib.auth.models import User
 from django.db.models import Q
-
+import math
 
 '''
 # Function to create random id and password for
@@ -213,7 +213,7 @@ def get_answered(userid,testid):
 	details = {}
 	scores = {}
 	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
-	scores["score"] = candidate.score
+	scores["score"] = math.ceil(float(candidate.score))
 	scores["mcq_score"] = candidate.correct_mcq
 	scores["total_mcq_score"] = candidate.total_mcq_score
 	scores["code_score"] = candidate.correct_ct

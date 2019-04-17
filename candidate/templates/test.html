@@ -86,7 +86,7 @@
                                     </div>
                                 
                     <!-- For coding type -->
-                           {%elif va.type == 'code' %}    
+                           {%elif va.type == 'code' %}  
                            {% csrf_token %}
                            <div class="col-md-12">
                              <textarea class="md-textarea" style="background: black;color: red;padding: 5px 5px 5px 5px;font-size: 15px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
@@ -103,7 +103,7 @@
                               </div>   
                               <div class="row">
                                 <div class="col-md-6 text-center">
-                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}">Run code </button> 
+                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}-{{va.language}}">Run code </button> 
                               </div> 
                               <div class="col-md-6">
                                 <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
@@ -257,7 +257,11 @@
   })();
 */
  $("#runajax").click(function(){
-  que_id = this.name;
+  id_lang = this.name;
+  arr=  id_lang.split("-");
+  que_id = arr[0];
+  language = arr[1];  
+  console.log(que_id+"  "+language);
   url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
   code = editor.getValue()
   $.ajax({
@@ -268,6 +272,7 @@
     data:{
       "code" : code,
       "testid" : testid,
+      "language":language,
     },
     contentType: 'application/json',
     success : function(data){
@@ -284,34 +289,6 @@
    return false;
  });
 
-$("#runajax1").click(function(){
-  console.log("manish")
-  que_id = this.name;
-  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
-  code = editor.getValue()
-  $.ajax({
-    type : "GET",
-    url : url,
-    dataType :"text",
-    csrfmiddlewaretoken: '{{ csrf_token }}',
-    data:{
-      "code" : code,
-      "testid" : testid,
-    },
-    contentType: 'application/json',
-    success : function(data){
-      $("#output").val(data);
-      testcases_matched(data)
-    },
-    failure: function(data) { 
-        console.log("Got error");
-        },
-        error: function(xhr,status,error) { 
-        console.log(xhr.responseText + " error  "+error);
-        }
-  });
-   return true;
- });
 
 
  function testcases_matched(json){

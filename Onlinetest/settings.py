@@ -97,11 +97,12 @@ DATABASES = {
 'default': {
 'ENGINE': 'djongo',
 'NAME': 'onlinetest',
-'USER': 'manish',
+'USERNAME': 'manish',
+'USER':'manish',
 'PASSWORD': 'Mf@#$2211',
 'HOST': '127.0.0.1',
 'PORT': 27017,
-'AUTH_SOURCE': 'onlinetest',
+'SOURCE': 'onlinetest',
 'AUTH_MECHANISM': 'SCRAM-SHA-1'
 }
 }

@@ -25,7 +25,6 @@ def run_code(code,userid):
 		folder.
 	'''	
 	hi_code = media+str(userid)+"/"+str(userid)+'.py'
-	print(hi_code)
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
 	with open(hi_code, "w") as f:

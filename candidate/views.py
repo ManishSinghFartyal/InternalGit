@@ -12,6 +12,7 @@ from django.contrib import messages
 
 # Create your views here.
 from . import checkCodePython as cPython
+from . import checkCodeJava as cJava
 
 def index(request,next_url=None):	
 	user =request.user
@@ -156,7 +157,11 @@ def ajaxcall(request,queid):
 	userid = get_id(request.user)
 	code = request.GET['code']
 	testid = request.GET['testid']
-	json = cPython.run_code2(code,userid,queid)
+	language = request.GET['language']
+	if language == 'python':
+		json = cPython.run_code2(code,userid,queid)
+	else:
+		json = cJava.run_code2(code,userid,queid)
 	save_code(queid,code,json,userid,testid)
 	return JsonResponse(json)
 
@@ -173,4 +178,4 @@ def rules(request,testid):
 		#If user submit a mcq answer
 		else:
 			return render(request,'rules.html',{'testid':testid})
-	return redirect("/login")
+	return redirect("/login")	

@@ -12,13 +12,13 @@
 	    <div class="card"> 		
 			<div class="row" style="padding: 10px 10px 10px 10px; text-align: center; font-weight: bold;font-size: 19px;font-family:sans-serif;color: black;">
 				<div class="col-sm-4">
-					Total score : {{scores.score}}/{{scores.total_score}}
+					Total score : {{scores.score}} out of {{scores.total_score}}
 				</div>
 				<div class="col-sm-4">
-					Total MCQ score : {{scores.mcq_score}}/{{scores.total_mcq_score}}					
+					Total MCQ score : {{scores.mcq_score}} out of {{scores.total_mcq_score}}					
 				</div>
 				<div class="col-sm-4">
-					Total coding score : {{scores.code_score}}/{{scores.total_code_score}}
+					Total coding score : {{scores.code_score}} out of {{scores.total_code_score}}
 				</div>					
 		    </div>
         </div>	
@@ -44,10 +44,10 @@
         		 	</li>
         		 	{% elif value.type == 'ct' %}
         		 	<hr>
-        		 <h6>{{value.type}}</h6>
+        		 <h6>Coding</h6>
         		 	<li>
         		 <div class="col-sm-12">           		      		 		
-        		 		{{value.description}}<br>
+        		 		{{value.description}}<br><br>
         		 		<textarea disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px">{{value.code}}</textarea>
        		 		<ol type="i">
         		 		{% for k,v in value.cases.items%}
