@@ -288,6 +288,8 @@ def successMessage(request,message):
 			return render(request,'Nitor/successMessage.html',{'message':message})
 	return index(request)
 
+
+
 # Code to assign the test for canidates.
 def assignTest(request):
 	user=request.user
@@ -354,3 +356,16 @@ def removeQuestionPaper(request,pid):
 def showscore(request,cid,pid):	
 	details,scores = get_answered(cid,pid)
 	return render(request,'Nitor/answerSheet.html',{'scores':scores,'details':details})
+
+def listQuestions(request):
+	questions = createQuestionObject()
+	return render(request,'Nitor/questions.html',{'questions':questions})
+
+def removeQue(request,queid):
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			Question.objects.filter(id=queid).delete()
+			questions = createQuestionObject()
+			return render(request,'Nitor/questions.html',{'questions':questions})
+	return index(request)

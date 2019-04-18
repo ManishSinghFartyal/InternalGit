@@ -101,7 +101,9 @@ def createQuestionObject():
 	except:
 		return que
 	que={}
+	#for options in questions if MCQ
 	js=None
+	#for testcases in question if CODING
 	tc= None
 	for question in questions:
 		if question.options:

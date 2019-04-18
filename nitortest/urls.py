@@ -22,4 +22,6 @@ urlpatterns = [
 	path('remassigned/<cid>/<pid>',views.remcandidatestatus,name='remcandidatestatus'),
 	path('removeQuestionPaper/<pid>',views.removeQuestionPaper,name='removeQuestionPaper'),
 	path('showscore/<cid>/<pid>',views.showscore,name='showscore'),
+	url(r'^listQuestions/$',views.listQuestions,name='listQuestion'),	
+	url(r'^removeQue/(?P<queid>\d+)',views.removeQue,name='removeQue'),
 ]

@@ -181,4 +181,7 @@ def rules(request,testid):
 		#If user submit a mcq answer
 		else:
 			return render(request,'rules.html',{'testid':testid})
-	return redirect("/login")	
+	return redirect("/login")
+
+def removeQue(queid):
+	Question.object.filter(id=queid).delete()
