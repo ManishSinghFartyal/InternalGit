@@ -67,8 +67,8 @@ def save_answer(answer,userid,testid):
 	testid = str(testid)
 	
 	#GETTING CANDIDATE OBJECT
-	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))	
-
+	candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+	
 	#Saving MCQ answered
 	try:
 		mcq_ans=ast.literal_eval(candidate.mcq_ans)

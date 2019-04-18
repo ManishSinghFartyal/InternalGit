@@ -81,6 +81,7 @@ def test(request,testid):
 					t = tuple(question_paper.items())
 					p = Paginator(t,1)
 					total_pages = p.num_pages
+					countScore(userid,testid)
 					paginate = p.page(page)
 					if page<total_pages:						
 						request.session['currentpage']=paginate.next_page_number()
@@ -108,6 +109,7 @@ def test(request,testid):
 					t = tuple(question_paper.items())
 					p = Paginator(t,1)
 					total_pages = p.num_pages
+					countScore(userid,testid)
 					paginate = p.page(page)
 					if page<total_pages:						
 						request.session['currentpage']=paginate.next_page_number()
@@ -154,6 +156,7 @@ def savetest(request,testid):
 
 
 def ajaxcall(request,queid):
+	print("something")
 	userid = get_id(request.user)
 	code = request.GET['code']
 	testid = request.GET['testid']

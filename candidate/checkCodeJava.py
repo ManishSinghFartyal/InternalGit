@@ -25,7 +25,6 @@ def run_code(code,userid):
 		folder.
 	'''	
 	hi_code = media+str(userid)+"/"+str(userid)+'.java'
-	print(hi_code)
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
 	with open(hi_code, "w") as f:
@@ -55,18 +54,29 @@ def fetch_test_cases(queid):
 
 def get_output(testcase,code,userid):
 	testcase = str.encode(testcase)
-	hi_code = media+str(userid)+"/"+str(userid)+'.java'
-	a=code	
+	a=code
+	class_name = get_class_name(a)
+	hi_code = media+str(userid)+"/"+class_name+".java"
+	hi_code1 = "-cp "+media+str(userid)+" "+class_name
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
 	with open(hi_code, "w") as f:
 		f.write(a)
 	f.close()
-	command = 'java '+hi_code
+	command = 'java '+hi_code1
+	commandC = 'javac '+hi_code
 	try:
+		subprocess.call(commandC,shell=True)
+	except subprocess.CalledProcessError as cl:
+		print("exception")
+		code_output=cl.output
+		new_output=code_output.decode()
+		return new_output
+	try:
+		print(command)
 		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True,input = testcase)
 	except subprocess.CalledProcessError as cl:
+		print("Exception occurs")
 		code_output=cl.output
-		print("Error ",code_output)
 	new_output=code_output.decode()
 	return new_output
 
@@ -94,13 +104,13 @@ def run_code2(code,userid,queid):
 
 def show_output(code,userid,queid):
 	testcase = str.encode(testcase)
-	hi_code = media+str(userid)+"/"+str(userid)+'.java'
+	hi_code = media+str(userid)+"/"+str(userid)
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
 	with open(hi_code, "w") as f:
 		f.write(a)
 	f.close()
-	command = 'python '+hi_code
+	command = 'java '+hi_code
 	try:
 		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True,input = testcase)
 	except subprocess.CalledProcessError as cl:
@@ -108,3 +118,15 @@ def show_output(code,userid,queid):
 		print("Error ",code_output)
 	new_output=code_output.decode()
 	return new_output
+
+def get_class_name(code):
+	lines = code.split("\n")
+	for line in lines:
+		if 'class' in line:
+			class_name = line.split(" ")
+			if class_name[0] == 'public':
+				name = class_name[2]
+			else:
+				name =class_name[1]
+			break
+	return name.strip()
