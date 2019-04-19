@@ -52,9 +52,9 @@ def fetch_test_cases(queid):
 
 
 
-def get_output(testcase,code,userid):
+def get_output(testcase,code,userid,queid):
 	testcase = str.encode(testcase)
-	hi_code = media+str(userid)+"/"+str(userid)+'.py'
+	hi_code = media+str(userid)+"/"+str(queid)+"-"+str(userid)+'.py'
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
 	with open(hi_code, "w") as f:
@@ -83,7 +83,7 @@ def run_code2(code,userid,queid):
 	for case in testcases:
 		value=testcases[case]['testcase']		
 		old_output=testcases[case]['output']
-		new_output = get_output(value,code,userid)
+		new_output = get_output(value,code,userid,queid)
 		#print("expected = ",len(old_output),"  Your=",len(new_output))
 		if new_output.strip() != old_output.strip():
 			answers[case] = {"input":value,"result":"incorrect","your_output":new_output,"expected_output":old_output}

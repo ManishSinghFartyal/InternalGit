@@ -156,7 +156,6 @@ def savetest(request,testid):
 
 
 def ajaxcall(request,queid):
-	print("something")
 	userid = get_id(request.user)
 	code = request.GET['code']
 	testid = request.GET['testid']

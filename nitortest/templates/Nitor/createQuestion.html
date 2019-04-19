@@ -39,13 +39,13 @@
                     </div>
                     
                       
-                     <div class="col-md-12 text-center">
+                     <!-- <div class="col-md-12 text-center">
                        <input type="checkbox" name="" checked="true" > All
                        &nbsp;&nbsp;&nbsp;&nbsp;
                        <input type="checkbox" name="" > MCQ
                        &nbsp;&nbsp;&nbsp;&nbsp;
                        <input type="checkbox" name="" > Coding Questions
-                     </div>                                      
+                     </div>    -->                                   
                     {% with questions as questions1 %} 
                     <div class="col-md-12">                  
                       <div class="table-responsive">
@@ -72,7 +72,14 @@
                               <input type="checkbox" name="questionid" onchange="changeTotal(this,'{{key}}')"  value={{key}} >
                             </td>                          
                             <td>
-                              {{value.qtype}}
+                               {% if value.qtype == 'mcq'%}
+                               <font style="color:black;font-weight: bold;font-style: italic;font-size: 12px;"><i class="material-icons">check</i>
+                                <sub>mcq</sub> </font>
+                               {% else %}
+                               <font style="color:green;font-weight: bold;font-size: 12px;"><i class="material-icons">code</i>
+                                <sub>code</sub>
+                               </font>
+                              {% endif %}
                             </td>
                             <td>
                             {% if value.subject%}
@@ -90,15 +97,42 @@
                                           })();"><u>show more</u></button>
                                   </a>
                                </div>                                
-                                <div id="demo{{key}}" class="collapse">
-                               {{value.post}}
+                               <div id="demo{{key}}" class="collapse">
+                              {% if value.qtype == 'mcq' %}
+                               {{value.post}} &nbsp; &nbsp; <i>
+                                 <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                                              document.getElementById('div{{key}}').style.display = 'initial';  
+                                              return false;
+                                          })();"><u>show less</u></button>
+                                  </a>
+                               </i>
                                <ol>
-                                {% if value.qtype == 'mcq' %}
-                                 {% for k,v in value.options.items %}
+                                  {% for k,v in value.options.items %}
                                     <li>{{v}}</li>
-                                 {% endfor %}
-                                {% endif %}
+                                  {% endfor %}
                                </ol>
+                               {%elif value.qtype == 'ct' %}
+                                <b>{{value.title}}&nbsp; &nbsp; <i>
+                                 <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                                              document.getElementById('div{{key}}').style.display = 'initial';
+                                              return false;
+                                          })();"><u>show less</u></button>
+                                  </a></b>
+                                <br>
+                                {{value.description}}
+                                <br>
+                                <textarea disabled="true" class="md-textarea" id="code"  {% if value.snippet|length > 300 %} rows="14" {% elif value.snippet|length > 200 %} 
+                              rows = "7" {% elif value.snippet|length > 100 %} 
+                              rows = "7" {% else %} rows="7" {% endif %} cols="90">{{value.snippet}}</textarea>
+                              <br>
+                              <i><b>Testcases</b></i><br>
+                              <ol>
+                              {% for k,v in value.testcases.items %}
+                              <li>Input : {{v.testcase}} | Output : {{v.output}}</li>
+                              {% endfor %}
+                              </ol>
+                           
+                                {% endif %}
                                 </div>
 
                             </td>

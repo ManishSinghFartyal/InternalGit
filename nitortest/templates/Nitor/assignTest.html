@@ -12,6 +12,7 @@
 </style>
 
 <div class="wrapper ">
+    {{que_paper_assigned}}
     {% include 'Nitor/sidebar.html' %}
     <div class="main-panel">
     	{% include 'Nitor/navbar.html'  %}
@@ -31,6 +32,7 @@
                 Candidates list to be select first
                -->
                 <div id='c_list' class="col-md-12">
+
                   <div class="col-md-12 text-info text-center">
                     <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Candidate list</u></b></h3>
                     <hr>
@@ -39,19 +41,19 @@
                     <div class="table-responsive">
                           <table class="table">
                             <thead class=" text-primary">  
-                              <th></th>                        
+                              <th></th>
                               <th>
                                 Name
                               </th>
                               <th>
                                 Email
-                              </th>                        
+                              </th>
                               <th>
                                 Skills
-                              </th>                        
+                              </th>
                               <th>
                                Exp.
-                              </th>                                            
+                              </th>
                               
                               <th>
                                Assign Test
@@ -64,20 +66,20 @@
                               </th>
                             </thead> 
                             <tbody>
-                     {% for key,value in candidates.items %}
-
+                   {% for key,value in candidates.items %}                   
                               <tr id='{{key}}-td'>
                                 <td><input type="checkbox" name="candidate_id" onclick='dynamicRow(this,"{{key}}");' value="{{value.user_id}}" id="{{key}}-check"></td>
                                 <td>{{value.fname}}&nbsp;{{value.lname}} </td>
                                 <td>{{value.email}}</td>
                                 <td>{{value.skill|upper}}</td>
-                                <td>{{value.experience}}</td>
-                                
+                                <td>{{value.experience}}</td>                                
                                 <td>
                                   <select class="form-control form-control-sm browser-default custom-select" name="{{value.user_id}}-paper" id="{{key}}-paper" disabled="true">
                                     <option disabled="true" selected="true" value="">Select test</option>
+                                    
                                   {% for question in papers %}
-                                    <option value={{question.id}}>{{question.title_qp}}</option>
+                                    <option value={{question.id}} {% if question.id in value.que_paper_assigned%} disabled="true" {%endif%} > {{question.title_qp}}</option>
+                                    }
                                   {% endfor %}
                                   </select>
                                 </td>
@@ -91,18 +93,18 @@
                                     {{value.status}}
                                   {% endif %}
                                 </td>
-                              </tr>                         
+                              </tr>
                       {% endfor %}
                               <tr>
                                 <td><button class="btn btn-primary">Submit</button></td>
                               </tr>
                             </tbody>
                           </table>
-                        </div> 
-                    </form>            
+                        </div>
+                    </form>
                    </div>
                   <div>
-                 </div>                
+                 </div>
               </div>
              </form>
             </div> 
@@ -128,7 +130,7 @@
           paper.disabled=false
           paper.setAttribute('required',true)
           date.setAttribute('required',true)
-          document.getElementById(row).style.background = '#0013'       
+          document.getElementById(row).style.background = '#0013'
         }
         return false;
     };
@@ -147,8 +149,8 @@
         else{
           document.getElementById(date_str).disabled=false;
           document.getElementById(paper_str).disabled=false;
-          document.getElementById(row).style.background = '#f093'       
-        }        
+          document.getElementById(row).style.background = '#f093'
+        }
       {% endfor %}
       return false;
       });

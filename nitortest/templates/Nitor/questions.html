@@ -28,10 +28,10 @@
                       {% for message in messages %}
                        <strong>{{message}}</strong>
                       {% endfor %}
-                    </div>     
-                     <br><br>                        
-                    {% with question as questionss %} 
-                    <div class="col-md-12">                  
+                    </div>
+                     <br><br>
+                    {% with question as questionss %}
+                    <div class="col-md-12">
                       <div class="table-responsive">
                       <table class="table">
                         <thead class=" text-primary">
@@ -40,10 +40,10 @@
                           </th>
                           <th>
                             Subject
-                          </th>                        
+                          </th>
                           <th>
                             Question
-                          </th>                        
+                          </th>
                           <th>
                            Level
                           </th>
@@ -68,17 +68,16 @@
                                   {{value.language}}
                               {% endif %}
                             </td>
-                            <td>                               
+                            <td>
                                <div id='div{{key}}'>
                                 {{value.pre}}
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
-                                              document.getElementById('div{{key}}').style.display = 'none';     
+                                              document.getElementById('div{{key}}').style.display = 'none';
                                               return false;
                                           })();"><u>show more</u></button>
                                   </a>
-                               </div>                                
+                               </div>
                                 <div id="demo{{key}}" class="collapse">
-                                  
                               {% if value.qtype == 'mcq' %}
                                {{value.post}} &nbsp; &nbsp; <i>
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
@@ -87,15 +86,15 @@
                                           })();"><u>show less</u></button>
                                   </a>
                                </i>
-                               <ol>                               
+                               <ol>
                                   {% for k,v in value.options.items %}
-                                    <li>{{v}}</li>                                    
-                                  {% endfor %}      
+                                    <li>{{v}}</li>
+                                  {% endfor %}
                                </ol>
                                {%elif value.qtype == 'ct' %}
                                 <b>{{value.title}}&nbsp; &nbsp; <i>
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
-                                              document.getElementById('div{{key}}').style.display = 'initial';  
+                                              document.getElementById('div{{key}}').style.display = 'initial';
                                               return false;
                                           })();"><u>show less</u></button>
                                   </a></b>
@@ -115,7 +114,7 @@
                               <br>
                                 <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger">Remove</a>
 
-                                {% endif %}                              
+                                {% endif %}
                                 </div>
                             </td>
                             <td>
@@ -125,18 +124,23 @@
                                   ---
                               {% endif %}
                             </td>
-                          </tr>                         
-                    {% endfor %}                         
+                          </tr>
+                    {% endfor %}
                        {% endwith %} 
                         </tbody>
                       </table>
                     </div>
                     </div>
                   </div>
-                </form>
+                </form>                
               </div>
-            </div> 
+            </div>            
           </div>
+            <div style="background: rgba(10,10,10,0.2);width: 30%;text-align: center;">
+                       <hr>
+                    <a href="/addCode" class="" style="padding: 101px 101px 110px 10px;"><i class="material-icons">add_box</i>Add questions</a>
+                    <hr>
+                    </div>
         </div>
       </div>
     </div>

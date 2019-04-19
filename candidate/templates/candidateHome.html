@@ -18,7 +18,7 @@
                   <div class="row lead">
                   {% for key,value in tests.items %}
                     <div class="col-lg-6" style="padding: 20px 20px 20px 20px;">      
-                      <div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,110,110,1){%else%}background-color: rgba(10,240,40,0.6);{%endif%}">
+                      <div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,60,60,0.7){%else%}background-color: rgba(10,160,170,0.7);{%endif%}">
                         <table>
                           <tr><td>Test Assigned</td><td>:</td><td>{{value.paper_title}}</td></tr>
                           <tr><td>Scheduled in : </td><td>:</td><td>{{value.date}}</td></tr> 

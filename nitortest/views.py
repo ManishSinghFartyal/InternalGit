@@ -295,7 +295,8 @@ def assignTest(request):
 	user=request.user
 	if user.is_authenticated:
 		if user.is_superuser:
-			candidates=getAllCandidates()			
+			candidates=getAllCandidates()
+			print(candidates)
 			question_papers = QuestionPaper.objects.all()
 			context = {'candidates':candidates,'papers':question_papers}
 			if request.method == 'POST':
@@ -354,12 +355,22 @@ def removeQuestionPaper(request,pid):
 	return HttpResponseRedirect("/questionPapers")
 
 def showscore(request,cid,pid):	
-	details,scores = get_answered(cid,pid)
-	return render(request,'Nitor/answerSheet.html',{'scores':scores,'details':details})
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			details,scores = get_answered(cid,pid)
+			return render(request,'Nitor/answerSheet.html',{'scores':scores,'details':details})
+	return index(request)
+
 
 def listQuestions(request):
-	questions = createQuestionObject()
-	return render(request,'Nitor/questions.html',{'questions':questions})
+	user=request.user
+	if user.is_authenticated:
+		if user.is_superuser:
+			questions = createQuestionObject()
+			return render(request,'Nitor/questions.html',{'questions':questions})
+	return index(request)
+
 
 def removeQue(request,queid):
 	user=request.user

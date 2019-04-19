@@ -63,15 +63,21 @@ def list_of_candidates():
 
 # Show candidate profile
 def candidate_profile(userid,id=1):
+	que_paper_assigned=[]
 	candidate={}
 	try:
 		profile = Profile.objects.get(user_id=userid)
+		print(CandidateStatus.objects.filter(candidate=userid).count())
 		if CandidateStatus.objects.filter(candidate=userid).count() >= 1:
+			assigned = CandidateStatus.objects.filter(candidate=userid)
+			for a in assigned:
+				que_paper_assigned.append(a.question_paper)
+			print(que_paper_assigned)
 			cs='Already Assigned'
 		else:
 			cs = 'Not assigned'
 		user= User.objects.get(id=userid)		
-		candidate = {'id':profile.id,'user_id':userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs}
+		candidate = {'id':profile.id,'user_id':userid,'fname':user.first_name,'lname':user.last_name,'email':user.email,'skill':profile.skills,'education':profile.education,'experience':profile.experience,'contact':profile.contact,'department':profile.department,'status':cs,'que_paper_assigned':que_paper_assigned}
 	except:
 		return candidate
 	return candidate
@@ -150,13 +156,14 @@ def getCategorizedQuestions(questions):
 To get all candidates list
 '''
 def getAllCandidates():
+	que_paper_assigned = []
 	candidate_dict = {}	
 	try:
 		candidates_list = Profile.objects.all()
 	except:
 		return candidates_dict
 	for candidate in candidates_list:
-		if candidate.role == 2:			
+		if candidate.role == 2:
 			candidate_dict[candidate.id] = candidate_profile(candidate.user_id,candidate.id)
 	return candidate_dict
 
