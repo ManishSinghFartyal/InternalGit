@@ -47,7 +47,7 @@
                           <th>
                            Level
                           </th>
-                        </thead> 
+                        </thead>
                         <tbody>
                  {% for key,value in questions.items %}
                           <tr id="{{key}}-row">
@@ -74,7 +74,7 @@
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
                                               document.getElementById('div{{key}}').style.display = 'none';
                                               return false;
-                                          })();"><u>show more</u></button>
+                                          })();"><u><i>show more</i></u></button>
                                   </a>
                                </div>
                                 <div id="demo{{key}}" class="collapse">
@@ -83,20 +83,22 @@
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
                                               document.getElementById('div{{key}}').style.display = 'initial';  
                                               return false;
-                                          })();"><u>show less</u></button>
+                                          })();"><u><i>show less</i></u></button>
                                   </a>
                                </i>
                                <ol>
                                   {% for k,v in value.options.items %}
                                     <li>{{v}}</li>
                                   {% endfor %}
+                                  <br>
+                                <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger" onclick="return confirmRemove()">Remove</a>
                                </ol>
                                {%elif value.qtype == 'ct' %}
                                 <b>{{value.title}}&nbsp; &nbsp; <i>
                                  <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
                                               document.getElementById('div{{key}}').style.display = 'initial';
                                               return false;
-                                          })();"><u>show less</u></button>
+                                          })();"><u><i>show less</i></u></button>
                                   </a></b>
                                 <br>
                                 {{value.description}}
@@ -106,14 +108,17 @@
                               rows = "7" {% else %} rows="7" {% endif %} cols="90">{{value.snippet}}</textarea>
                               <br>
                               <i><b>Testcases</b></i><br>
-                              <ol>
-                              {% for k,v in value.testcases.items %}
-                              <li>Input : {{v.testcase}} | Output : {{v.output}}</li>
-                              {% endfor %}
-                              </ol>
-                              <br>
-                                <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger">Remove</a>
-
+                              <table>
+                                <tr>
+                                  <th>Input</th><th>Output</th>
+                                </tr>
+                                 {% for k,v in value.testcases.items %}
+                                 <tr>
+                                  <td>{{v.testcase}}</td><td>{{v.output}}</td>
+                                 </tr>
+                                 {% endfor %}
+                              </table>
+                                <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger" onclick="return confirmRemove()">Remove</a>
                                 {% endif %}
                                 </div>
                             </td>
@@ -132,9 +137,9 @@
                     </div>
                     </div>
                   </div>
-                </form>                
+                </form>
               </div>
-            </div>            
+            </div>
           </div>
             <div style="background: rgba(10,10,10,0.2);width: 30%;text-align: center;">
                        <hr>
@@ -181,6 +186,15 @@ function createEditor(){
       mode:  "java",
       theme: 'duotone-light',    
     });  
+}
+
+function confirmRemove() {
+  var txt;
+  if (confirm("Are you sure?")) {
+    return true;
+  } else {
+    return false;
+  }
 }
 </script>
 

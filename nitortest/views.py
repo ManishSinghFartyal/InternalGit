@@ -72,6 +72,7 @@ def login(request):
 
 	next_url = request.GET.get('next')
 	if request.method == 'POST':
+		print("Login new")
 		form = UserLoginForm(request.POST)
 		if form.is_valid():
 			user = form.cleaned_data
@@ -83,7 +84,7 @@ def login(request):
 	else:
 		form=UserLoginForm()
 		context={'form':form}
-	return render(request,'Nitor/login.html',context)
+	return render(request,'Nitor/loginNew.html',context)
 
 
 
@@ -332,28 +333,38 @@ def questionPapers(request):
 			return render(request,'Nitor/questionPaper.html',{'paper':qp})
 	return index(request)
 
+
+#To fetch details of created question paper
 def fetchQuestionPaper(request,questionid):
 	id = int(questionid)
 	q_paper = QuestionPaper.objects.get(id=questionid)
 	paper = getPaper(q_paper)
 	return render(request,'Nitor/showQuestion.html',{'paper':paper,'id':id})
 
+
+#To show candidate status
 def candidatestatus(request,candidateid):
 	id = int(candidateid)
 	cst = getCandidateStatus(id)
 	return render(request,'Nitor/candidateStatus.html',{'status':cst,'cid':candidateid})
 
+
+#To remove Assigned test of candidate
 def remcandidatestatus(request,cid,pid):
 	CandidateStatus.objects.get(candidate=cid,question_paper=pid).delete()
 	url = "/candidatestatus/"+cid
 	print(url)
 	return HttpResponseRedirect(url)
 
+
+#To remove question paper
 def removeQuestionPaper(request,pid):
 	id = int(pid)
 	q_paper = QuestionPaper.objects.get(id=pid).delete()
 	return HttpResponseRedirect("/questionPapers")
 
+
+#To show selected candidate score of his/her attempted assigned exam
 def showscore(request,cid,pid):	
 	user=request.user
 	if user.is_authenticated:
@@ -363,6 +374,7 @@ def showscore(request,cid,pid):
 	return index(request)
 
 
+#Function to list all the available questions in databse
 def listQuestions(request):
 	user=request.user
 	if user.is_authenticated:
@@ -372,6 +384,8 @@ def listQuestions(request):
 	return index(request)
 
 
+
+# Function to remove question from database
 def removeQue(request,queid):
 	user=request.user
 	if user.is_authenticated:

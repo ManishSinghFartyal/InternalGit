@@ -130,8 +130,7 @@ def createQuestionObject():
 		else:
 			pre = desc[:25]
 			post =desc[:l]
-		que[question.id] = {"qtype":question.qtype,"subject":question.subject or None,"language":question.language or None,"title":question.title or None,"description":question.description or None,"snippet":question.snippet or None,"options":js,"correct_option":question.correct_option or None,"testcases":tc,"level":question.level or None,"pre":pre,"post":post}	
-		
+		que[question.id] = {"qtype":question.qtype,"subject":question.subject or None,"language":question.language or None,"title":question.title or None,"description":question.description or None,"snippet":question.snippet or None,"options":js,"correct_option":question.correct_option or None,"testcases":tc,"level":question.level or None,"pre":pre,"post":post}			
 	return que
 
 
@@ -251,6 +250,10 @@ def get_answered(userid,testid):
 		details[key] = {'type':question.qtype,"description":question.description,"selected":value["answer"],"options":options,"correct":question.correct_option}
 	return details,scores
 
+
+
+
+# To score candidate's attempt
 def get_scores(testid):
 	total =0
 	mcq=0
@@ -259,11 +262,10 @@ def get_scores(testid):
 	try:
 		mcqs=ast.literal_eval(question.mcq)
 		mcqs=json.dumps(mcqs)
-		mcqs=json.loads(mcqs)		
+		mcqs=json.loads(mcqs)
 	except Exception as s:
 		print(s)
 		mcqs={}
-
 	try:
 		codes=ast.literal_eval(question.coding)
 		codes=json.dumps(codes)
@@ -277,8 +279,6 @@ def get_scores(testid):
 
 	for key,value in codes.items():
 		code=code+100
-
 	total =mcq+code
 	print(total,"  ",mcq,"  ",code)
-
 	return total,mcq,code 
