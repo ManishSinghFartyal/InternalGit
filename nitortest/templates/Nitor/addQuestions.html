@@ -4,10 +4,9 @@
 
 <div class="wrapper ">
     {% include 'Nitor/sidebar.html' %}
-    <div class="main-panel">
-    	{% include 'Nitor/navbar.html'  %}      
-    	<div class="content">
-           
+    {% include 'Nitor/navbar.html'  %}
+    <div class="main-panel">    	
+    	<div class="content">           
         <div class="container-fluid">
           <form action="" method="POST"  novalidate="true"> 
             {% csrf_token %}    

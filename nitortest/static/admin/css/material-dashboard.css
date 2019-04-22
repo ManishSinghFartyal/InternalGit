@@ -13151,7 +13151,8 @@ fieldset[disabled] .form-group .form-control {
 
 .navbar .navbar-brand {
   position: relative;
-  color: inherit;
+  color: white;
+  font-weight: bold !important;
   height: 50px;
   font-size: 1.125rem;
   line-height: 30px;
@@ -13284,7 +13285,7 @@ fieldset[disabled] .form-group .form-control {
 }
 
 .navbar.navbar-transparent {
-  background-color: transparent !important;
+  background-color: #212529 !important;
   box-shadow: none;
 }
 

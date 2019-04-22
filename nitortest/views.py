@@ -72,7 +72,6 @@ def login(request):
 
 	next_url = request.GET.get('next')
 	if request.method == 'POST':
-		print("Login new")
 		form = UserLoginForm(request.POST)
 		if form.is_valid():
 			user = form.cleaned_data
@@ -133,7 +132,6 @@ def show_profile(request,profile):
 
 ########## Removing candidate by using id #####################
 def removeCandidate(request,userid):
-	print(userid)
 	if request.user.is_authenticated:
 		if request.user.is_superuser:
 			try:
