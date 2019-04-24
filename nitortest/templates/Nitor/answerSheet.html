@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="row">
-	<div class="col-sm-12">
-		<div class="col-sm-12">
- 			 	{% include 'Nitor/navbar.html'%}
- 			 	<br><br>
- 		</div>		
-	</div>
-	<div class="col-sm-12">
+<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;">
+    {% include 'Nitor/navbar.html'  %}
+    <div class="main-panel">
+        <div class="content"> 
+            <div class="container-fluid">
+                <div class="row">   
+                <div class="col-sm-12">
 	    <div class="card"> 		
 			<div class="row" style="padding: 10px 10px 10px 10px; text-align: center; font-weight: bold;font-size: 19px;font-family:sans-serif;color: black;">
 				<div class="col-sm-4">
@@ -67,4 +66,6 @@
         </div>	
 	</div>
 </div> 
+</div>
+</div>
 {% endblock %}

@@ -19,17 +19,15 @@
   }
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
-<div class="wrapper">
+<div class="wrapper" style="margin-left: -230px;padding: 10px 30px 10px 10px;">
+  {% include 'navbar.html'%}
 	<form onload="timer2();"></form>    
 	 {% csrf_token %}
     <div class="main-panel">
-    	{% include 'navbar.html'  %}
-    	<div class="content"  style="margin-left: -280px;">
+    	<div class="content" >
         <div class="container">
-          <div class="row text-left" style="font-family: sans-serif;">
-            <div class="row ">
-
-                  <div class="col-sm-11 text-center ">
+           <div class="row" style="background: #1115;padding: 20px 0px 0px 0px;">
+                  <div class="col-sm-8">
                     <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
                     <input type="text" name="hours" id="hours" style="width: 26px;height: 26px;" disabled="true" value="{{hour}}">
                       <span>:</span>
@@ -38,13 +36,14 @@
                     <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
                   </p>
                   </div>  
-                  <form action="/candidate/savetest/{{testid}}">
-                    <div class="col-sm-1 text-right">
+                    <div class="col-sm-4">
+                      <form action="/candidate/savetest/{{testid}}">
                       <input type="submit" id="quit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
-                    </div>                    
-                  </form>            
-                  
-            </div>            
+                      </form>
+                    </div>                  
+            </div>         
+          <div class="row " style="font-family: cursive;">
+              
               <div class="row" >
                 <div class="col-md-9">
                     <div class="card" id="testcase">
@@ -160,9 +159,10 @@
                         {% endif %}
                   </div>
                 </div>   
-            
-            </div>
+            </div>            
           </div>
+             {% include 'Nitor/footer.html'  %}
+
         </div>        
       </div>    
     </div>

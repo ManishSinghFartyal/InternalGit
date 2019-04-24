@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="row">
-	<div class="col-sm-12">
-		<div class="col-sm-12">
- 			 	{% include 'Nitor/navbar.html'  %}
- 			 	<br><br>
- 		</div>		
-	</div>
-	<div class="col-sm-12">
-			<div class="card jumbotron"> 		
-				<div class="row">
+<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;">
+ 	{% include 'Nitor/navbar.html'  %}
+	<div class="main-panel">
+		<div class="content"> 
+			<div class="container-fluid">
+				<div class="row">	
+				<div class="col-sm-12">
+						<div class="card jumbotron"> 		
+							<div class="row">
 					 		{% for key,value in status.items %} 
  		<div class="col-sm-5 lead" style="padding: 10px 10px 10px 10px;color: black;">
  			<div class="card" style="padding: 10px 10px 10px 10px; color: black;font-weight: bold;font-family:sans-serif; {% if value.attempted == False%} background-color: rgba(255,60,60,0.7){%else%}background-color: rgba(10,160,170,0.7);{%endif%}">
@@ -43,4 +42,11 @@
 	</div>
 </div>
  
+</div>
+
+	</div>
+	
+			</div>
+		</div>
+		
 {% endblock %}

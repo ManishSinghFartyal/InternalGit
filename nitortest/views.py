@@ -69,13 +69,12 @@ def login(request):
 	user =request.user
 	if user.is_authenticated:
 		return index(request)
-
 	next_url = request.GET.get('next')
 	if request.method == 'POST':
+		print("psoet")
 		form = UserLoginForm(request.POST)
 		if form.is_valid():
 			user = form.cleaned_data
-			print(user)
 			auth_login(request, user)
 			return index(request,next_url)
 		else:

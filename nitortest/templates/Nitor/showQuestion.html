@@ -16,7 +16,6 @@
                  <div id='c_list' class="col-md-12">                  
                   <div class="col-md-12 text-info text-center">
                     <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Created question papers</u></b></h3>
-                    <hr>
                   </div>
                   <form>
                      <div class="modal fade" id="myModal">
@@ -28,33 +27,33 @@
                   </div>                  
                 </div>
            </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="border: solid 1px black;">
                           <table class="table">
                             <thead class=" text-primary"> 
                               <th>
-                                Title
+                                <b>Title</b>
                               </th>
                               <th>
-                                Total question
+                                <b>Total question</b>
                               </th>
                               <th>
-                                Max time
+                                <b>Max time</b>
                               </th>
                             </thead>
                             <tbody>                              
                               <tr>
-                                <td>{{paper.title}}</td>
-                                <td>{{paper.total}}</td>                               
-                                <td>{{paper.max_time}}</td>
+                                <td><b><i>{{paper.title}}</i></b></td>
+                                <td><b><i>{{paper.total}}</i></b></td>                               
+                                <td><b><i>{{paper.max_time}}</i></b></td>
                              </tr>                            
                             </tbody>
-                          </table>                                                                             
+                          </table>                                                                    
                         </div>
+                        <hr>
                         <div class="row">
-                          <h5> <u>Multiple choice questions</u></h5>
-                          <br>
-                          <br>
-                          <br>
+                          <div class="col-md-12">
+                            <h5> <u>Multiple choice questions</u></h5>                            
+                          </div>
                             <ol>
                             {% for key,value in paper.mcq.items %}
                             <div class="col-sm-10">

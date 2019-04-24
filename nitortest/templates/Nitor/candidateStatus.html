@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="row">
-	<div class="col-sm-12">
-		<div class="col-sm-12">
- 			 	{% include 'Nitor/navbar.html'  %}
- 			 	<br><br>
- 		</div>		
-	</div>
-	<div class="col-sm-12">
+<div class="wrapper" style="margin-left: -250px;padding: 2px 20px 10px 10px;">
+	{% include 'Nitor/navbar.html'  %}
+	<div class="main-panel">
+	<div class="row">		
+	<div class="col-sm-12"><br><br>
 			<div class="card jumbotron"> 		
 				<div class="row">
 					 		{% for key,value in status.items %} 
  		<div class="col-sm-5 lead" style="padding: 10px 10px 10px 10px;color: black;">
- 			<div class="card" style="padding: 10px 10px 10px 10px; color: black;font-weight: bold;font-family:sans-serif; {% if value.attempted == False%} background-color: rgba(255,60,60,0.7){%else%}background-color: rgba(10,160,170,0.7);{%endif%}">
+ 			<div class="card" style="padding: 10px 10px 10px 10px;color: black;font-weight: bold;font-family:sans-serif;background-color: rgba(66, 165, 74, 0.86);{% if value.attempted == False%} padding: 10px 10px 10px 10px;color: black;font-weight: bold;font-family:sans-serif;background-color: rgba(255, 4, 4, 0.69);{%endif%}">
  				<table>
  					<tr><td>Test Assigned</td><td>:</td><td><a href="/fetchQuestionPaper/{{value.paperId}}">{{value.paper_title}}</a></td></tr>
  					<tr><td>Scheduled in : </td><td>:</td><td>{{value.date}}</td></tr>
@@ -28,17 +25,23 @@
  					 <hr>
  					</tr>
  					 <tr>
- 					 	<td><hr><a href="/remassigned/{{cid}}/{{value.paperId}}" class="btn btn-danger btn-sm">Remove</a></td>
+ 					 	<td><hr><a href="/remassigned/{{cid}}/{{value.paperId}}" class="btn btn-sm" style="background: #1118;">Remove</a></td>
  					 	{% if value.attempted == True %}
- 					 	<td><hr><a href="/showscore/{{cid}}/{{value.paperId}}" class="btn btn-success btn-sm">Show Answer sheet</a></td>
+ 					 	<td><hr><a href="/showscore/{{cid}}/{{value.paperId}}" class="btn btn-sm"  style="background: #1118;">Show Answer sheet</a></td>
  					 	{% endif %}
  					 </tr>
  				</table>
  			</div>
  		</div>
- 		{% endfor %}					
-			</div>
-       </div>		
-	</div>
-</div> 
+		<div class="col-sm-2"></div>					 		
+
+ 		{% endfor %}
+		</div>
+       </div>
+       {% include 'Nitor/footer.html'  %}
+		</div>
+	   </div> 	
+	</div>	
+ </div>
+
 {% endblock %}

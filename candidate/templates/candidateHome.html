@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="wrapper" style="margin-left: -200px;">
-   {% include 'navbar.html'  %}     
+<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;">
+     {% include 'navbar.html'  %}         
 	<form>
 		{% csrf_token %}
     <div class="main-panel">
     	<div class="content"> 
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-10 ">
+            <div class="col-sm-12 ">
               <div class="card ">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title">Tests assigned to you</h4>
@@ -17,16 +17,16 @@
                 <div class="card-body  jumbotron">
                   <div class="row lead">
                   {% for key,value in tests.items %}
-                    <div class="col-lg-6" style="padding: 20px 20px 20px 20px;">      
-                      <div class="card" style="padding: 20px 20px 20px 20px; {% if value.attempted == False%} background-color: rgba(255,60,60,0.7){%else%}background-color: rgba(10,160,170,0.7);{%endif%}">
+                    <div class="col-sm-6" style="padding: 10px 10px 10px 10px;">      
+                      <div class="card" style="padding: 10px 10px 10px 10px;color: black;font-weight: bold;font-family:sans-serif;background-color: rgba(66, 165, 74, 0.86);{% if value.attempted == False%} padding: 10px 10px 10px 10px;color: black;font-weight: bold;font-family:sans-serif;background-color: rgba(255, 4, 4, 0.69);{%endif%}">
                         <table>
                           <tr><td>Test Assigned</td><td>:</td><td>{{value.paper_title}}</td></tr>
                           <tr><td>Scheduled in : </td><td>:</td><td>{{value.date}}</td></tr> 
                           <tr><td>Time : </td><td>:</td><td>{{value.max_time}}&nbsp; minutes</td></tr>               
                           <tr>{% if value.attempted == False%}
-                            <strong><u>Not attempted</u></strong>
+                            <strong><u>Not attempted</u><i class="material-icons" style="position: fixed;">clear</i></strong>
                             {%else%}
-                            <strong><u>Attempted</u></strong>
+                            <strong><u>Attempted</u><i class="material-icons" style="position: fixed;">done</i></strong>
                            {% endif %}
                            <hr>
                           </tr>
@@ -42,7 +42,8 @@
                   </div>
                 </div>
               </div>
-            </div>            
+            </div> 
+             {% include 'Nitor/footer.html'  %}           
           </div>
         </div>
       </div>

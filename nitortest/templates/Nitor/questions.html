@@ -22,7 +22,7 @@
                   <div class="row">
                     <div class="col-md-12 text-center" style="padding-top: 20px;">
                       <div class="card-header card-header-primary">
-                        <h4 class="card-title"><u>Create Test</u></h4>
+                        <h4 class="card-title"><u>Questions</u></h4>
                       </div>   
                     </div>
                     <div class="col-md-12">
@@ -37,16 +37,16 @@
                       <table class="table">
                         <thead class=" text-primary">
                           <th>
-                            Type
+                            <b>Type</b>
                           </th>
                           <th>
-                            Subject
+                            <b>Subject</b>
                           </th>
                           <th>
-                            Question
+                            <b>Question</b>
                           </th>
                           <th>
-                           Level
+                           <b>Level</b>
                           </th>
                         </thead>
                         <tbody>
@@ -54,7 +54,7 @@
                           <tr id="{{key}}-row">
                             <td>
                                {% if value.qtype == 'mcq'%}
-                               <font style="color:black;font-weight: bold;font-style: italic;font-size: 12px;"><i class="material-icons">check</i>
+                               <font style="color:black;font-weight: bold;font-style: italic;font-size: 12px;"><i class="material-icons">view_list</i>
                                 <sub>mcq</sub> </font>
                                {% else %}
                                <font style="color:green;font-weight: bold;font-size: 12px;"><i class="material-icons">code</i>
@@ -142,19 +142,18 @@
               </div>
             </div>
           </div>
-            <div style="background: rgba(10,10,10,0.2);width: 30%;text-align: center;">
-                       <hr>
-                    <a href="/addCode" class="" style="padding: 101px 101px 110px 10px;"><i class="material-icons">add_box</i>Add questions</a>
-                    <hr>
-                    </div>
+          <div style="width: 30%;text-align: center;">
+            <hr>
+            <a href="/addCode" class="btn btn-success"><i class="material-icons">add_box</i>Add questions</a>
+            <hr>
+          </div>
         </div>
       </div>
     </div>
 </div>
    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
-
 <script type="text/javascript">
-  
+
 function showRelatedQue(){
   qtype = document.getElementById('qtype').value;
   console.log('questions =>', JSON.stringify("{{ questions }}"))
@@ -165,6 +164,7 @@ function showRelatedQue(){
     }
   {% endfor %}
 };
+
 
 function changeTotal(cb,key){
   row = key+"-row";
@@ -180,6 +180,7 @@ function changeTotal(cb,key){
   }
 };
 
+
 function createEditor(){
   console.log("hi")
   var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
@@ -189,6 +190,8 @@ function createEditor(){
     });  
 }
 
+
+
 function confirmRemove() {
   var txt;
   if (confirm("Are you sure?")) {
@@ -197,6 +200,7 @@ function confirmRemove() {
     return false;
   }
 }
+
 </script>
 
 {% endblock %}
