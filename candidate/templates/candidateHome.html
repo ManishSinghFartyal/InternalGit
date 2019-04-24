@@ -2,10 +2,10 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="wrapper" style="margin-left: -200px;">
+   {% include 'navbar.html'  %}     
 	<form>
-		{% csrf_token %}		    
+		{% csrf_token %}
     <div class="main-panel">
-    	{% include 'navbar.html'  %}
     	<div class="content"> 
         <div class="container-fluid">
           <div class="row">

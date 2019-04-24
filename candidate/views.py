@@ -182,3 +182,14 @@ def rules(request,testid):
 
 def removeQue(queid):
 	Question.object.filter(id=queid).delete()
+
+
+def home(request):
+	user = request.user	
+	if user.is_authenticated:
+		if user.is_superuser:
+			return index(request)
+		#If user submit a mcq answer
+		else:
+			return render(request,'userHome.html')
+	return redirect("/login")

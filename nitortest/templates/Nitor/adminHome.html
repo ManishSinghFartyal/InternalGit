@@ -1,6 +1,73 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-{% include 'Nitor/sidebar.html' %}
-{% include 'Nitor/navbar.html' %}
+{% load static %}
+<div class="wrapper" style="margin-left: -250px;">
+   {% include 'navbar.html'  %}     
+	<form>
+		{% csrf_token %}
+    <div class="main-panel">
+    	<div class="content"> 
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10 ">
+              <div class="card" style="margin-left: 70px;">               
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-center" id="">
+                      <a href="/listCandidate" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-center">
+                      <a href="/addUser" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-center">
+                      <a href="/assignTest" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
+                    </div>                                         
+                  </div>
+                  <br>
+                
+                  <br>
+                  <hr>
+                  <br>
+                  <br>
+                  <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-center">
+                      <a href="/questionPapers" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-center">
+                      <a href="/listQuestions" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
+                    </div>                                         
+                  </div>
+                </div>
+
+              </div>
+              <div class="row text-right">
+              {% include 'Nitor/footer.html'  %}
+              </div>
+            </div>            
+          </div>          
+        </div>
+      </div>
+      
+    </div>     
+	</form>
+</div>
+<script type="text/javascript">
+  function hover(tag){
+    tag = tag.parentNode;
+    tag.childNodes[1].childNodes[0].style.width = "110px";
+    tag.childNodes[1].childNodes[0].style.height = "110px";
+  }
+  function unhover(tag){
+     tag = tag.parentNode;
+     tag.childNodes[1].childNodes[0].style.width = "100px";
+    tag.childNodes[1].childNodes[0].style.height = "100px";
+  }
+</script>
 {% endblock %}
+  

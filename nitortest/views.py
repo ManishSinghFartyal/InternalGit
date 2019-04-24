@@ -392,3 +392,5 @@ def removeQue(request,queid):
 			questions = createQuestionObject()
 			return render(request,'Nitor/questions.html',{'questions':questions})
 	return index(request)
+
+
