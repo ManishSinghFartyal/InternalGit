@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load static %}
+<div class="wrapper" style="margin-left: -250px;padding: 2px 20px 10px 10px;">
+	{% include 'Nitor/navbar.html'  %}
+	<div class="main-panel">
+		<div class="row">		
+	 		<div class="col-sm-12">
+				<div class="card jumbotron"> 		
+				 		{% for key,value in status.items %} 
+				 		<div class="row" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 10px 10px 10px 10px;box-shadow: 2px 2px 10px #1119;">
+				 			<div class="col-md-2" style="background: #1113;border-top-left-radius:50px;border-bottom-left-radius:50px;padding: 10px 10px 10px 10px;">
+				 				<img src="{% static 'admin/img/testAssigned.png' %}" width="160px" height="160px">
+				 			</div>
+				 			<div class="col-md-1" style="{% if value.attempted == False%} background: #9113;{% else %}background: #1913;{% endif %}"></div>
+				 			<div class="col-md-7" style="{% if value.attempted == False%} background: #9113;{% else %}background: #1913;{% endif %}">
+				 				<div class="row" style="padding: 10px 10px 10px 10px;">
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Test Assigned : {{value.paper_title}}</font></div>
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Scheduled in :{{value.date}}</font></div>
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Total score : {{value.score}} / {{value.total_score}}</font></div>
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Total score of MCQ : {{value.mcq_correct}} / 	{{value.total_mcq_score}}</font></div>
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Total score of Coding : {{value.coding_correct}} / {{value.total_code_score}}</font></div>
+				 					<div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Total score of Coding : {{value.coding_correct}} / {{value.total_code_score}}</font></div>
+				 				</div>
+				 			</div>
+				 			<div class="col-md-2">
+				 				<div class="row">
+				 					<div class="col-md-12">
+				 						{% if value.attempted == True%}
+				 						<img src="{% static 'admin/img/right.svg' %}" width="80px" height="70px" >Attempted
+				 						{% else %}
+				 						<img src="{% static 'admin/img/wrong.png' %}" width="70px" height="70px"> Not attempted
+				 						{% endif %}
+				 					</div>
+				 					<div class="col-md-12"><a href="/remassigned/{{cid}}/{{value.paperId}}" class="btn btn-sm btn-danger" >Remove</a></div>
+				 					{% if value.attempted == True%}
+				 					<div class="col-md-12"><a href="/showscore/{{cid}}/{{value.paperId}}" class="btn btn-sm btn-info"  >Show Answer sheet</a></div>
+				 					{% endif %}
+				 				</div>
+				 			</div>
+				 		</div>
+				 		<br>			 		
+		 		{% endfor %}
+		       </div>
+		       {% include 'Nitor/footer.html'  %}
+		</div>
+	   </div> 	
+	</div>	
+ </div>
+
+{% endblock %}

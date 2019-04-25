@@ -8,10 +8,11 @@ from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login, logout, authenticate
 from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered,get_scores
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-
+@login_required
 def index(request,next_url=None):	
 	user =request.user
 	if user.is_authenticated:
@@ -65,13 +66,13 @@ def add_user(request):
 
 
 ###########   To check user login     #########################
+
 def login(request):
 	user =request.user
 	if user.is_authenticated:
 		return index(request)
 	next_url = request.GET.get('next')
 	if request.method == 'POST':
-		print("psoet")
 		form = UserLoginForm(request.POST)
 		if form.is_valid():
 			user = form.cleaned_data
@@ -99,7 +100,7 @@ def listCandidates(request):
 	if user.is_authenticated:
 		if user.is_superuser:
 			candidates = list_of_candidates()
-			return render(request,'Nitor/candidatesList.html',{'candidates':candidates})
+			return render(request,'Nitor/candidateList.html',{'candidates':candidates})
 		else:
 			return index(request)
 			#return render(request,'to candidate home page')
@@ -343,7 +344,7 @@ def fetchQuestionPaper(request,questionid):
 def candidatestatus(request,candidateid):
 	id = int(candidateid)
 	cst = getCandidateStatus(id)
-	return render(request,'Nitor/candidateStatus.html',{'status':cst,'cid':candidateid})
+	return render(request,'Nitor/candidateStatus1.html',{'status':cst,'cid':candidateid})
 
 
 #To remove Assigned test of candidate
