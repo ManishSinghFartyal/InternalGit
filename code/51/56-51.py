@@ -1,8 +1,30 @@
-string=input("")
+string=input()
 # write your program from here
-if(string==string[::-1]):
-      print("yes")
+if string == string[::-1]:
+	print("yes")
 else:
-      print("no")
+	print("1no")
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                                 
                                 

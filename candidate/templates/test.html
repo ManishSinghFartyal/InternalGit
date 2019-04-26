@@ -6,8 +6,6 @@
   #testcases-info{
     color : black;
     text-align: center;
-    border: green solid;
-    border-width: 4px;
     padding: 15px 15px 15px 15px;
     text-indent: inherit;
     color: green;
@@ -24,7 +22,41 @@
      text-align: center;
      color: white;
      font-size: 24px;"
-  }
+  } 
+.loader {
+  margin-left: 300px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid green;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#testcase-style2{
+  font-size: 29px;
+  background: black;
+  box-shadow: 1px 1px 1px green;
+  font-weight: bolder;
+}
+#testcase-style1{
+  font-size: 29px;
+  background: white;
+  border-top-left-radius: 90px;
+  border-bottom-left-radius: 90px;
+  box-shadow: 1px 1px 1px green;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.css">
@@ -122,7 +154,10 @@
                               </div> 
                               <div class="col-md-6">
                                 <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
-                              </div>                                  
+                              </div> 
+                              <div class="col-md-12 text-center">
+                                <div class="loader" id="loader" style="visibility: hidden;"></div>
+                              </div>                                 
                               </div>                                  
                                <!-- <div class="col-md-11" >                                 
                                       <h5 style="font-family: inherit;">Output:</h5>
@@ -265,6 +300,8 @@
   
 
  $("#runajax").click(function(){
+  document.getElementById('loader').style.visibility="visible";
+  
   id_lang = this.name;
   arr=  id_lang.split("-");
   que_id = arr[0];
@@ -306,7 +343,7 @@
  }
  testcases = document.createElement('div');
  testcases.setAttribute('id','testcases-info');
- testcases.setAttribute('class','col-sm-8 jumbotron');
+ testcases.setAttribute('class','row');
  i=1;
  for (var key in json) {     
      result = document.createElement('p');
@@ -316,16 +353,36 @@
        break;
      }
      else{
-       result.setAttribute("class","lead btn btn-sm btn-success")
-     }
+         divcol11 = document.createElement('div'); 
+         divcol11.setAttribute("class","col-sm-3 text-right");
+         divcol12 = document.createElement('div');          
+         divcol12.setAttribute("class","col-sm-3 text-right");
+         divcol1 = document.createElement('div');
+         divcol1.setAttribute("class","col-sm-1 text-center");
+         divcol1.setAttribute("id","testcase-style1");
+         image = document.createElement("img");
+         image.setAttribute("src","{% static 'admin/img/right.svg' %}");
+         image.setAttribute("width","50px");
+         image.setAttribute("height","50px");
+         divcol1.appendChild(image)
+         divcol2 = document.createElement('div');
+         divcol2.setAttribute("id","testcase-style2");  
+         divcol2.setAttribute("class","col-sm-5 text-left");
+         divcol2.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result;
+         result.setAttribute("class","lead btn btn-sm btn-success");
+      }
      line = document.createElement('br');
-     result.setAttribute('id','result');
-     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result
-     testcases.appendChild(result);
+     //result.setAttribute('id','result');
+     //result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result
+     testcases.appendChild(divcol11);
+     testcases.appendChild(divcol1);
+     testcases.appendChild(divcol2);
+     testcases.appendChild(divcol12);     
      testcases.appendChild(line);
      i++;
    }
-     document.getElementById('testcase').appendChild(testcases);
+    document.getElementById('loader').style.visibility="hidden";
+    document.getElementById('testcase').appendChild(testcases);
  }
 
  function incorrect_output(testcase,input,result1,output,expected,div){    
@@ -373,6 +430,66 @@
      div.appendChild(label3);
      div.appendChild(output2);
  }
+
+ /*function incorrect_output12(testcase,input,result1,output,expected,div){    
+     divcol1 = document.createElement('div');
+     divcol1.setAttribute("class","col-sm-3");
+     image = document.createElement("img");
+     if(result1 == 'correct'){
+      image.setAttribute("src","{% static 'right.svg'%}");
+     }
+     else{
+      image.setAttribute("src","{% static 'wrong.png'%}");
+     }
+     image.setAttribute("width","50px");
+     image.setAttribute("height","50px");
+     divcol1.appendChild(image);
+     divcol1 = document.createElement('div');     
+     divcol2.setAttribute("class","col-sm-7");
+     line = document.createElement('br');
+     result = document.createElement('p');
+     result.setAttribute("class","lead btn btn-sm btn-danger")
+     result.setAttribute('id','result');
+     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+result1;     
+     label1 = document.createElement('label');
+     label1.setAttribute("for","inputvalue");
+     label1.innerHTML = "Input";
+     input1 = document.createElement('input');
+     input1.setAttribute("type","text");
+     input1.setAttribute("class","container");
+     input1.setAttribute("disabled","True");
+     input1.setAttribute("value",input);
+     label2 = document.createElement('label');
+     label2.setAttribute("for","outputvalue");
+     label2.innerHTML = "Your output";
+     output1 = document.createElement('textarea');
+     output1.setAttribute("type","text");
+     output1.setAttribute("class","container");
+     output1.setAttribute("disabled","True");
+     output1.innerHTML = output;
+     if(output.length > 80){
+      output1.setAttribute("rows","5");
+     }
+     else{
+      output1.setAttribute("cols","50");
+     }
+     label3 = document.createElement('label');
+     label3.setAttribute("for","outputvalue");
+     label3.innerHTML = "Expected output";
+     output2 = document.createElement('input');
+     output2.setAttribute("type","text");
+     output2.setAttribute("class","container");
+     output2.setAttribute("disabled","True");
+     output2.setAttribute("value",expected);
+     div.appendChild(result)
+     div.appendChild(line)
+     div.appendChild(label1);
+     div.appendChild(input1);
+     div.appendChild(label2);
+     div.appendChild(output1);
+     div.appendChild(label3);
+     div.appendChild(output2);
+ }*/
 </script>
 {% endblock %}
   
