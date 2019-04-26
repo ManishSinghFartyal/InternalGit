@@ -16,21 +16,7 @@
             <ul class="navbar-nav">
               
               {% if request.user.is_authenticated %}           
-              <li class="nav-item dropdown ">                  
-                <a class="nav-link" href="#" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons" style="background: white;">person</i>
-                  <p class="d-lg-none d-md-block">
-                    Account
-                  </p>
-                </a>
-            
-                <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="/candidateProfile/{{request.user.id}}">{{ request.user }}</a>
-                  
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/candidate/logout">Log out</a>
-                </div>                 
-              </li>
+              
                 {% endif %}
             </ul>
           </div>

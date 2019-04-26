@@ -11,6 +11,6 @@ urlpatterns = [
 	url(r'^test/(?P<testid>\d+)$$',views.test,name='test'),
 	url(r'^rules/(?P<testid>\d+)$$',views.rules,name='rules'),
 	url(r'^savetest/(?P<testid>\d+)',views.savetest,name='savetest'),
-
+	url(r'^logout/$',views.userLogout,name='logout'),
 #	url(r'^addUser/$',views.add_user,name='addUser'),
 ]

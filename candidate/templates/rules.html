@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %} 
-<div class="row">
+{% load static %}
+<div class="row" style="padding: 20px 20px 20px 20px;background: #6818;">
+	<div class="col-sm-1 text-right">
+		<img src="{% static 'admin/img/rules.png' %}" width="50px" height="50px">
+	</div>
+	<div class="col-sm-9 text-left"> <h1 style="font-family: sans-serif;font-weight: bolder;">Rules and regulations</h1></div>
 	<div class="col-sm-12">
 		<div class="jumbotron">
-			<h3><u> Rules and regulations</u></h3>
 			 <p class="lead">
 			  	<h5><i>Beginning the Examination</i></h5>
 					Only those candidates who are required to write the examination will be allowed in the room during the examination.

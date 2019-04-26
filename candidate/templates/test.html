@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% load static %}
 <style type="text/css">
   #testcases-info{
     color : black;
@@ -17,41 +18,54 @@
    #result{      
    padding: 5px 15px 5px 15px; 
   }
+  #span{
+     width: 50px;
+     height: 50px;
+     text-align: center;
+     color: white;
+     font-size: 24px;"
+  }
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.min.css">
 <div class="wrapper" style="margin-left: -230px;padding: 10px 30px 10px 10px;">
-  {% include 'navbar.html'%}
+  {% include 'navbar2.html'%}
 	<form onload="timer2();"></form>    
 	 {% csrf_token %}
-    <div class="main-panel">
+    <div class="main-panel jumbotron">
     	<div class="content" >
         <div class="container">
-           <div class="row" style="background: #1115;padding: 20px 0px 0px 0px;">
-                  <div class="col-sm-8">
-                    <p class="lead">Test will ends in &nbsp;&nbsp;&nbsp;
-                    <input type="text" name="hours" id="hours" style="width: 26px;height: 26px;" disabled="true" value="{{hour}}">
-                      <span>:</span>
-                    <input type="text" name="minutes" id="minutes" style="width: 26px;height: 26px;" disabled="true" value="{{minute}}">
-                      :
-                    <input type="text" name="seconds" id="seconds" style="width: 26px;height: 26px;" disabled="true" value="{{second}}">
+           <div class="row" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px; margin-top:-100px;border-radius: 10px;">
+            <div class="col-sm-8">
+              <div class="col-sm-12">
+              <p class="lead" style="color: white;font-weight: bolder;font-size: 27px;"><b>Test will ends in &nbsp;&nbsp;&nbsp;</b></p>
+              </div>
+              <div class="col-sm-12">                                  
+                    <input type="text" name="hours" id="hours" style="background: #1113; width: 50px;height: 50px;text-align: center;color: white;font-size: 24px;border: none;" disabled="true" value="{{hour}}">
+                      <span id="span">:</span>
+                    <input type="text" name="minutes" id="minutes" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{minute}}">
+                      <span id="span">:</span>
+                    <input type="text" name="seconds" id="seconds" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{second}}">
                   </p>
-                  </div>  
-                    <div class="col-sm-4">
+               </div>                                    
+            </div> 
+            <div class="col-sm-4">
+              <div class="col-sm-4">
                       <form action="/candidate/savetest/{{testid}}">
                       <input type="submit" id="quit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
                       </form>
-                    </div>                  
-            </div>         
+                    </div>
+            </div>           
+            </div>
+          </div>
+
           <div class="row " style="font-family: cursive;">
               
               <div class="row" >
                 <div class="col-md-9">
                     <div class="card" id="testcase">
-                        <div class="card-header card-header-primary">
-                         <h5 class="card-title">{{paper_details.title}}</h5>
-                         <p class="card-title">Total questions : {{paper_details.total}}</p>
-                         <p class="card-title">Max_time : {{paper_details.max_time}} minutes</p>
-                        </div>
+                       
                       <div class="card-body" style="margin-top: 30px;">
                             {% for ke,va in pages.items %}
                             <div class="row">
@@ -125,15 +139,15 @@
                   </div>
                 <div class="col-md-3">
                   <div class="card">
-                    <div class="card-body"> 
+                    <div class="card-body" style="background: #077123db;"> 
                       {% if paginator.has_other_pages %}
                       <ul class="pagination">
                          <div class="row">
                           <div class="col-md-12 text-center" style="margin-top: 10px;">
                           {% if paginator.has_previous %}
-                          <li class="page-item" style="background-color: #9111;font-family: cursive;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}">&laquo; Previous</a></li>
+                          <li class="page-item" style="background-color: #9111;font-family: cursive;color: black;"><a class="page-link" href="?page={{ paginator.previous_page_number }}" style="box-shadow: 2px 2px 3px; background: #6c757d52;color: black;font-weight: bolder;">&laquo; Previous</a></li>
                           {% else %}
-                          <li class="disabled page-item page-link" style="background: #0007;opacity: 0.3;font-size: 12px;color: black;background-color: #9111;"><span>&laquo; Previous</span></li>
+                          <li class="disabled page-item page-link" style="box-shadow: 2px 2px 3px;background: #0007;opacity: 0.3;font-size: 12px;color: black;background-color: #9111;"><span>&laquo; Previous</span></li>
                           {% endif %}
                           </div> 
                         {% for i in paginator.paginator.page_range %}
@@ -143,16 +157,16 @@
                           </div>                        
                         {% else %}
                           <div class="col-md-3 text-center" style="margin-top: 10px;">
-                          <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();">{{ i }}</a></li>
+                          <li class="page-item" style="font-family: cursive;font-weight: bolder;font-size: 12px;color: #000;background-color: #9111;"><a class="page-link" href="?page={{ i }}" id="{{i}}-count" onclick="answerChange();" style="background: #6c757d52;color: black;font-weight: bolder;">{{ i }}</a></li>
                           </div>
                         {% endif %}                                    
                         {% endfor %}                                                    
 
                          <div class="col-md-12 text-center" style="margin-top: 10px;">
                         {% if paginator.has_next %}
-                          <li class="page-item " style="font-family: cursive;background-color: #9111;font-weight: bolder;font-size: 12px;color: black;font-family: cursive;"><a class="page-link" href="?page={{ paginator.next_page_number }}">Next &raquo;</a></li>
+                          <li class="page-item " style="font-family: cursive;background-color: #9111;font-weight: bolder;font-size: 12px;color: black;font-family: cursive;"><a class="page-link" href="?page={{ paginator.next_page_number }}" style="box-shadow: 2px 2px 3px;background: #6c757d52;color: black;font-weight: bolder;">Next &raquo;</a></li>
                         {% else %}
-                          <li class="disabled page-item page-link" style="background: #0007;background-color: #9111;opacity: 0.3;color: black;font-family: cursive;"><span>Next &raquo;</span></li>
+                          <li class="disabled page-item page-link" style="box-shadow: 2px 2px 3px;background: #0007;background-color: #9111;opacity: 0.3;color: black;font-family: cursive;"><span>Next &raquo;</span></li>
                         </div>
                         {% endif %}
                         </div>
@@ -160,14 +174,12 @@
                   </div>
                 </div>   
             </div>            
-          </div>
-             {% include 'Nitor/footer.html'  %}
-
-        </div>        
-      </div>    
+          </div>             
+        </div>  
+      </div>          
     </div>
 </div>
-
+ {% include 'Nitor/footer.html'  %}
 
 
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
@@ -247,23 +259,16 @@
      var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
       lineNumbers: true,
       mode:  "java",
-      theme: 'duotone-light',
+      theme: 'eclipse'
     });  
 
-  /* (function() {
-    var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
-      lineNumbers: true,
-      mode:  "java",
-      theme: 'duotone-light',
-    });   
-  })();
-*/
+  
+
  $("#runajax").click(function(){
   id_lang = this.name;
   arr=  id_lang.split("-");
   que_id = arr[0];
   language = arr[1];  
-  console.log(que_id+"  "+language);
   url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
   code = editor.getValue()
   $.ajax({
@@ -297,10 +302,8 @@
  json = JSON.parse(json); 
  check = document.getElementById('testcases-info')
  if(check){
-  console.log("exists");
   check.remove();
  }
-
  testcases = document.createElement('div');
  testcases.setAttribute('id','testcases-info');
  testcases.setAttribute('class','col-sm-8 jumbotron');
@@ -322,11 +325,10 @@
      testcases.appendChild(line);
      i++;
    }
-     document.getElementById('testcase').appendChild(testcases);   
+     document.getElementById('testcase').appendChild(testcases);
  }
 
- function incorrect_output(testcase,input,result1,output,expected,div){
-     console.log(result)
+ function incorrect_output(testcase,input,result1,output,expected,div){    
      line = document.createElement('br');
      result = document.createElement('p');
      result.setAttribute("class","lead btn btn-sm btn-danger")
@@ -343,11 +345,17 @@
      label2 = document.createElement('label');
      label2.setAttribute("for","outputvalue");
      label2.innerHTML = "Your output";
-     output1 = document.createElement('input');
+     output1 = document.createElement('textarea');
      output1.setAttribute("type","text");
      output1.setAttribute("class","container");
      output1.setAttribute("disabled","True");
-     output1.setAttribute("value",output);
+     output1.innerHTML = output;
+     if(output.length > 80){
+      output1.setAttribute("rows","5");
+     }
+     else{
+      output1.setAttribute("cols","50");
+     }
      label3 = document.createElement('label');
      label3.setAttribute("for","outputvalue");
      label3.innerHTML = "Expected output";
@@ -357,7 +365,7 @@
      output2.setAttribute("disabled","True");
      output2.setAttribute("value",expected);
      div.appendChild(result)
-      div.appendChild(line)
+     div.appendChild(line)
      div.appendChild(label1);
      div.appendChild(input1);
      div.appendChild(label2);

@@ -9,7 +9,7 @@ import json
 from os.path import join
 import os
 import subprocess
-from subprocess import PIPE
+from subprocess import PIPE,check_output, CalledProcessError, STDOUT
 from django.conf import settings
 from nitortest.models import Question
 from .service import get_question_paper
@@ -35,10 +35,8 @@ def run_code(code,userid):
 		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True)
 	except subprocess.CalledProcessError as cl:
 		code_output=cl.output
-		print("Error ",code_output)
 	new_output=code_output.decode()
 	return new_output
-
 
 
 
@@ -65,21 +63,17 @@ def get_output(testcase,code,userid):
 	command = 'java '+hi_code1
 	commandC = 'javac '+hi_code
 	try:
-		subprocess.call(commandC,shell=True)
+		subprocess.check_output(commandC,shell=True,stderr=STDOUT)
 	except subprocess.CalledProcessError as cl:
-		print("exception")
 		code_output=cl.output
 		new_output=code_output.decode()
 		return new_output
 	try:
-		print(command)
 		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True,input = testcase)
 	except subprocess.CalledProcessError as cl:
-		print("Exception occurs")
 		code_output=cl.output
 	new_output=code_output.decode()
 	return new_output
-
 
 
 
@@ -95,12 +89,13 @@ def run_code2(code,userid,queid):
 		value=testcases[case]['testcase']		
 		old_output=testcases[case]['output']
 		new_output = get_output(value,code,userid)
-		#print("expected = ",len(old_output),"  Your=",len(new_output))
 		if new_output.strip() != old_output.strip():
 			answers[case] = {"input":value,"result":"incorrect","your_output":new_output,"expected_output":old_output}
 		else:
 			answers[case] = {"result":"correct","your_output":new_output,"expected_output":old_output}	
 	return answers
+
+
 
 def show_output(code,userid,queid):
 	testcase = str.encode(testcase)
@@ -115,9 +110,9 @@ def show_output(code,userid,queid):
 		code_output=subprocess.check_output(command,stderr= subprocess.STDOUT,shell=True,input = testcase)
 	except subprocess.CalledProcessError as cl:
 		code_output=cl.output
-		print("Error ",code_output)
 	new_output=code_output.decode()
 	return new_output
+
 
 def get_class_name(code):
 	lines = code.split("\n")

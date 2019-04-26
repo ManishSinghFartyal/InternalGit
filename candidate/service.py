@@ -42,7 +42,6 @@ def get_question_paper(testid):
 		mcqvalues=ast.literal_eval(value['options'])
 		mcqvalues=json.dumps(mcqvalues)
 		mcqvalues=json.loads(mcqvalues)
-		#print(type(mcqvalues))
 		mcq[key]['sr']=i
 		mcq[key]['options'] = mcqvalues
 		mcq[key]['type'] = "mcq"
@@ -123,12 +122,10 @@ def save_code(queid,code,json1,userid,testid):
 		cases[key] = value['result']
 	try:
 		code_ans=ast.literal_eval(candidate.code_ans)
-		print(type(code_ans))
 		code_ans=json.dumps(code_ans)
 		code_ans=json.loads(code_ans)
 	except Exception as e:
 		code_ans={}
-	print(cases)
 	code_ans[queid] = {"code":code,"cases":cases}
 	candidate.code_ans = code_ans
 	candidate.save()

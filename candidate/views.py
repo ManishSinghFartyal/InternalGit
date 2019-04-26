@@ -140,9 +140,9 @@ def test(request,testid):
 	return redirect("/login")
 
 def savetest(request,testid):
-	user = request.user	
+	user = request.user
 	if user.is_authenticated:
-		if user.is_superuser:			
+		if user.is_superuser:
 			return index(request)
 		#If user submit a mcq answer
 		else:
@@ -193,3 +193,9 @@ def home(request):
 		else:
 			return render(request,'userHome.html')
 	return redirect("/login")
+
+
+########## To logout user django logout() method ##############
+def userLogout(request):
+	logout(request)
+	return redirect('/login')
