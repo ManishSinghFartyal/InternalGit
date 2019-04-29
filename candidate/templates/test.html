@@ -7,11 +7,13 @@
     color : black;
     text-align: center;
     padding: 15px 15px 15px 15px;
-    text-indent: inherit;
     color: green;
-    font-size:14px;
+    font-size:12px;
     border-radius: 10px;  
     align-self: center;  
+    background: #1111;
+    margin-top: -80px;
+    width: 90%;
   }
    #result{      
    padding: 5px 15px 5px 15px; 
@@ -45,17 +47,18 @@
   100% { transform: rotate(360deg); }
 }
 #testcase-style2{
-  font-size: 29px;
-  background: black;
-  box-shadow: 1px 1px 1px green;
+  font-size: 19px;
+  background: #1112;
+  font-family: sans-serif;  
   font-weight: bolder;
 }
-#testcase-style1{
-  font-size: 29px;
-  background: white;
-  border-top-left-radius: 90px;
-  border-bottom-left-radius: 90px;
-  box-shadow: 1px 1px 1px green;
+#result{
+  font-size: 19px;
+  background: #9115;
+  font-family: sans-serif;  
+  font-weight: bolder;
+  color: red;
+  border-radius: 5px;
 }
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
@@ -96,7 +99,7 @@
               
               <div class="row" >
                 <div class="col-md-9">
-                    <div class="card" id="testcase">
+                    <div class="card" id="testcase" style="padding: 20px 20px 20px 20px;">
                        
                       <div class="card-body" style="margin-top: 30px;">
                             {% for ke,va in pages.items %}
@@ -301,6 +304,7 @@
 
  $("#runajax").click(function(){
   document.getElementById('loader').style.visibility="visible";
+
   
   id_lang = this.name;
   arr=  id_lang.split("-");
@@ -343,7 +347,7 @@
  }
  testcases = document.createElement('div');
  testcases.setAttribute('id','testcases-info');
- testcases.setAttribute('class','row');
+ testcases.setAttribute('class','row lead');
  i=1;
  for (var key in json) {     
      result = document.createElement('p');
@@ -353,6 +357,7 @@
        break;
      }
      else{
+         line = document.createElement('hr');
          divcol11 = document.createElement('div'); 
          divcol11.setAttribute("class","col-sm-3 text-right");
          divcol12 = document.createElement('div');          
@@ -362,8 +367,8 @@
          divcol1.setAttribute("id","testcase-style1");
          image = document.createElement("img");
          image.setAttribute("src","{% static 'admin/img/right.svg' %}");
-         image.setAttribute("width","50px");
-         image.setAttribute("height","50px");
+         image.setAttribute("width","30px");
+         image.setAttribute("height","30px");
          divcol1.appendChild(image)
          divcol2 = document.createElement('div');
          divcol2.setAttribute("id","testcase-style2");  
@@ -371,7 +376,7 @@
          divcol2.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result;
          result.setAttribute("class","lead btn btn-sm btn-success");
       }
-     line = document.createElement('br');
+     line = document.createElement('hr');
      //result.setAttribute('id','result');
      //result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+json[key].result
      testcases.appendChild(divcol11);
@@ -385,10 +390,12 @@
     document.getElementById('testcase').appendChild(testcases);
  }
 
- function incorrect_output(testcase,input,result1,output,expected,div){    
-     line = document.createElement('br');
+ function incorrect_output(testcase,input,result1,output,expected,div){  
+     form_group1= document.createElement('div');
+     form_group1.setAttribute("class","form-group col-sm-12") 
+     line = document.createElement('hr');
      result = document.createElement('p');
-     result.setAttribute("class","lead btn btn-sm btn-danger")
+     result.setAttribute("class","lead col-sm-12")
      result.setAttribute('id','result');
      result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+result1;
      label1 = document.createElement('label');
@@ -396,39 +403,48 @@
      label1.innerHTML = "Input";
      input1 = document.createElement('input');
      input1.setAttribute("type","text");
-     input1.setAttribute("class","container");
+     input1.setAttribute("class","form-control");
+     input1.setAttribute("id","inputvalue");
      input1.setAttribute("disabled","True");
      input1.setAttribute("value",input);
+     form_group1.appendChild(label1);
+     form_group1.appendChild(input1);
+     form_group2= document.createElement('div');
+     form_group2.setAttribute("class","form-group col-sm-12") 
      label2 = document.createElement('label');
      label2.setAttribute("for","outputvalue");
      label2.innerHTML = "Your output";
      output1 = document.createElement('textarea');
      output1.setAttribute("type","text");
-     output1.setAttribute("class","container");
+     output1.setAttribute("class","form-control");
      output1.setAttribute("disabled","True");
-     output1.innerHTML = output;
+     output1.setAttribute("id","outputvalue");     
+     output1.innerHTML = output;     
      if(output.length > 80){
       output1.setAttribute("rows","5");
      }
-     else{
+     else {
       output1.setAttribute("cols","50");
      }
+     form_group2.appendChild(label2);
+     form_group2.appendChild(output1);
+     form_group3= document.createElement('div');
+     form_group3.setAttribute("class","form-group col-sm-12") 
      label3 = document.createElement('label');
-     label3.setAttribute("for","outputvalue");
+     label3.setAttribute("for","outputvalue1");
      label3.innerHTML = "Expected output";
      output2 = document.createElement('input');
      output2.setAttribute("type","text");
-     output2.setAttribute("class","container");
+     output2.setAttribute("class","form-control");
      output2.setAttribute("disabled","True");
      output2.setAttribute("value",expected);
-     div.appendChild(result)
-     div.appendChild(line)
-     div.appendChild(label1);
-     div.appendChild(input1);
-     div.appendChild(label2);
-     div.appendChild(output1);
-     div.appendChild(label3);
-     div.appendChild(output2);
+     output2.setAttribute("id","outputvalue1");     
+     form_group3.appendChild(label3);
+     form_group3.appendChild(output2);
+     div.appendChild(result);
+     div.appendChild(form_group1);
+     div.appendChild(form_group2);
+     div.appendChild(form_group3);
  }
 
  /*function incorrect_output12(testcase,input,result1,output,expected,div){    

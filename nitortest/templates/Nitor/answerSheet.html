@@ -44,16 +44,16 @@
         		 	                {% elif value.type == 'ct' %}
                                     <br>
                                     <div style="text-align: center;">
-                                        <h6 style="border:3px solid;width: 190px;padding: 5px 5px 5px 5px;">Coding</h6>                                        
+                                        <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;">Coding</h6>                                        
                                     </div>
 
                                     	<li>
                                             <div class="col-sm-12" >
-                                                <div style="background: #1114;padding: 5px 5px 5px 5px;">
+                                                <div style="background: #1114;padding: 10px 10px 10px 10px;">
                                                     {{value.description}}
                                                 </div>
                                                 <div style="padding: 5px 5px 5px 5px;">
-                                                    <textarea disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px; background: #1119;color:black;font-size: 18px;">{{value.code}}</textarea>
+                                                    <textarea disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px; background: #1112;color:black;font-size: 15px;font-family: Microsoft Sans Serif">{{value.code}}</textarea>
                                                 </div>
                                                 
                                                 <ol type="i">
@@ -70,6 +70,7 @@
                                             	</ol>
                                             </div>
                                         </li>
+                                    <hr>
                                     {% endif %}
                                 {% endfor %}
                                 </ol>
