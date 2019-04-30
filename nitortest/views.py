@@ -1,399 +1,363 @@
-from django.shortcuts import render,redirect
-from .forms import UserRegisterForm,UserLoginForm,addCodingTestForm,addMcqForm,createQuestionPaper
-from .models import Profile,Question,QuestionPaper,CandidateStatus
-from django.db.models import Q
-from django import forms
-from django.contrib import messages
-from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
-from django.contrib.auth import login as auth_login, logout, authenticate
-from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered,get_scores
+'''
+Nitor test module handles the activity of admin in the project.
+'''
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib.auth import login as auth_login, logout
+from .forms import createQuestionPaper
+from .forms import UserRegisterForm, UserLoginForm, addCodingTestForm, addMcqForm
+from .models import Profile, Question, QuestionPaper, CandidateStatus
+from .service import  get_candidate_status, get_answered, get_scores, create_question_object
+from .service import list_of_candidates, get_candidate_profile, get_categorized_questions
+from .service import  get_all_candidates, get_question_paper, get_paper,question_remove_from_paper
 
-# Create your views here.
 
 @csrf_protect
 @login_required
-def index(request,next_url=None):	
-	user =request.user
-	if user.is_authenticated:
-		print(user.is_superuser)
-		if user.is_superuser:
-			return render(request,'Nitor/adminHome.html')
-		return HttpResponseRedirect('/candidate')
-	print("Manishd")
-	return redirect('/login')
+def index(request, next_url=None):
+    ''' Handles the redirection of user as per their roles '''
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/adminHome.html')
+        return HttpResponseRedirect('/candidate')
+    return redirect('/login')
 
 
-def saveUserSuccessNotification(request):	
-	user =request.user	
-	if user.is_superuser:
-		return HttpResponseRedirect('/success')
-	return redirect('/login')
 
-################# To send user response after Candidate successfully saved ###################
+
 def success(request):
-	return render(request,'Nitor/saveCandidate.html')
-
-def index1(request,next_url=None):
-	return redirect('/addUser' if not next_url else next_url)
-
-#To check if user has admin rights
-def is_admin(userid):		
-	try:
-		userProfile = Profile.objects.get(userid=userid)
-		role=userProfile.role
-		if role == 1:
-			return True
-		else:
-			return False
-	except Exception:
-		print('IN is_admin method : ',Exception)
-		return False
+    """ To send user response after Candidate successfully saved """
+    return render(request, 'Nitor/saveCandidate.html')
 
 
-###########   To register new user   #########################
+def is_admin(userid):
+    ''' To check if user has admin rights '''
+    to_return = False
+    try:
+        user_profile = Profile.objects.get(userid=userid)
+        role = user_profile.role
+        if role == 1:
+            to_return = True
+        return to_return
+    except Exception:
+        return False
+
+
 def add_user(request):
-	if request.user.is_authenticated:
-		if request.method=='POST':
-			form = UserRegisterForm(request.POST)
-			if form.is_valid():
-				newUserProfile=form.save()
-				return successMessage(request,"Candidate saved successfully")
-			else:
-				return render(request,'Nitor/register.html',{'form':form})
-		form=UserRegisterForm()
-		return render(request,'Nitor/register.html',{'form':form})
-	return index(request)
-
-
-###########   To check user login     #########################
+    """To register new user"""
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = UserRegisterForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return success_message(request, "Candidate saved successfully")
+            else:
+                return render(request, 'Nitor/register.html', {'form':form})
+        form = UserRegisterForm()
+        return render(request, 'Nitor/register.html', {'form':form})
+    return index(request)
 
 def login(request):
-	user =request.user
-	if user.is_authenticated:
-		return index(request)
-	next_url = request.GET.get('next')
-	if request.method == 'POST':
-		form = UserLoginForm(request.POST)
-		if form.is_valid():
-			user = form.cleaned_data
-			auth_login(request, user)
-			return index(request,next_url)
-		else:
-			context={'form':form}
-	else:
-		form=UserLoginForm()
-		context={'form':form}
-	return render(request,'Nitor/loginNew.html',context)
+    """ To check user login    """
+    user = request.user
+    if user.is_authenticated:
+        return index(request)
+    next_url = request.GET.get('next')
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data
+            auth_login(request, user)
+            return index(request, next_url)
+        else:
+            context = {'form':form}
+    else:
+        form = UserLoginForm()
+        context = {'form':form}
+    return render(request, 'Nitor/loginNew.html', context)
 
 
 
-########## To logout user django logout() method ##############
-def userLogout(request):
-	logout(request)
-	return redirect('/login')
+def user_logout(request):
+    ''' To logout user django logout() method '''
+    logout(request)
+    return redirect('/login')
+
+
+def list_candidates(request):
+    ''' To list out all the candidates and their details '''
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            candidates = list_of_candidates()
+            return render(request, 'Nitor/candidateList.html', {'candidates':candidates})
+        else:
+            return index(request)
+            #return render(request, 'to candidate home page')
+    return render(request, '/login')
+
+
+def candidate_profile(request, userid):
+    """ To view candidate profile using id """
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            profile = get_candidate_profile(userid)
+            return show_profile(request, profile)
+    return index(request)
+
+def show_profile(request, profile):
+    """ Code to show profile of a user """
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return render(request, 'Nitor/candidateProfile.html', {'candidate':profile})
+    return index(request)
+
+
+def remove_candidate(request, userid):
+    """ Removing candidate by using id """
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            try:
+                Profile.objects.get(user_id=userid).delete()
+                User.objects.get(id=userid).delete()
+                CandidateStatus.objects.filter(candidate=userid).delete()
+                return HttpResponseRedirect('/listCandidate')
+            except:
+                return HttpResponseRedirect('/listCandidate')
+    return index(request)
+
+def save_candidate(request):
+    """save candidate method"""
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return render(request, 'Nitor/saveCandidate.html')
+    return index(request)
+
+def show_add_code(request):
+    """ Add new coding questions """
+    form1 = addMcqForm()
+    form2 = addCodingTestForm()
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == 'POST':
+                qtype = request.POST.get('qtype')
+                #code to add coding test in database
+                if qtype == 'ct':
+                    form2 = addCodingTestForm(request.POST, {'extra':int(request.POST.get('total_testcases_count'))})
+                    if form2.is_valid():
+                        test_cases = {}
+                        title = request.POST.get('title')
+                        level = request.POST.get('level')
+                        description = request.POST.get('description')
+                        snippet = request.POST.get('snippet')
+                        language = request.POST.get('language')
+                        total_test_cases = int(request.POST.get('total_testcases_count'))
+                        if total_test_cases:
+                            total_test_cases += 1
+                            for index in range(1, total_test_cases):
+                                case = 'case'+str(index)
+                                input_str = 'input_'+str(index)
+                                output_str = 'output_'+str(index)
+                                test_cases[case] = {'testcase':request.POST.get(input_str), 'output':request.POST.get(output_str)}
+                        testcases = test_cases
+                        question = Question(qtype=qtype, language=language, title=title, level=level, description=description, snippet=snippet, testcases=testcases)
+                        question.save()
+                        return success_message(request, "One coding question saved successfully.")
+
+                #code to add mcq in database
+                elif qtype == 'mcq':
+                    form1 = addMcqForm(request.POST, {'extra':int(request.POST.get('total_options'))})
+                    if form1.is_valid():
+                        test_options = {}
+                        question = request.POST.get('question')
+                        total_options = int(request.POST.get('total_options'))
+                        if total_options:
+                            total_options += 1
+                            for index in range(1, total_options):
+                                option = str(index)
+                                option_val = "option_"+str(index)
+                                test_options[option] = request.POST.get(option_val)
+                        options = test_options
+                        correct_option = request.POST.get('correct_option')
+                        subject = request.POST.get('subject')
+                        question = Question(qtype=qtype, subject=subject, description=question, options=options, correct_option=correct_option)
+                        question.save()
+                        return success_message(request, "One multiple choice question saved successfully.")
+                    else:
+                        return render(request, 'Nitor/addCodingQuiz.html', {'form1':form1, 'form2':form2, 'current':'mcq'})
+            else:
+                form1 = addMcqForm()
+                form2 = addCodingTestForm()
+                context = {'form1':form1, 'form2':form2, 'current':None}
+                return render(request, 'Nitor/addCodingQuiz.html', context)
+    return index(request)
 
 
 
-##################### To list out all the candidates and their details  #########################
-def listCandidates(request):
-	user = request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			candidates = list_of_candidates()
-			return render(request,'Nitor/candidateList.html',{'candidates':candidates})
-		else:
-			return index(request)
-			#return render(request,'to candidate home page')
-	return render(request,'/login')
+
+def success_que(request):
+    """# To show the success message after adding a question"""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/quesuccess_message.html')
+    return index(request)
 
 
 
-
-##################### To view candidate profile using id #############################
-def candidateProfile(request,userid):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			profile =candidate_profile(userid)
-			return show_profile(request,profile)
-	return index(request)
+def get_questions(request):
+    """ fetching all the questions from database to manage in interpolation"""
+    questions = Question.objects.values()
+    return JsonResponse({'questions': list(questions)})
 
 
+def create_que_paper(request):
+    """# To create question paper"""
 
-
-##################### Code to show profile of a user ###############################
-def show_profile(request,profile):
-	if request.user.is_authenticated:
-		if request.user.is_superuser:
-			return render(request,'Nitor/candidateProfile.html',{'candidate':profile})
-	return index(request)
-
-
-
-########## Removing candidate by using id #####################
-def removeCandidate(request,userid):
-	if request.user.is_authenticated:
-		if request.user.is_superuser:
-			try:
-				Profile.objects.get(user_id=userid).delete()
-				User.objects.get(id=userid).delete()
-				CandidateStatus.objects.filter(candidate=userid).delete()
-				return HttpResponseRedirect('/listCandidate')
-			except:
-				return HttpResponseRedirect('/listCandidate')
-	return index(request)
-
-
-
-# save candidate method
-def saveCandidate(request):
-	if request.user.is_authenticated:
-		if request.user.is_superuser:
-			return render(request,'Nitor/saveCandidate.html')
-	return index(request)
+    # fetching all the questions from database to manage in interpolation
+    user = request.user
+    questions = Question.objects.all()
+    que = create_question_object()
+    form = createQuestionPaper()
+    context = {'form':form, 'questions':que}
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == 'POST':
+                form = createQuestionPaper(request.POST)
+                total = int(request.POST.get('totalquestions'))
+                if total == 0:
+                    messages.error(request, '**Questions not selected.')
+                    return render(request, 'Nitor/createQuestion.html', context)
+                title = request.POST.get('title_qp')
+                if not title:
+                    messages.error(request, '**Please enter title.')
+                    return render(request, 'Nitor/createQuestion.html', context)
+                questions = request.POST.getlist('questionid')
+                _mcq, _ct = get_categorized_questions(questions)
+                max_time = int(request.POST.get('max_time'))
+                if max_time == 0:
+                    messages.error(request, '**Enter max time')
+                    return render(request, 'Nitor/createQuestion.html', context)
+                q_p = QuestionPaper(title_qp=title, total_question=total, mcq=_mcq, coding=_ct, max_time=max_time)
+                q_p.save()
+                return success_message(request, "Question paper created successfully.")
+            else:
+                return render(request, 'Nitor/createQuestion.html', context)
+    return index(request)
 
 
 
+def success_message(request, message):
+    """# to show success message on completing some event."""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/successMessage.html', {'message':message})
+    return index(request)
+
+def assign_test(request):
+    """ Code to assign the test for canidates."""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            candidates = get_all_candidates()
+            question_papers = QuestionPaper.objects.all()
+            context = {'candidates':candidates, 'papers':question_papers}
+            if request.method == 'POST':
+                ids = request.POST.getlist('candidate_id')
+                if not ids:
+                    messages.error(request, '**No candidate selected.')
+                else:
+                    for i in ids:
+                        test_str = i+"-paper"
+                        date_str = i+"-date"
+                        assigned_test = request.POST.get(test_str)
+                        total_score, mcq_score, code_score = get_scores(assigned_test)
+                        assigned_date = request.POST.get(date_str)
+                        mcq_ans = {}
+                        code_ans = {}
+                        if assigned_date == "" or assigned_test is None:
+                            messages.error(request, ' Either date of test or exam not selected.')
+                            return render(request, 'Nitor/assignTest.html', context)
+                        _c = CandidateStatus(candidate=i, exam_date=assigned_date, question_paper=assigned_test, mcq_ans=mcq_ans, code_ans=code_ans, total_score=total_score, total_code_score=code_score, total_mcq_score=mcq_score)
+                        _c.save()
+                    return success_message(request, "Successfully asssigned")
+            return render(request, 'Nitor/assignTest.html', context)
+        return index(request)
 
 
-########## Add new coding questions #####################
-def showAddCode(request):
-	form1 = addMcqForm()
-	form2=addCodingTestForm()
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			if request.method == 'POST':
-				qtype = request.POST.get('qtype')
-			#code to add coding test in database
-				if qtype == 'ct':
-					print(request.POST)
-					form2 = addCodingTestForm(request.POST, {'extra':int(request.POST.get('total_testcases_count'))})
-					print(form2.errors)
-					if form2.is_valid():
-						print(qtype)
-						test_cases={}
-						title= request.POST.get('title')
-						level=request.POST.get('level')
-						description=request.POST.get('description')
-						snippet=request.POST.get('snippet')
-						language=request.POST.get('language')
-						total_test_cases=int(request.POST.get('total_testcases_count'))
-						if total_test_cases:
-							total_test_cases+=1
-							for index in range(1,total_test_cases):
-								case='case'+str(index)
-								input_str = 'input_'+str(index)
-								output_str = 'output_'+str(index)
-								test_cases[case]={'testcase':request.POST.get(input_str),'output':request.POST.get(output_str)}
-						testcases=test_cases
-						print(qtype,'\n',title,'\n',level,'\n',description,'\n',snippet,'\n',testcases,'\n',language)
-						question=Question(qtype=qtype,language=language,title=title,level=level,description=description,snippet=snippet,testcases=testcases)
-						question.save()
-						return successMessage(request,"One coding question saved successfully.")
-
-			#code to add mcq in database
-
-				elif qtype == 'mcq':
-					print(request.POST)
-					form1 = addMcqForm(request.POST, {'extra':int(request.POST.get('total_options'))})
-					if form1.is_valid():
-						test_options={}
-						question=request.POST.get('question')
-						total_options=int(request.POST.get('total_options'))
-						if total_options:
-							total_options+=1
-							for index in range(1,total_options):
-								option=str(index)
-								option_val = "option_"+str(index)
-								test_options[option]=request.POST.get(option_val)
-						options = test_options
-						correct_option = request.POST.get('correct_option')
-						subject= request.POST.get('subject')
-						question=Question(qtype=qtype,subject=subject,description=question,options=options,correct_option=correct_option)
-						question.save()
-						return successMessage(request,"One multiple choice question saved successfully.")
-					else:
-						return render(request,'Nitor/addCodingQuiz.html',{'form1':form1,'form2':form2,'current':'mcq'})
-
-				form = addCodingTestForm(request.POST, extra=request.POST.get('total_testcases_count'))
-				return HttpResponse("Data needs to be saved.")
-			else:
-				form1 = addMcqForm()
-				form2=addCodingTestForm()
-				context ={'form1':form1,'form2':form2,'current':None}
-				return render(request,'Nitor/addCodingQuiz.html',context)
-	return index(request)
+def question_papers(request):
+    """# Code to show question papers"""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            q_p = get_question_paper()
+            return render(request, 'Nitor/listquestionPaper.html', {'paper':q_p})
+    return index(request)
 
 
-
-# To show the success message after adding a question
-def successQue(request):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			return render(request,'Nitor/queSuccessMessage.html')
-	return index(request)
+def fetch_question_paper(request, questionid):
+    """#To fetch details of created question paper"""
+    _id = int(questionid)
+    q_paper = QuestionPaper.objects.get(id=questionid)
+    paper = get_paper(q_paper)
+    return render(request, 'Nitor/showQuestionPaper.html', {'paper':paper, 'id':_id})
 
 
-# To create question paper
-def getQuestions(request):
-	# fetching all the questions from database to manage in interpolation
-	questions = Question.objects.values()
-	return JsonResponse({'questions': list(questions)})
+def candidate_status(request, candidateid):
+    """#To show candidate status"""
+    _id = int(candidateid)
+    cst = get_candidate_status(_id)
+    return render(request, 'Nitor/candidateStatus1.html', {'status':cst, 'cid':candidateid})
+
+def rem_candidate_status(request, cid, pid):
+    """#To remove Assigned test of candidate"""
+    CandidateStatus.objects.get(candidate=cid, question_paper=pid).delete()
+    url = "/candidatestatus/"+cid
+    print(url)
+    return HttpResponseRedirect(url)
 
 
-# To create question paper
-def createQuePaper(request):
-	# fetching all the questions from database to manage in interpolation
-	user=request.user
-	questions = Question.objects.all()
-	que = createQuestionObject()
-	form = createQuestionPaper()
-	context={'form':form,'questions':que}
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			if request.method == 'POST':
-				form = createQuestionPaper(request.POST)
-				total = int(request.POST.get('totalquestions'))
-				if total == 0:
-					messages.error(request,'**Questions not selected.')
-					return render(request,'Nitor/createQuestion.html',context)
-				title = request.POST.get('title_qp')
-				if not title:
-					messages.error(request,'**Please enter title.')
-					return render(request,'Nitor/createQuestion.html',context)
-				questions = request.POST.getlist('questionid')
-				mcq,ct=getCategorizedQuestions(questions)
-				maxtime = int(request.POST.get('max_time'))
-				if maxtime == 0:
-					messages.error(request,'**Enter max time')
-					return render(request,'Nitor/createQuestion.html',context)
-				qp = QuestionPaper(title_qp=title,total_question=total,mcq=mcq,coding=ct,max_time=maxtime)
-				qp.save()
-				return successMessage(request,"Question paper created successfully.")
-			else:
-				return render(request,'Nitor/createQuestion.html',context)
-	return index(request)
+def remove_question_paper(request, pid):
+    """#To remove question paper"""
+    QuestionPaper.objects.get(id=pid).delete()
+    return HttpResponseRedirect("/questionPapers")
 
 
-
-# to show success message on completing some event.
-def successMessage(request,message):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			return render(request,'Nitor/successMessage.html',{'message':message})
-	return index(request)
-
-
-
-# Code to assign the test for canidates.
-def assignTest(request):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			candidates=getAllCandidates()
-			print(candidates)
-			question_papers = QuestionPaper.objects.all()
-			context = {'candidates':candidates,'papers':question_papers}
-			if request.method == 'POST':
-				ids= request.POST.getlist('candidate_id')
-				if not ids:
-					messages.error(request,'**No candidate selected.')
-					return render(request,'Nitor/assignTest.html',context)
-				for i in ids:
-					test_str = i+"-paper"
-					date_str = i+"-date"
-					assigned_test = request.POST.get(test_str)
-					total_score,mcq_score,code_score=get_scores(assigned_test)
-					assigned_date =  request.POST.get(date_str)
-					mcq_ans = {}
-					code_ans = {}
-					if assigned_date == "" or assigned_test is None:
-						messages.error(request,' Either date of test or exam not selected.')
-						return render(request,'Nitor/assignTest.html',context)
-					c=CandidateStatus(candidate=i,exam_date=assigned_date,question_paper=assigned_test,mcq_ans=mcq_ans,code_ans=code_ans,total_score=total_score,total_code_score=code_score,total_mcq_score=mcq_score)
-					c.save()
-				return successMessage(request,"Successfully asssigned")
-			else:
-				return render(request,'Nitor/assignTest.html',context)
-	return index(request)
+def show_score(request, cid, pid):
+    """#To show selected candidate score of his/her attempted assigned exam"""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            details, scores = get_answered(cid, pid)
+            return render(request, 'Nitor/answerSheet.html', {'scores':scores, 'details':details})
+    return index(request)
 
 
-# Code to show question papers
-def questionPapers(request):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			qp = getQuestionPaper()
-			return render(request,'Nitor/listquestionPaper.html',{'paper':qp})
-	return index(request)
+def list_questions(request):
+    """#Function to list all the available questions in databse"""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            questions = create_question_object()
+            return render(request, 'Nitor/questions.html', {'questions' : questions})
+    return index(request)
 
-
-#To fetch details of created question paper
-def fetchQuestionPaper(request,questionid):
-	id = int(questionid)
-	q_paper = QuestionPaper.objects.get(id=questionid)
-	paper = getPaper(q_paper)
-	return render(request,'Nitor/showQuestionPaper.html',{'paper':paper,'id':id})
-
-
-#To show candidate status
-def candidatestatus(request,candidateid):
-	id = int(candidateid)
-	cst = getCandidateStatus(id)
-	return render(request,'Nitor/candidateStatus1.html',{'status':cst,'cid':candidateid})
-
-
-#To remove Assigned test of candidate
-def remcandidatestatus(request,cid,pid):
-	CandidateStatus.objects.get(candidate=cid,question_paper=pid).delete()
-	url = "/candidatestatus/"+cid
-	print(url)
-	return HttpResponseRedirect(url)
-
-
-#To remove question paper
-def removeQuestionPaper(request,pid):
-	id = int(pid)
-	q_paper = QuestionPaper.objects.get(id=pid).delete()
-	return HttpResponseRedirect("/questionPapers")
-
-
-#To show selected candidate score of his/her attempted assigned exam
-def showscore(request,cid,pid):	
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			details,scores = get_answered(cid,pid)
-			return render(request,'Nitor/answerSheet.html',{'scores':scores,'details':details})
-	return index(request)
-
-
-#Function to list all the available questions in databse
-def listQuestions(request):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			questions = createQuestionObject()
-			return render(request,'Nitor/questions.html',{'questions':questions})
-	return index(request)
-
-
-
-# Function to remove question from database
-def removeQue(request,queid):
-	user=request.user
-	if user.is_authenticated:
-		if user.is_superuser:
-			Question.objects.filter(id=queid).delete()
-			questions = createQuestionObject()
-			return render(request,'Nitor/questions.html',{'questions':questions})
-	return index(request)
-
-
+def remove_question(request, queid):
+    """ Function to remove question from database"""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            #Question.objects.filter(id=queid).delete()
+            question_remove_from_paper(queid)
+            questions = create_question_object()
+            return render(request, 'Nitor/questions.html', {'questions' : questions})
+    return index(request)

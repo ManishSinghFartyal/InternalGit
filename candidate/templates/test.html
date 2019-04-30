@@ -87,20 +87,18 @@
             </div> 
             <div class="col-sm-4">
               <div class="col-sm-4">
-                      <form action="/candidate/savetest/{{testid}}">
-                      <input type="submit" id="quit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
-                      </form>
-                    </div>
+                  <form action="/candidate/savetest/{{testid}}">
+                  <input type="submit" id="quit" name="submit" value="Quit test" class="btn btn-md btn-danger" style="text-align: right;">
+                  </form>
+              </div>
             </div>           
             </div>
           </div>
 
           <div class="row " style="font-family: cursive;">
               
-              <div class="row" >
                 <div class="col-md-9">
                     <div class="card" id="testcase" style="padding: 20px 20px 20px 20px;">
-                       
                       <div class="card-body" style="margin-top: 30px;">
                             {% for ke,va in pages.items %}
                             <div class="row">
@@ -144,16 +142,14 @@
                               rows = "7" {% elif va.desc|length > 100 %} 
                               rows = "7" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
                               <div><p class="lead"><u>Write your code</u><hr></p></div>
-                              <div class="col-md-12">
-                                <!-- <textarea class="md-textarea" id="code">{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%else%}{{va.snippet}}{% endif %}{% endfor %}
-                                </textarea> -->
+                              <div class="col-md-12">                                
                                 <textarea class="md-textarea" id="code">{%if not code_answered%}{{va.snippet}}{%else%}{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%endif%}{%endfor%}{%endif%}
                                 </textarea>
                                 <hr>
                               </div>   
                               <div class="row">
                                 <div class="col-md-6 text-center">
-                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}-{{va.language}}"onclick="runajax();">Run code </button> 
+                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}-{{va.language}}">Run code </button> 
                               </div> 
                               <div class="col-md-6">
                                 <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
@@ -161,11 +157,7 @@
                               <div class="col-md-12 text-center">
                                 <div class="loader" id="loader" style="visibility: hidden;"></div>
                               </div>                                 
-                              </div>                                  
-                               <!-- <div class="col-md-11" >                                 
-                                      <h5 style="font-family: inherit;">Output:</h5>
-                                      <textarea class="md-textarea" style="background: black;color: white; font-weight: bold;padding: 10px 10px 10px 10px;" rows="3" cols="70" disabled="true" id="output"></textarea>
-                              </div> -->
+                              </div>                                                                 
                            </div>
                          </form>
                             {% endif %}       
@@ -175,6 +167,8 @@
                       </div>                                 
                     </div>
                   </div>
+
+                <!-- For pagination -->
                 <div class="col-md-3">
                   <div class="card">
                     <div class="card-body" style="background: #077123db;"> 
@@ -212,12 +206,12 @@
                   </div>
                 </div>   
             </div>            
-          </div>             
         </div>  
       </div>          
     </div>
-</div>
  {% include 'Nitor/footer.html'  %}
+
+</div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
@@ -226,18 +220,23 @@
     window.onload = checkThis();
 
     function checkThis(){
-      var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
+      if(!document.getElementsByClassName('CodeMirror-scroll')){
+        var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
         lineNumbers: true,
         mode:  "java",
         theme: 'eclipse'
       });  
-
+      }
+      
+    {% if paginator.has_other_pages %}
       {% for key,value in paper.items %}
         {% if key in mcq_answered or key in code_answered%}
-          str= "{{value.sr}}-count";          
+          str= "{{value.sr}}-count";
           document.getElementById(str).style.background = "#9999";
         {% endif %}
       {% endfor %}    
+    {% endif %}
+
       hours=document.getElementById('hours').value; 
       minutes=document.getElementById('minutes').value;
       seconds= document.getElementById('seconds').value;
@@ -307,44 +306,15 @@
     });  
 
   
-function runajax(){
-  document.getElementById('loader').style.visibility="visible";  
-  id_lang = this.name;
-  arr=  id_lang.split("-");
-  que_id = arr[0];
-  language = arr[1];  
-  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
-  code = editor.getValue()
-  $.ajax({
-    type : "GET",
-    url : url,
-    dataType :"text",
-    csrfmiddlewaretoken: '{{ csrf_token }}',
-    data:{
-      "code" : code,
-      "testid" : testid,
-      "language":language,
-    },
-    contentType: 'application/json',
-    success : function(data){
-      $("#output").val(data);
-      testcases_matched(data)
-    },
-    failure: function(data) { 
-        console.log("Got error");
-        },
-        error: function(xhr,status,error) { 
-        console.log(xhr.responseText + " error  "+error);
-        }
-  });
-   return false;
-}
+
 
 
  $("#runajax").click(function(){
-  document.getElementById('loader').style.visibility="visible";
+  console.log("cutton clicked");
+  //Hiding the loader
+  document.getElementById('loader').style.visibility="visible";  
 
-  
+  //Running code
   id_lang = this.name;
   arr=  id_lang.split("-");
   que_id = arr[0];

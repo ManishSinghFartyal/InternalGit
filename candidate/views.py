@@ -36,6 +36,7 @@ def starttest(request,testid):
 			return index(request)
 		#If user submit a mcq answer
 		else:
+			request.session['testid'] = testid
 			userid = get_id(user)
 			starttime = timezone.localtime(timezone.now())
 			endtime = save_time(starttime,userid,testid)
@@ -52,7 +53,9 @@ def test(request,testid):
 		if user.is_superuser:
 			return index(request)
 		#If user submit a mcq answer
-		else:
+		else:			
+			if 'testid' not in request.session:
+				return candidateHome(request)
 			userid = get_id(user)
 			mcq_answered,code_answered = get_answered(userid,testid)
 			page = request.GET.get('page', 1)
@@ -88,7 +91,10 @@ def test(request,testid):
 						paginate = p.page(request.session['currentpage'])
 						pages = dict(paginate)
 					elif page==total_pages:
-						request.session['currentpage']=paginate.previous_page_number()
+						try:
+							request.session['currentpage']=paginate.previous_page_number()
+						except:
+							request.session['currentpage']=1
 						paginate = p.page(page)
 						pages = dict(paginate)
 					else:
@@ -109,7 +115,6 @@ def test(request,testid):
 					t = tuple(question_paper.items())
 					p = Paginator(t,1)
 					total_pages = p.num_pages
-					print(page,"  ",total_pages)
 					paginate = p.page(page)
 					if page<total_pages:
 						request.session['currentpage']=paginate.next_page_number()
@@ -144,16 +149,20 @@ def test(request,testid):
 		return render(request,'test.html',{'testid':testid,'paper_details':paper,'paper':question_paper,'pages':pages,'paginator':paginate,'mcq_answered':mcq_answered,'code_answered':code_answered,'hour':int(h),'minute':int(m),'second':int(s)})
 	return redirect("/login")
 
-def savetest(request,testid):
+def savetest(request,testid):	
 	user = request.user
 	if user.is_authenticated:
 		if user.is_superuser:
 			return index(request)
 		#If user submit a mcq answer
-		else:
+		else:			
 			request.message = 'Successfully submitted test.'
 			userid = get_id(user)
 			countScore(userid,testid)
+			try:
+				del request.session['testid']
+			except KeyError:
+				pass
 			candidateHome(request)
 	return redirect("/login")
 
@@ -206,3 +215,4 @@ def home(request):
 def userLogout(request):
 	logout(request)
 	return redirect('/login')
+

@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.conf import settings
-from .service import generate_Password,generate_userid
+from .service import generate_password,generate_userid
 languages = (
     ("select", "Select Language"),
     ("python", "Python"),
@@ -134,7 +134,7 @@ class UserRegisterForm(forms.Form):
         first_name=cleaned_data['first_name']
         last_name=cleaned_data['last_name']
         username = email
-        password=generate_Password()
+        password=generate_password()
         newUser=User.objects.create_user(username,email,password)
         newUser.first_name = first_name
         newUser.last_name=last_name
