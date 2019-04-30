@@ -9,13 +9,16 @@ from django.contrib.auth import login as auth_login, logout, authenticate
 from .service import list_of_candidates,candidate_profile,saveMCQ,createQuestionObject,getCategorizedQuestions,getAllCandidates,getQuestionPaper,getPaper,getCandidateStatus,get_answered,get_scores
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+
 # Create your views here.
 
-
+@csrf_protect
 @login_required
 def index(request,next_url=None):	
 	user =request.user
 	if user.is_authenticated:
+		print(user.is_superuser)
 		if user.is_superuser:
 			return render(request,'Nitor/adminHome.html')
 		return HttpResponseRedirect('/candidate')
@@ -328,7 +331,7 @@ def questionPapers(request):
 	if user.is_authenticated:
 		if user.is_superuser:
 			qp = getQuestionPaper()
-			return render(request,'Nitor/questionPaper.html',{'paper':qp})
+			return render(request,'Nitor/listquestionPaper.html',{'paper':qp})
 	return index(request)
 
 
@@ -337,7 +340,7 @@ def fetchQuestionPaper(request,questionid):
 	id = int(questionid)
 	q_paper = QuestionPaper.objects.get(id=questionid)
 	paper = getPaper(q_paper)
-	return render(request,'Nitor/showQuestion.html',{'paper':paper,'id':id})
+	return render(request,'Nitor/showQuestionPaper.html',{'paper':paper,'id':id})
 
 
 #To show candidate status

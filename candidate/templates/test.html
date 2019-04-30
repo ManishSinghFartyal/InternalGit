@@ -153,7 +153,7 @@
                               </div>   
                               <div class="row">
                                 <div class="col-md-6 text-center">
-                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}-{{va.language}}">Run code </button> 
+                                <button class="btn btn-success btn-sm" id='runajax' name = "{{ke}}-{{va.language}}"onclick="runajax();">Run code </button> 
                               </div> 
                               <div class="col-md-6">
                                 <input type="submit" class="btn btn-success btn-sm" id='runajax1'  value = "Submit code" name = "{{ke}}" onclick="allcheck();"> 
@@ -226,6 +226,12 @@
     window.onload = checkThis();
 
     function checkThis(){
+      var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
+        lineNumbers: true,
+        mode:  "java",
+        theme: 'eclipse'
+      });  
+
       {% for key,value in paper.items %}
         {% if key in mcq_answered or key in code_answered%}
           str= "{{value.sr}}-count";          
@@ -301,6 +307,39 @@
     });  
 
   
+function runajax(){
+  document.getElementById('loader').style.visibility="visible";  
+  id_lang = this.name;
+  arr=  id_lang.split("-");
+  que_id = arr[0];
+  language = arr[1];  
+  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
+  code = editor.getValue()
+  $.ajax({
+    type : "GET",
+    url : url,
+    dataType :"text",
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+    data:{
+      "code" : code,
+      "testid" : testid,
+      "language":language,
+    },
+    contentType: 'application/json',
+    success : function(data){
+      $("#output").val(data);
+      testcases_matched(data)
+    },
+    failure: function(data) { 
+        console.log("Got error");
+        },
+        error: function(xhr,status,error) { 
+        console.log(xhr.responseText + " error  "+error);
+        }
+  });
+   return false;
+}
+
 
  $("#runajax").click(function(){
   document.getElementById('loader').style.visibility="visible";

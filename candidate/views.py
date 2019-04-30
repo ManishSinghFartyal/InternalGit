@@ -10,9 +10,10 @@ import datetime
 from django.contrib import messages
 
 
-# Create your views here.
+# Extending compilers
 from . import checkCodePython as cPython
 from . import checkCodeJava as cJava
+from . import checkCodeNode as cNode
 
 def index(request,next_url=None):	
 	user =request.user
@@ -108,13 +109,17 @@ def test(request,testid):
 					t = tuple(question_paper.items())
 					p = Paginator(t,1)
 					total_pages = p.num_pages
+					print(page,"  ",total_pages)
 					paginate = p.page(page)
-					if page<total_pages:						
+					if page<total_pages:
 						request.session['currentpage']=paginate.next_page_number()
 						paginate = p.page(request.session['currentpage'])
 						pages = dict(paginate)
 					elif page==total_pages:
-						request.session['currentpage']=paginate.previous_page_number()
+						try:
+							request.session['currentpage']=paginate.previous_page_number()
+						except:
+							request.session['currentpage']=1
 						paginate = p.page(page)
 						pages = dict(paginate)
 					else:
@@ -160,8 +165,10 @@ def ajaxcall(request,queid):
 	language = request.GET['language']
 	if language == 'python':
 		json = cPython.run_code2(code,userid,queid)
-	else:
+	elif language == 'java':
 		json = cJava.run_code2(code,userid,queid)
+	elif language == 'javascript':
+		json = cNode.run_code2(code,userid,queid)
 	save_code(queid,code,json,userid,testid)
 	return JsonResponse(json)
 

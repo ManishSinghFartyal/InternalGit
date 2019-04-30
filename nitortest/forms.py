@@ -19,6 +19,7 @@ languages = (
     ("c", "C Language"),
     ("cpp", "C++ Language"),
     ("java", "Java Language"),
+    ("javascript", "Javascript"),
 )
 
 education =(
