@@ -10,8 +10,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
     {% include 'Nitor/sidebar.html' %}
     {% include 'Nitor/navbar.html'  %}
-    <div class="main-panel">
-    
+    <div class="main-panel">    
       <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -25,10 +24,8 @@
                         <h4 class="card-title"><u>Questions</u></h4>
                       </div>   
                     </div>
-                    <div class="col-md-12">
-                      {% for message in messages %}
-                       <strong>{{message}}</strong>
-                      {% endfor %}
+                    <div class="col-md-12 text-center">                      
+                       <strong style="font-size: 20px">*{{message}}</strong>
                     </div>
                      <br><br>
                     {% with question as questionss %}
@@ -181,14 +178,11 @@ function changeTotal(cb,key){
 };
 
 
-function createEditor(){
-  console.log("hi")
-  var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
-      lineNumbers: true,
-      mode:  "java",
-      theme: 'duotone-light',    
-    });  
-}
+function show_message(){
+  console.log("manish");
+  message = "{{message}}";
+  console.log(message);
+};
 
 
 

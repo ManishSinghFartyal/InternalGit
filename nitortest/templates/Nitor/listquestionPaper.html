@@ -23,6 +23,9 @@
               <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
                 {% csrf_token %}
               <div class="card" >
+                    <div class="col-md-12 text-center">                      
+                       <strong style="font-size: 20px">*{{message}}</strong>
+                    </div>
                 <div class="col-md-12">
                       {% for message in messages %}
                        <strong>Error : {{message}}</strong>

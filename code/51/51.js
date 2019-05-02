@@ -7,18 +7,9 @@ var rl = readline.createInterface({
 });
 
 rl.on('line', function (line) {
-	fact=1;
-    if(line<0){
-    console.log("Not valid");
-    }
-    else{
-    for(var i=1;i<=line;i++){
-    fact=fact*i;
-    }
-    console.log(fact);
-    }
-  
+  fact=1;
+   for(i=1;i<=line;i++){
+   fact = fact*i;
+   }
+   console.log(fact);
 });
-                                
-                                
-                                

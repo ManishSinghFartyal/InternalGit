@@ -27,11 +27,13 @@
                                 <ol>
                                 {% for key,value in details.items %}
                                     {% if value.type == 'mcq' %}
-                                    <h6>{{value.type}}</h6>
+                                         <hr>
+                                    <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;text-align: center;">{{value.type}}</h6>
                                     <li>
                                         <div class="col-sm-12">
+
                                             {{value.description}}
-                                            <hr>
+                                          
                                             <ol type="i">
                                                 {% for k,v in value.options.items%}
                                                 <li style="{% if k == value.selected %}{%if k == value.correct %}color:green;font-weight: bold;{% else %}color:red;font-weight: bold;{%endif%}{% endif %}">{{v}}
@@ -58,12 +60,12 @@
                                                 
                                                 <ol type="i">
                                                     {% for k,v in value.cases.items%}
-                                                    <li style="{% if v == 'correct' %}color:green;font-weight: bold;text-transform:uppercase;; {% else %}color:red;font-weight: bold;{%endif%}">
+                                                    <li style="{% if v == 'correct' %}color:green;font-weight: bold;text-transform:uppercase; {% else %}color:red;font-weight: bold;text-transform:uppercase;{%endif%}">
                                                         {{k}}&nbsp;&nbsp;&nbsp;{{v}}
                                                         {%if v == 'correct' %}
                                                         <img src="{% static 'admin/img/right.svg' %}" width="20px" height="20px" style="position: absolute;">
                                                         {%else%}
-                                                        <img src="{% static 'admin/img/right.svg' %}" width="20px" height="20px" style="position: absolute;">
+                                                        <img src="{% static 'admin/img/wrong.png' %}" width="20px" height="20px" style="position: absolute;">
                                                          {% endif %} 
                                                     </li>
                                                     {% endfor %}
