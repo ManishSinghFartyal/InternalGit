@@ -14471,6 +14471,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   position: relative;
   top: 0;
   height: 100vh;
+  background-image: url('/static/admin/img/background1.jpg');  
 }
 
 .sidebar {
@@ -14917,6 +14918,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar,
 .main-panel,
 .sidebar-wrapper {
+  background: rgba(200, 200, 200, 0.2);
   -webkit-transition-property: top, bottom, width;
   transition-property: top, bottom, width;
   -webkit-transition-duration: .2s, .2s, .35s;
@@ -16629,7 +16631,7 @@ label {
   margin-top: 30px;
   border-radius: 6px;
   color: #933333;
-  background: #fff;
+  background: #8889;
   width: 100%; 
   /*box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); */
   box-shadow: 5px 15px 10px #1119 !important;
@@ -16974,6 +16976,8 @@ label {
 .card .card-body {
   padding: 0.9375rem 20px;
   position: relative;
+  background-image: url('/static/admin/img/background1.jpg');
+  background-repeat: round;
 }
 
 .card .card-body .form-group {

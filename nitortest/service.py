@@ -232,7 +232,7 @@ def get_answered(userid, testid):
         code_ans = ast.literal_eval(candidate.code_ans)
         code_ans = json.dumps(code_ans)
         code_ans = json.loads(code_ans)
-    except:
+    except ValueError:
         mcq_ans = {}
         code_ans = {}
         return mcq_ans, code_ans
@@ -262,13 +262,13 @@ def get_scores(testid):
         mcqs = ast.literal_eval(question.mcq)
         mcqs = json.dumps(mcqs)
         mcqs = json.loads(mcqs)
-    except Exception:
+    except ValueError:
         mcqs = {}
     try:
         codes = ast.literal_eval(question.coding)
         codes = json.dumps(codes)
         codes = json.loads(codes)
-    except Exception:
+    except ValueError:
         codes = {}
 
     for key in mcqs:
@@ -294,7 +294,7 @@ def question_remove_from_paper(question_id):
             for k in _mcqs:
                 if question_id == k:
                     existed_in.append(question.id)
-        except:
+        except ValueError:
             existed_in = {}
         try:
             _codes = ast.literal_eval(question.coding)
@@ -303,13 +303,13 @@ def question_remove_from_paper(question_id):
             for k in _codes:
                 if question_id == k:
                     existed_in.append(question.id)
-        except Exception:
+        except ValueError:
             existed_in = {}
     return existed_in
 
 def questionpaper_remove_from_assigned(question_paper_id):
     """ Before removing the question paper it makes
-    sure that it is not assigned to any student """    
+    sure that it is not assigned to any student """
     existed_in = []
     candidate_status = CandidateStatus.objects.all()
     for c_d in candidate_status:

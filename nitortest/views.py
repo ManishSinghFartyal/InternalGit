@@ -8,8 +8,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import login as auth_login, logout
-from .forms import createQuestionPaper
-from .forms import UserRegisterForm, UserLoginForm, addCodingTestForm, addMcqForm
+from django.core.exceptions import ObjectDoesNotExist
+from .forms import CreateQuestionPaper
+from .forms import UserRegisterForm, UserLoginForm, AddCodingTestForm, AddMcqForm
 from .models import Profile, Question, QuestionPaper, CandidateStatus
 from .service import  get_candidate_status, get_answered, get_scores, create_question_object
 from .service import list_of_candidates, get_candidate_profile, get_categorized_questions
@@ -41,7 +42,7 @@ def is_admin(userid):
         if role == 1:
             to_return = True
         return to_return
-    except Exception:
+    except ObjectDoesNotExist:
         return False
 
 def add_user(request):
@@ -115,7 +116,7 @@ def remove_candidate(request, userid):
                 User.objects.get(id=userid).delete()
                 CandidateStatus.objects.filter(candidate=userid).delete()
                 return HttpResponseRedirect('/listCandidate')
-            except:
+            except ObjectDoesNotExist:
                 return HttpResponseRedirect('/listCandidate')
     return index(request)
 
@@ -128,8 +129,8 @@ def save_candidate(request):
 
 def show_add_code(request):
     """ Add new coding questions """
-    form1 = addMcqForm()
-    form2 = addCodingTestForm()
+    form1 = AddMcqForm()
+    form2 = AddCodingTestForm()
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -137,7 +138,7 @@ def show_add_code(request):
                 qtype = request.POST.get('qtype')
                 #code to add coding test in database
                 if qtype == 'ct':
-                    form2 = addCodingTestForm(request.POST, \
+                    form2 = AddCodingTestForm(request.POST, \
                      {'extra':int(request.POST.get('total_testcases_count'))})
                     if form2.is_valid():
                         test_cases = {}
@@ -164,7 +165,7 @@ def show_add_code(request):
 
                 #code to add mcq in database
                 elif qtype == 'mcq':
-                    form1 = addMcqForm(request.POST,\
+                    form1 = AddMcqForm(request.POST,\
                      {'extra':int(request.POST.get('total_options'))})
                     if form1.is_valid():
                         test_options = {}
@@ -186,8 +187,8 @@ def show_add_code(request):
                          "One multiple choice question saved successfully.")
                     return render(request, 'Nitor/addCodingQuiz.html', {'form1':form1,\
                          'form2':form2, 'current':'mcq'})
-            form1 = addMcqForm()
-            form2 = addCodingTestForm()
+            form1 = AddMcqForm()
+            form2 = AddCodingTestForm()
             context = {'form1':form1, 'form2':form2, 'current':None}
             return render(request, 'Nitor/addCodingQuiz.html', context)
     return index(request)
@@ -212,13 +213,13 @@ def create_que_paper(request):
     user = request.user
     questions = Question.objects.all()
     que = create_question_object()
-    form = createQuestionPaper()
+    form = CreateQuestionPaper()
     context = {'form':form, 'questions':que}
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
             if request.method == 'POST':
-                form = createQuestionPaper(request.POST)
+                form = CreateQuestionPaper(request.POST)
                 total = int(request.POST.get('totalquestions'))
                 if total == 0:
                     messages.error(request, '**Questions not selected.')
@@ -279,7 +280,7 @@ def assign_test(request):
             return render(request, 'Nitor/assignTest.html', context)
         return index(request)
 
-def question_papers(request, message=None):
+def question_papers(request, message=""):
     """# Code to show question papers"""
     user = request.user
     if user.is_authenticated:
@@ -309,7 +310,7 @@ def rem_candidate_status(request, cid, pid):
     return HttpResponseRedirect(url)
 
 def remove_question_paper(request, pid):
-    """ To remove question paper """    
+    """ To remove question paper """
     existed_in = questionpaper_remove_from_assigned(pid)
     if not existed_in:
         QuestionPaper.objects.get(id=pid).delete()

@@ -2,6 +2,15 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
+<style>
+  .img{
+    transition:  1s;
+  }
+  .img:hover{
+    width:150px;
+    height: 110px;
+  }  
+</style>
 <div class="wrapper" style="margin-left: -250px;">
    {% include 'navbar.html'  %}     
 	<form>
@@ -11,24 +20,23 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-10 ">
-              <div class="card" style="margin-left: 70px;">               
+              <div class="card" style='margin-left: 70px;'>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center" id="">
-                      <a href="/listCandidate" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
+                    <div class="col-md-3 text-center">
+                      <a href="/listCandidate" ><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span>Candidates list</span></a>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-3 text-center">
-                      <a href="/addUser" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
+                      <a href="/addUser"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-3 text-center">
-                      <a href="/assignTest" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
-                    </div>                                         
+                      <a href="/assignTest"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
+                    </div>
                   </div>
                   <br>
-                
                   <br>
                   <hr>
                   <br>
@@ -36,19 +44,18 @@
                   <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-3 text-center">
-                      <a href="/questionPapers" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
+                      <a href="/questionPapers"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-3 text-center">
-                      <a href="/listQuestions" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
+                      <a href="/listQuestions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
                     </div> 
                     <div class="col-md-1"></div>
                     <div class="col-md-3 text-center">
-                      <a href="/addCode" onmouseover="hover(this)" onmouseout="unhover(this)"><img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
-                    </div>                                         
+                      <a href="/addCode"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
+                    </div>
                   </div>
                 </div>
-
               </div>
               <div class="row text-right">
               {% include 'Nitor/footer.html'  %}
