@@ -1,3 +1,5 @@
-string=raw_input("Enter string:")
-# write your program from here
-                                
+str = input()
+if str == str[::-1]:
+	print("yes")
+else:
+	print("no")

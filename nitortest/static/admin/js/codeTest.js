@@ -14,7 +14,8 @@ function addTestCase(){
       document.getElementById('tc').appendChild(input_label);
 
       input = document.createElement('input'); 
-      input.setAttribute('name','input_'+count)  ;
+      input.setAttribute('name','input_'+count);
+      input.setAttribute('size','35');
       input.setAttribute('id','id_input_'+count) ;       
       document.getElementById('tc').appendChild(input) ;
 
@@ -26,6 +27,7 @@ function addTestCase(){
 
       output = document.createElement('input');  
       output.setAttribute('name','output_'+count);  
+      output.setAttribute('size','35');  
       output.setAttribute('id','id_output_'+count)  ;
       document.getElementById('tc').appendChild(output) ;
       document.getElementById('id_total_testcases_count').value=count;
@@ -128,6 +130,7 @@ function addOptions(){
 
       input = document.createElement('input'); 
       input.setAttribute('name','option_'+count);
+      input.setAttribute('size','80px');
       input.setAttribute('required','true');
       input.setAttribute('id','id_option_'+count); 
       document.getElementById('op').appendChild(input);

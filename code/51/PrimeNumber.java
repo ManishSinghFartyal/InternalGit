@@ -4,8 +4,9 @@ public class PrimeNumber
                 public static void main(String args[]) 
              { 
                   int num,b,c; 
-                  Scanner s=new Scanner(System.in);                   
+                  Scanner s=new Scanner(System.in); 
                   num =s.nextInt(); 
+                  num=121;
                   b=1; 
                   c=0; 
                    while(b<= num) 

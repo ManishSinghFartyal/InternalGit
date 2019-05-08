@@ -6,10 +6,10 @@ class Factorial
    {
       int n, c, fact = 1;
      
-     
       Scanner in = new Scanner(System.in);
      
       n = in.nextInt();
+      n=5;
      
       if (n < 0)
          System.out.println("Not valid");
@@ -22,3 +22,4 @@ class Factorial
       }
    }
 }
+

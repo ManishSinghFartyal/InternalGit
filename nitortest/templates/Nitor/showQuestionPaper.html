@@ -2,114 +2,119 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
+<link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
+<link href='https://fonts.googleapis.com/css?family=Rubik Mono One' rel='stylesheet'>
 <style type="text/css">
-  
+  .table_css{
+    font-family: righteous;
+    font-size: 18px;
+  }
+  .heading_css{
+    font-family: Rubik mono one;
+    font-size: 20px;
+  }
 </style>
 <div class="wrapper" style="margin-left: -250px;">
   {% include 'Nitor/navbar.html'  %}
-    <div class="main-panel">      
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
-                {% csrf_token %}
+  <div class="main-panel">      
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
+              {% csrf_token %}
               <div class="card" >
                 <div class="col-md-12">
-                 <div id='c_list' class="col-md-12">                  
-                  <div class="col-md-12 text-info text-center">
+                 <div id='c_list' class="col-md-12">
+                  <div class="col-md-12 text-info text-center " style="background: #9997;width: 98%; border-radius: 10px;margin-top: 10px;padding-bottom: 4px;">
                     <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Created question papers</u></b></h3>
                   </div>
                   <form>
-                     <div class="modal fade" id="myModal">
-                <div class="modal-dialog">
-                
-                  <!-- Modal content-->
-                  <div class="modal-content">
-                      
-                  </div>                  
-                </div>
-           </div>
-                    <div class="table-responsive" style="border: solid 1px black;">
-                          <table class="table">
-                            <thead class=" text-primary"> 
-                              <th>
-                                <b>Title</b>
-                              </th>
-                              <th>
-                                <b>Total question</b>
-                              </th>
-                              <th>
-                                <b>Max time</b>
-                              </th>
-                            </thead>
-                            <tbody>                              
-                              <tr>
-                                <td><b><i>{{paper.title}}</i></b></td>
-                                <td><b><i>{{paper.total}}</i></b></td>                               
-                                <td><b><i>{{paper.max_time}}</i></b></td>
-                             </tr>                            
-                            </tbody>
-                          </table>                                                                    
-                        </div>
+
+                  <div class="table-responsive" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px;border-radius: 10px;width: 98%; border-radius: 10px;margin-top: 10px;">
+                    <table class="table">
+                      <thead class=" text-primary"> 
+                        <th>
+                          <b>Title</b>
+                        </th>
+                        <th>
+                          <b>Total question</b>
+                        </th>
+                        <th>
+                          <b>Max time</b>
+                        </th>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><b><i>{{paper.title}}</i></b></td>
+                          <td><b><i>{{paper.total}}</i></b></td>
+                          <td><b><i>{{paper.max_time}}</i></b></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <hr>
+                  {% if paper.mcq %}
+                  <div class="row table_css" >
+                    <div class="col-md-12" style="background: #4ff2;padding: 15px 5px 5px 5px;">
+                      <h6 id="Quetype" style="font-family: Rubik Mono One;color: black;"> Multiple choice questions</h6>
+                    </div>
+                    <div class="col-md-12"><br></div>
+                    <ol>
+                      {% for key,value in paper.mcq.items %}
+                      <div class="col-sm-10">
+                        <li>
+                          {{value.desc}}
+                          <br>
+                          <ol>
+                            {%for k,v in value.options.items %}
+                            <li>
+                              {{v}}
+                            </li>
+                            {% endfor %}
+                          </ol>
+                        </li>
                         <hr>
-                        <div class="row">
-                          <div class="col-md-12" style="background: #1113;padding: 5px 5px 5px 5px;">
-                            <h5 id="Quetype"> <u>Multiple choice questions</u></h5>   
-                          </div>
-                          <div class="col-md-12"><br></div>
-                            <ol>
-                            {% for key,value in paper.mcq.items %}
-                            <div class="col-sm-10">
-                              <li>
-                                {{value.desc}}                              
-                                <br>
-                                <ol>                                  
-                                  {%for k,v in value.options.items %}
-                                  <li>                                    
-                                    {{v}}
-                                  </li>
-                                 {% endfor %}                                  
-                                </ol>        
-                              </li>
-                              <hr>
-                            </div>
-                            {% endfor %}
-                            </ol>
-                        </div>
-                         <div class="row">
-                          <div class="col-sm-12" style="background: #1113;padding: 5px 5px 5px 5px;">
-                          <h5> <u>Coding question</u></h5>                            
-                         </div>
-                            <ol>
-                            {% for key,value in paper.coding.items %}
-                            <div class="col-sm-12">
-                              <li>
-                                {{value.title}}                              
-                                <br>
-                              </li>
-                              <br>
-                            </div>
-                            {% endfor %}
-                            </ol>
-                        </div>
-                        <div class="row text-center">
-                         <div class="col-md-2 text-left" style="margin-top: -12px;">
-                           <a href="" class="btn btn-lg text-center"><i class="material-icons">print</i>Print out</a>
-                         </div>                         
-                         <div class="col-md-2 text-center">
-                            <a href='/removeQuestionPaper/{{id}}' class="btn btn-sm btn-danger">Remove</a>
-                         </div>
-                        </div>
-                    </form>            
+                      </div>
+                      {% endfor %}
+                    </ol>
+                  </div>
+                  {% endif %}
+                  {% if paper.coding %}
+                  <div class="row table_css">
+                    <div class="col-sm-12" style="background: #4ff2;padding: 15px 15px 5px 30px;">
+                      <h6 style="font-family: Rubik Mono One;color: black;">Coding question</h6>
+                    </div>
+                    <ol>
+                      {% for key,value in paper.coding.items %}
+                      <div class="col-sm-12">
+                        <li>
+                          {{value.title}}
+                          <br>
+                        </li>
+                        <br>
+                      </div>
+                      {% endfor %}
+                    </ol>
+                  </div>
+                  {% endif %}
+                  <div class="row text-center">
+                   <div class="col-md-2 text-left" style="margin-top: -12px;">
+                     <a href="" class="btn btn-lg text-center"><i class="material-icons">print</i>Print out</a>
                    </div>
-                  <div>
-                 </div>                
-              </div>
-             </form>
-            </div> 
+                   <div class="col-md-2 text-center">
+                    <a href='/removeQuestionPaper/{{id}}' class="btn btn-sm btn-danger">Remove</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div>
+            </div>
           </div>
-      </div>
+        </form>
+      </div> 
     </div>
+  </div>
+</div>
 
 {% endblock %}

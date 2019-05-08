@@ -86,6 +86,8 @@ SUB = (
     ('aptitude', 'Aptitude'),
     ('english', 'English'),
     ('gk', 'Computer awareness'),
+    ('ds', 'Data Structure'),
+    ('dp', 'Design Pattern'),    
     )
 
 VALID_USERNAME = letters + '._' + digits

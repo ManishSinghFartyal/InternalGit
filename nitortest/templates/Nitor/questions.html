@@ -6,7 +6,17 @@
     font-size: 16px;
     font-weight: bolder;
   }
+  .question_css {
+    font-family: 'Roboto';
+    font-size: 16px;
+    }
+  .tabel_css {
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: bold;
+    }
 </style>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
     {% include 'Nitor/sidebar.html' %}
     {% include 'Nitor/navbar.html'  %}
@@ -25,14 +35,14 @@
                       </div>   
                     </div>
                     <div class="col-md-12 text-center">                      
-                       <strong style="font-size: 20px">*{{message}}</strong>
+                       <strong style="font-size: 20px">{{message}}</strong>
                     </div>
                      <br><br>
                     {% with question as questionss %}
                     <div class="col-md-12">
                       <div class="table-responsive">
                       <table class="table">
-                        <thead class=" text-primary">
+                        <thead class=" text-primary  tabel_css">
                           <th>
                             <b>Type</b>
                           </th>
@@ -48,7 +58,7 @@
                         </thead>
                         <tbody>
                  {% for key,value in questions.items %}
-                          <tr id="{{key}}-row">
+                          <tr id="{{key}}-row" class="question_css">
                             <td>
                                {% if value.qtype == 'mcq'%}
                                <font style="color:black;font-weight: bold;font-style: italic;font-size: 12px;"><i class="material-icons">view_list</i>
@@ -141,7 +151,7 @@
           </div>
           <div style="width: 30%;text-align: center;">
             <hr>
-            <a href="/addCode" class="btn btn-success"><i class="material-icons">add_box</i>Add questions</a>
+            <a href="/addQuestion" class="btn btn-success"><i class="material-icons">add_box</i>&nbsp;Add questions</a>
             <hr>
           </div>
         </div>

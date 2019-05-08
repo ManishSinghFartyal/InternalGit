@@ -144,7 +144,7 @@ def save_code(queid, code, json1, userid, testid):
 
 
 def count_score(userid, testid):
-    ''' count score '''
+    '''  count score  '''
     count = 0
     correct = 0
     total = 0

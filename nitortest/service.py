@@ -195,18 +195,18 @@ def get_paper(q_paper):
 def get_candidate_status(candidateid):
     '''Will return candidate dictionary which contains the related status of candidate'''
     candidate_status = {}
-    try:
+    try:        
         status = CandidateStatus.objects.filter(candidate=candidateid)
         for i in status:
             paper = QuestionPaper.objects.filter(id=i.question_paper)
             title = ""
             for _p in paper:
                 title = _p.title_qp
-            candidate_status[i.id] = {'paperId':i.question_paper, \
-             'paper_title':title, 'date':i.exam_date, 'attempted':i.attempted,\
-              'score':i.score, 'time_taken':i.total_time,\
-              'mcq_correct':i.correct_mcq, 'coding_correct':i.correct_ct,\
-               'total_score':i.total_score,\
+            candidate =get_candidate_profile(candidateid)
+            candidate_status[i.id] = {'candidate':candidate, 'paperId':i.question_paper, 'paper_title':title,\
+             'date':i.exam_date, 'attempted':i.attempted, 'score':i.score,\
+             'time_taken':i.total_time, 'mcq_correct':i.correct_mcq,\
+             'coding_correct':i.correct_ct, 'total_score':i.total_score,\
                'total_mcq_score':i.total_mcq_score, 'total_code_score':i.total_code_score}
     except ObjectDoesNotExist:
         candidate_status = {}
@@ -316,3 +316,33 @@ def questionpaper_remove_from_assigned(question_paper_id):
         if c_d.question_paper == int(question_paper_id):
             existed_in.append(c_d.candidate)
     return existed_in
+
+def get_all_candidate_status():
+    all_candiates_status = {}
+    candidates_in_status = CandidateStatus.objects.all()
+    for candidate in candidates_in_status:        
+        all_candiates_status[candidate.id] = get_candidate_status2(candidate.candidate,candidate.question_paper)
+    print(all_candiates_status)
+    return all_candiates_status
+
+
+def get_candidate_status2(candidateid, question_id):
+    '''Will return candidate dictionary which contains the related status of candidate'''
+    candidate_status = {}
+    try:        
+        i = CandidateStatus.objects.get(Q(candidate=candidateid)&Q(question_paper=question_id))
+        paper = QuestionPaper.objects.filter(id=i.question_paper)
+        title = ""
+        max_time = ""
+        for _p in paper:
+            title = _p.title_qp
+            max_time = _p.max_time
+        candidate =get_candidate_profile(candidateid)
+        candidate_status = {'candidate':candidate, 'paperId':i.question_paper, 'paper_title':title,\
+         'date':i.exam_date, 'attempted':i.attempted, 'score':i.score,\
+         'time_taken':i.total_time, 'mcq_correct':i.correct_mcq,\
+         'coding_correct':i.correct_ct, 'total_score':i.total_score,\
+           'total_mcq_score':i.total_mcq_score, 'total_code_score':i.total_code_score,'max_time':max_time}
+    except ObjectDoesNotExist:
+        candidate_status = {}
+    return candidate_status

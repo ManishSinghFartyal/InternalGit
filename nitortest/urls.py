@@ -14,10 +14,10 @@ urlpatterns = [
     url(r'^listCandidate/$', views.list_candidates, name='candidateList'),
     url(r'^candidateProfile/(?P<userid>\d+)$', views.candidate_profile, name='candidateProfile'),
     url(r'^removeCandidate/(?P<userid>\d+)$', views.remove_candidate, name='removeCandidate'),
-    url(r'^addCode/$', views.show_add_code, name='addCode'),
+    url(r'^addQuestion/$', views.show_add_question, name='addCode'),
     url(r'^successQue/$', views.success_que, name='successQue'),
     url(r'^createQuePaper/$', views.create_que_paper, name='createQuePaper'),
-    url(r'^assignTest/$', views.assign_test, name='assignTest'),
+    url(r'^assignTest/$', views.assign_test2, name='assignTest'),
     url(r'^questionPapers/$', views.question_papers, name='questionPapers'),
     url(r'^fetchQuestionPaper/(?P<questionid>\d+)', views.fetch_question_paper,\
      name='fetchQuestionPaper'),

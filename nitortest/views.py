@@ -15,7 +15,7 @@ from .models import Profile, Question, QuestionPaper, CandidateStatus
 from .service import  get_candidate_status, get_answered, get_scores, create_question_object
 from .service import list_of_candidates, get_candidate_profile, get_categorized_questions
 from .service import  get_all_candidates, get_question_paper, get_paper, question_remove_from_paper
-from .service import questionpaper_remove_from_assigned
+from .service import questionpaper_remove_from_assigned, get_all_candidate_status
 
 
 @csrf_protect
@@ -127,7 +127,7 @@ def save_candidate(request):
             return render(request, 'Nitor/saveCandidate.html')
     return index(request)
 
-def show_add_code(request):
+def show_add_question(request):
     """ Add new coding questions """
     form1 = AddMcqForm()
     form2 = AddCodingTestForm()
@@ -190,7 +190,7 @@ def show_add_code(request):
             form1 = AddMcqForm()
             form2 = AddCodingTestForm()
             context = {'form1':form1, 'form2':form2, 'current':None}
-            return render(request, 'Nitor/addCodingQuiz.html', context)
+            return render(request, 'Nitor/addNewQuestion.html', context)
     return index(request)
 
 def success_que(request):
@@ -277,7 +277,7 @@ def assign_test(request):
                            total_mcq_score=mcq_score)
                         _c.save()
                     return success_message(request, "Successfully asssigned")
-            return render(request, 'Nitor/assignTest.html', context)
+            return render(request, 'Nitor/assignTestToCandidate.html', context)
         return index(request)
 
 def question_papers(request, message=""):
@@ -307,7 +307,7 @@ def rem_candidate_status(request, cid, pid):
     """#To remove Assigned test of candidate"""
     CandidateStatus.objects.get(candidate=cid, question_paper=pid).delete()
     url = "/candidatestatus/"+cid
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect('/assignTest')
 
 def remove_question_paper(request, pid):
     """ To remove question paper """
@@ -353,3 +353,30 @@ def remove_question(request, queid):
             return render(request, 'Nitor/questions.html', {'questions' : \
                 questions, 'message' : message})
     return index(request)
+
+def assign_test2(request):
+    """ Code to assign the test for canidates."""
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            all_candidate_status = get_all_candidate_status()
+            context = {'candidates':get_all_candidates(), 'papers':QuestionPaper.objects.all(), "all_candidate_status":all_candidate_status}
+            if request.method == 'POST':
+                ids = request.POST.get('candidate')                
+                assigned_test = request.POST.get("paper")
+                total_score, mcq_score, code_score = get_scores(assigned_test)
+                assigned_date = request.POST.get("date_str")
+                mcq_ans = {}
+                code_ans = {}
+                if assigned_date == "" or assigned_test is None or ids is None:
+                    messages.error(request, ' Select all information.')
+                    return render(request, 'Nitor/assignTest.html', context)
+                _c = CandidateStatus(candidate=ids, exam_date=assigned_date,\
+                         question_paper=assigned_test, mcq_ans=mcq_ans,code_ans=code_ans,\
+                          total_score=total_score, total_code_score=code_score,\
+                          total_mcq_score=mcq_score)
+                _c.save()
+                return HttpResponseRedirect('/assignTest')
+            return render(request, 'Nitor/assignTestToCandidate.html', context)
+        return index(request)
+

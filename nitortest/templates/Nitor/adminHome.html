@@ -7,66 +7,75 @@
     transition:  1s;
   }
   .img:hover{
-    width:150px;
-    height: 110px;
-  }  
+    width:130px;
+    height: 120px;
+  }
+  .font-sheet{
+   font-family: 'Righteous';
+   font-size: 30px;
+ }  
+  .font-sheet-header{
+     font-family: 'Monofett';
+     font-size: 50px;
+     font-weight: bolder;
+  }
 </style>
 <div class="wrapper" style="margin-left: -250px;">
-   {% include 'navbar.html'  %}     
-	<form>
-		{% csrf_token %}
-    <div class="main-panel">
-    	<div class="content"> 
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-10 ">
-              <div class="card" style='margin-left: 70px;'>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/listCandidate" ><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span>Candidates list</span></a>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/addUser"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/assignTest"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
-                    </div>
-                  </div>
-                  <br>
-                  <br>
-                  <hr>
-                  <br>
-                  <br>
-                  <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/questionPapers"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/listQuestions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
-                    </div> 
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 text-center">
-                      <a href="/addCode"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
-                    </div>
-                  </div>
+ {% include 'navbar.html'  %}     
+ <form>
+  {% csrf_token %}
+  <div class="main-panel">
+   <div class="content"> 
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 ">
+          <div class="card" style='margin-left: 70px;'>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/listCandidate" title="Show all candidates"><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span class="font-sheet" style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/addUser" title="Add new candidate"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/assignTest" title="Assign test to candidates"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
                 </div>
               </div>
-              <div class="row text-right">
-              {% include 'Nitor/footer.html'  %}
+              <br>
+              <br>
+              <hr>
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/questionPapers" title="Show all question paper created"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/listQuestions" title="Show all questions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
+                </div> 
+                <div class="col-md-1"></div>
+                <div class="col-md-3 text-center">
+                  <a href="/addQuestion" title="Add new questions"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
+                </div>
               </div>
-            </div>            
-          </div>          
-        </div>
-      </div>
-      
-    </div>     
-	</form>
+            </div>
+          </div>
+          <div class="row text-right">
+            {% include 'Nitor/footer.html'  %}
+          </div>
+        </div>            
+      </div>          
+    </div>
+  </div>
+  
+</div>     
+</form>
 </div>
 <script type="text/javascript">
   function hover(tag){
@@ -75,10 +84,9 @@
     tag.childNodes[1].childNodes[0].style.height = "110px";
   }
   function unhover(tag){
-     tag = tag.parentNode;
-     tag.childNodes[1].childNodes[0].style.width = "100px";
-    tag.childNodes[1].childNodes[0].style.height = "100px";
-  }
+   tag = tag.parentNode;
+   tag.childNodes[1].childNodes[0].style.width = "100px";
+   tag.childNodes[1].childNodes[0].style.height = "100px";
+ }
 </script>
 {% endblock %}
-  

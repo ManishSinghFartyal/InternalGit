@@ -14,8 +14,14 @@
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 
-  <!-- CSS Just for demo purpose, don't include it in your project -->  
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href='https://fonts.googleapis.com/css?family=Cabin Sketch' rel='stylesheet'> 
+  <link href='https://fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Cabin Sketch' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Quattrocento Sans' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
   <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+  <link href="{% static 'admin/css/eclipse.css'%}" rel="stylesheet" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <div class="wrapper ">
@@ -27,8 +33,16 @@
     #navbar20{      
      background: black;
       }
+    #fonts-for-all {
+    font-family: 'Quattrocento Sans';font-size: 22px;
+      }
+    #font-sheet-header{
+     font-family: 'Cabin Sketch';
+     font-size: 50px;
+     font-weight: bolder;
+  }
   </style>
-<body > 
+<body class="fonts-for-all"> 
 	{% block content %}
 	{% endblock %}
 </body>
