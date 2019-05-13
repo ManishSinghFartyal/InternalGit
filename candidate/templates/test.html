@@ -87,7 +87,7 @@
     </div> 
     <div class="col-sm-4">
       <div class="col-sm-4">
-        <form action="/candidate/savetest/{{testid}}">
+        <form action="/candidate/savetest/{{pid}}/{{tid}}">
           <input type="submit" id="quit" name="submit" value="Submit test" class="btn btn-md btn-danger" style="text-align: right;margin-top: 40px;">
         </form>
       </div>
@@ -96,9 +96,9 @@
 </div>
 
 <div class="row " style="font-family: cursive;">  
-  <div class="col-md-9">
+  <div class="col-md-8">
     <div class="card" id="testcase" style="padding: 20px 20px 20px 20px;">
-      <div class="card-body" style="margin-top: 30px;">
+      <div class="card-body" style="margin-top: 30px;">                
         {% for ke,va in pages.items %}
         <div class="row">
           <div class="col-md-1"><span>{{va.sr}}</span></div>                   
@@ -136,10 +136,10 @@
              <div class="col-md-12">
               <textarea class="md-textarea" style="background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: #111;padding: 5px 5px 5px 5px;font-size: 20px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
                 rows = "7" {% elif va.title|length > 100 %} 
-                rows = "3" {% else %} rows="1" {% endif %} cols="65" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
+                rows = "3" {% else %} rows="2" {% endif %} cols="55" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
                 <textarea class="md-textarea"  style="background: #fff1;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 17px;font-family: monospace;font-weight: bolder;font-size: 16px;border: none;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 200 %} 
                   rows = "12" {% elif va.desc|length > 100 %} 
-                  rows = "10" {% else %} rows="7" {% endif %} cols="69" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
+                  rows = "10" {% else %} rows="7" {% endif %} cols="57" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
                   <div><p class="lead"><u>Write your code</u><hr></p></div>
                   <div class="col-md-12">                                
                     <textarea class="md-textarea" id="code">{%if not code_answered%}{{va.snippet}}{%else%}{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%endif%}{%endfor%}{%endif%}
@@ -168,9 +168,9 @@
     </div>
 
     <!-- For pagination -->
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="card">
-        <div class="card-body" style="background: #077123db;"> 
+        <div class="card-body" style="background: #077123m1;"> 
           {% if paginator.has_other_pages %}
           <ul class="pagination">
            <div class="row">
@@ -214,7 +214,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
 <script type="text/javascript">
-  testid = "{{testid}}";
+  pid = "{{pid}}";
+  tid = "{{tid}}";
   window.onload = checkThis();
 
   function checkThis(){
@@ -326,8 +327,9 @@ $("#runajax").click(function(){
     csrfmiddlewaretoken: '{{ csrf_token }}',
     data:{
       "code" : code,
-      "testid" : testid,
+      "testid" : pid,
       "language":language,
+      "tid":tid,
     },
     contentType: 'application/json',
     success : function(data){

@@ -22,9 +22,9 @@ urlpatterns = [
     url(r'^fetchQuestionPaper/(?P<questionid>\d+)', views.fetch_question_paper,\
      name='fetchQuestionPaper'),
     url(r'^candidatestatus/(?P<candidateid>\d+)', views.candidate_status, name='candidatestatus'),
-    path('remassigned/<cid>/<pid>', views.rem_candidate_status, name='remcandidatestatus'),
+    path('remassigned/<cid>/<pid>/<tid>', views.rem_candidate_status, name='remcandidatestatus'),
     path('removeQuestionPaper/<pid>', views.remove_question_paper, name='removeQuestionPaper'),
-    path('showscore/<cid>/<pid>', views.show_score, name='showscore'),
+    path('showscore/<cid>/<pid>/<tid>', views.show_score, name='showscore'),
     url(r'^listQuestions/$', views.list_questions, name='listQuestion'),
     url(r'^removeQue/(?P<queid>\d+)', views.remove_question, name='removeQue'),
 ]

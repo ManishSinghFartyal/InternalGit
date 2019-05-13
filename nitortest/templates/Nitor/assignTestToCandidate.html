@@ -17,6 +17,31 @@
         border-radius: 2px;
         font-family: ubuntu;
     }
+    .marquee1{        
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family: ubuntu;
+        color: #12f9;
+        border-radius: 20px;
+    }
+    .marquee2{
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family:ubuntu;
+        color: #111;
+        border-radius: 20px;
+    }  
+    #icon{
+        font-size: 27px;
+        position:absolute;
+        color: red;
+        background: #1113;
+        padding: 2px 2px 2px 2px;
+    }
 </style>
 
 <div class="wrapper ">
@@ -24,7 +49,6 @@
     {% include 'Nitor/sidebar.html' %}
     {% include 'Nitor/navbar.html'  %}
     <div class="main-panel">
-
         <div class="content" style="margin-top: 20px;">
             <div class="container-fluid">
                 <div class="row">
@@ -37,19 +61,19 @@
                                     <strong>Error : {{message}}</strong>
                                     {% endfor %}
                                 </div> 
-              <!--
+                <!--
                 Candidates list to be select first
-              -->
+            -->
             <div id='c_list' class="col-md-12">
                 <div class="col-md-12 text-info"  style="background: #9997;width: 98%; border-radius: 10px;padding: 4px 4px 4px 4px;">
-                    <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;"> <b><u>Assign Test</u></b></h4>                    
+                    <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;"> <b><u>Assign Test</u></b></h4>
                 </div> 
                 <div class="row"><hr></div>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-sm-12">
-                                <label for="candidate">Select candidate</label>
+                                <label for="candidate">*Select candidate</label>
                             </div>
                             <div class="col-sm-12">
                                 <select name="candidate" id="candidate" class="form-control form-control-md browser-default custom-select"  onchange="findAssigned(this)" required="true">
@@ -64,8 +88,8 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-3">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <label for="paper" id="paper-label" style="visibility: hidden;">Select Test</label>
+                            <div class="col-sm-12" >
+                                <label for="paper" id="paper-label" style="visibility: hidden;">*Select Test</label>
                             </div>
                             <div class="col-sm-12">
                                 <select style="visibility: hidden;" name="paper" id="paper" class="form-control form-control-md browser-default custom-select" onchange="showBox();">
@@ -80,7 +104,7 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-3">
                         <div class="row">
-                            <div class="col-sm-12" id="date-label" style="visibility: hidden;"><label for="date">Test Date</label></div>
+                            <div class="col-sm-12" id="date-label" style="visibility: hidden;"><label for="date">*Test Date</label></div>
                             <div class="col-sm-12" id="date-input" style="visibility: hidden;"><input type="date" class="form-control" required="true" name="date_str"></div>
                         </div>
                     </div>
@@ -90,6 +114,7 @@
                     <button class="btn btn-md btn-success text-center"> Submit</button>
                 </div>
                 <div class="row"><hr></div>
+                <div class="row text-center" style="border-radius: 20px;"><marquee behavior="" direction="right" class="marquee1" id="marquee">Select candidate &nbsp;<i class="material-icons" id="icon">person</i></marquee></div>
             </div>
             <div>
             </div>
@@ -123,7 +148,6 @@
                         <th></th>
                     </thead>
                     <tbody>
-
                         {% for key,value in all_candidate_status.items %}
                         <tr>
                             <td id="left">{{value.candidate.fname}}&nbsp;{{value.candidate.lname}}</td>
@@ -135,13 +159,13 @@
 
                             <td>
                                 {% if value.attempted == True %}
-                                <a class="btn btn-sm btn-success" href="/showscore/{{value.candidate.user_id}}/{{value.paperId}}">  <i class="material-icons">visibility</i>
+                                <a class="btn btn-sm btn-success" href="/showscore/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}">  <i class="material-icons">visibility</i>
                                 </a>
                                 {% else %}
                                 <a class="btn btn-sm" style="background: #9999;"><i class="material-icons">visibility</i>
                                 </a>
                                 {% endif %}
-                                <a class="btn btn-sm btn-danger" href="/remassigned/{{value.candidate.user_id}}/{{value.paperId}}" onclick="return confirmRemove();"> <i class="material-icons">clear</i>
+                                <a class="btn btn-sm btn-danger" href="/remassigned/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}" onclick="return confirmRemove();"> <i class="material-icons">clear</i>
                                 </a>
                             </td>
                         </tr>
@@ -160,7 +184,7 @@
 </div>
 <script type="text/javascript">
     function findAssigned(tag){
-        op = document.getElementById('paper').getElementsByTagName('option');
+/*        op = document.getElementById('paper').getElementsByTagName('option');
         for(var i=1; i<op.length; i++){
             op[i].disabled = false;
         }
@@ -174,22 +198,37 @@
             document.getElementById(option).disabled = true;
             {% endfor %}
         }
-        {% endfor %}
+        {% endfor %}*/
         document.getElementById("paper-label").style.visibility="visible";
-        document.getElementById("paper").style.visibility="visible";
+        document.getElementById("paper").style.visibility="visible";  
+        i = document.createElement('i');
+        i.setAttribute('class','material-icons');
+        i.setAttribute('id','icon');
+        i.innerHTML='file_copy';
+        document.getElementById("marquee").textContent = "*Select test - ";
+        document.getElementById("marquee").className = "marquee2";
+        document.getElementById("marquee").appendChild(i);
     }
     function showBox(){
         document.getElementById("date-label").style.visibility="visible";
         document.getElementById("date-input").style.visibility="visible";
+        i = document.createElement('i');
+        i.setAttribute('class','material-icons');
+        i.setAttribute('id','icon');
+        i.innerHTML='access_time';    
+        document.getElementById("marquee").textContent = "*Select Date - ";
+        document.getElementById("marquee").className = "marquee1";
+        document.getElementById("marquee").appendChild(i);        
+
     }
     function confirmRemove(){
       result = confirm("Are you sure ?");
       if(result){
         return true;
-        }
-      else{
-        return false;
-        }
     }
+    else{
+        return false;
+    }
+}
 </script>
 {% endblock %}

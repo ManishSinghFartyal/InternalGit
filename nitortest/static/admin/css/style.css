@@ -1,31 +1,18 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% block content %}
-{% load static %}
-
-
-<!------ Include the above in your HEAD tag ---------->
-
-
-
-<head>
-    <link href='https://fonts.googleapis.com/css?family=Luckiest Guy' rel='stylesheet'> 
-    <link href='https://fonts.googleapis.com/css?family=Overpass Mono' rel='stylesheet'> 
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>    <style class="cp-pen-styles">@import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,300);
-    /* GENERAL RESETS */
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    html {
-      box-sizing: border-box;
-  }
-  *, *:before, *:after {
-      margin: 0;
-      padding: 0;
-      box-sizing: inherit;
-  }
-  a {
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,300);
+/* GENERAL RESETS */
+* {
+    margin: 0;
+    padding: 0;
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+a {
     color: #666;
     text-decoration: none;
 }
@@ -41,9 +28,9 @@ body {
     text-align: center;
     height: 100%;
     background: -moz-linear-gradient(270deg, rgba(34,46,64,1) 0%, rgba(81,195,184,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(34,46,64,1)), color-stop(100%, rgba(181,195,184,1)));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(34,46,64,1)), color-stop(100%, rgba(81,195,184,1)));
     background: -webkit-linear-gradient(270deg, rgba(34,46,64,1) 0%, rgba(81,195,184,1) 100%);
-    background: linear-gradient(10deg, rgba(114,46,164,0.4) 0%, rgba(81,15,14,0.4) 100%);
+    background: linear-gradient(180deg, rgba(34,46,64,1) 0%, rgba(81,195,184,1) 100%);
     overflow:hidden;
 }
 
@@ -139,10 +126,10 @@ a.button:hover {
     width: 100%;
     height: 100vh;
     overflow: auto;
-    background: -moz-linear-gradient(48deg, rgba(2,46,54,0.2) 0%, rgba(197,107,125,0.5) 100%);
-    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(42,46,54,1)), color-stop(100%, rgba(197,7,125,1)));
-    background: -webkit-linear-gradient(48deg, rgba(4,46,54,1) 0%, rgba(97,107,125,1) 5 0%);
-    background: linear-gradient(42deg, rgba(2,46,54,0.2) 0%, rgba(117,117,115,0.4) 80%);
+    background: -moz-linear-gradient(48deg, rgba(42,46,54,1) 0%, rgba(97,107,125,1) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(42,46,54,1)), color-stop(100%, rgba(97,107,125,1)));
+    background: -webkit-linear-gradient(48deg, rgba(42,46,54,1) 0%, rgba(97,107,125,1) 100%);
+    background: linear-gradient(42deg, rgba(42,46,54,1) 0%, rgba(97,107,125,1) 100%);
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -357,47 +344,47 @@ a.button:hover {
 /* CIRCLE EFFECT */
 #toggle-terms:after {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: 50%;
-    content: '';
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	border-radius: 50%;
+	content: '';
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
 }
 #toggle-terms:before {
-    speak: none;
-    display: block;
-    -webkit-font-smoothing: antialiased;
+	speak: none;
+	display: block;
+	-webkit-font-smoothing: antialiased;
 }
 #toggle-terms {
-    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
     -webkit-transition: color 0.3s ease;
     -moz-transition: color 0.3s ease;
     -o-transition: color 0.3s ease;
     transition: color 0.3s ease;
 }
 #toggle-terms:after {
-    top: 0px;
-    left: 0px;
-    padding: 0;
-    z-index: -1;
-    background: rgba(0, 0, 0, 0.2);
+	top: 0px;
+	left: 0px;
+	padding: 0;
+	z-index: -1;
+	background: rgba(0, 0, 0, 0.2);
     -webkit-transition: -webkit-transform 0.2s, opacity 0.3s;
     -moz-transition: -moz-transform 0.2s, opacity 0.3s;
     -o-transition: -o-transform 0.2s, opacity 0.3s;
     transition: transform 0.2s, opacity 0.3s;
 }
 #toggle-terms.closed {
-    color: rgba(0, 0, 0, 0.2);
+	color: rgba(0, 0, 0, 0.2);
 }
 #toggle-terms.closed:after {
-    -webkit-transform: scale(1.6);
-    -moz-transform: scale(1.6);
-    -ms-transform: scale(1.6);
-    transform: scale(1.6);
-    opacity: 0;
+	-webkit-transform: scale(1.6);
+	-moz-transform: scale(1.6);
+	-ms-transform: scale(1.6);
+	transform: scale(1.6);
+	opacity: 0;
 }
 
 /* CLOSE ANIMATION*/
@@ -505,15 +492,15 @@ a.button:hover {
     margin: 0 auto;
     width: 100%;
     height: 100%;
-    padding:  0px;
+    padding: 10px;
     border-radius: 10px 0 0 10px;
 }
 #slideshow h2 {
-    margin: 1em auto 0em auto;
+    margin: .0em auto .0em auto;
     text-align: center;
-    font-size: 7px;
+    font-size: 1.4em;
     color: #fff;
-    line-height: 0em;
+    line-height: .5em;
 }
 #slideshow p {
   color: #fff;
@@ -525,7 +512,7 @@ a.button:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 1em 1em;
+    padding: 1em 3em;
     background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -591,7 +578,7 @@ input {
     display: block;
     color: #999;
     border: 0;
-}
+ }
 .form-wrap .tabs h3 a.active {
     color: #ccc;
 }
@@ -709,186 +696,185 @@ input {
     /* GLOBAL TRANSITION */
     * {
       /*transition: .25s ease-in-out;*/
-  }
-  /* WRAP */
-  .wrap {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 600px;
-    height: 500px;
-    margin: auto;
-    border-radius: 10px;
-}
-/* LOGO */
-.logo {
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    background: none;
-}
-.logo img {
-    width: 100%;
-}
-@keyframes show_close {
-    0% {
-        opacity: 0;
+    }
+    /* WRAP */
+    .wrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 600px;
+        height: 500px;
+        margin: auto;
+        border-radius: 10px;
+    }
+    /* LOGO */
+    .logo {
+        top: 10px;
+        left: 10px;
+        width: 40px;
+        height: 40px;
+        background: none;
+    }
+    .logo img {
+        width: 100%;
+    }
+    @keyframes show_close {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate(-6px, -100px);
+            -moz-transform: translate(-6px, -100px);
+            -o-transform: translate(-6px, -100px);
+            transform: translate(-6px, -100px);
+        }
+        100% {
+            opacity: 1;
+            -webkit-transform: translate(-6px, 18px);
+            -moz-transform: translate(-6px, 18px);
+            -o-transform: translate(-6px, 18px);
+            transform: translate(-6px, 18px);
+        }
+    }
+    /* TOGGLE WRAP */
+    #toggle-wrap {
+        top: 60px;
+        right: calc(50% + 17px);
+        height: 80px;
+        overflow: hidden;
+    }
+    #toggle-wrap.closed {
+        width: 50%;
+    }
+    /* TOGGLE TERMS */
+    #toggle-terms {
+        opacity: 1;
         -webkit-transform: translate(-6px, -100px);
         -moz-transform: translate(-6px, -100px);
         -o-transform: translate(-6px, -100px);
         transform: translate(-6px, -100px);
     }
-    100% {
+    #toggle-terms.closed {
         opacity: 1;
         -webkit-transform: translate(-6px, 18px);
         -moz-transform: translate(-6px, 18px);
         -o-transform: translate(-6px, 18px);
         transform: translate(-6px, 18px);
     }
-}
-/* TOGGLE WRAP */
-#toggle-wrap {
-    top: 60px;
-    right: calc(50% + 17px);
-    height: 80px;
-    overflow: hidden;
-}
-#toggle-wrap.closed {
-    width: 50%;
-}
-/* TOGGLE TERMS */
-#toggle-terms {
-    opacity: 1;
-    -webkit-transform: translate(-6px, -100px);
-    -moz-transform: translate(-6px, -100px);
-    -o-transform: translate(-6px, -100px);
-    transform: translate(-6px, -100px);
-}
-#toggle-terms.closed {
-    opacity: 1;
-    -webkit-transform: translate(-6px, 18px);
-    -moz-transform: translate(-6px, 18px);
-    -o-transform: translate(-6px, 18px);
-    transform: translate(-6px, 18px);
-}
 
-/* SLIDESHOW */
-#slideshow h2 {        
-    margin: 1em 0 1em;
-    font-size: 2em;
-}
-#slideshow h2 span {
-    padding: 0px 0;
-    border: solid #B6EDE3;
-    border-width: 1px 0;
-}
-#slideshow p {
-    display: block;
-}
-#slideshow div {
-    -webkit-background-size: auto;
-    -moz-background-size: auto;
-    -o-background-size: auto;
-    background-size: auto;
-}
-#slideshow .one {
-    background-position: 50% 30%;
-}
-#slideshow .two {
-    background-position: 0% 170%;
-}
-#slideshow .three {
-    background-position: 50% 300%;
-}
-#slideshow .four {
-    background-position: -40% -80%;
-}
+    /* SLIDESHOW */
+    #slideshow h2 {
+        margin: 4.5em 0 1em;
+        font-size: 2em;
+    }
+    #slideshow h2 span {
+        padding: 5px 0;
+        border: solid #B6EDE3;
+        border-width: 1px 0;
+    }
+    #slideshow p {
+        display: block;
+    }
+    #slideshow div {
+        -webkit-background-size: auto;
+        -moz-background-size: auto;
+        -o-background-size: auto;
+        background-size: auto;
+    }
+    #slideshow .one {
+        background-position: 50% 130%;
+    }
+    #slideshow .two {
+        background-position: 50% 200%;
+    }
+    #slideshow .three {
+        background-position: 50% 300%;
+    }
+    #slideshow .four {
+        background-position: -40% -80%;
+    }
 
-/* CONTENT */
-.content, .content.full {
-    text-indent: inherit;
-    position: relative;
-    float: left;
-    width: 50%;
-    height: 500px;
-    -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    border-radius: 10px 0 0 10px;
-}
-/* TERMS */
-.terms, .recovery {
-    position: absolute;
-    width: 50%;
-    height: 440px;
-    float: left;
-    margin: 60px 0 0;
-    -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    border-radius: 0 0 0 10px;
-}
-/* USER (FORM WRAPPER) */
-.user {
-    padding-top: 0;
-    float: left;
-    width: 50%;
-    height: 500px;
-    -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
-    border-radius: 0 10px 10px 0;
-    border: 0;
-}
-.user .actions {
-    margin: 0;
-    text-align: right;
-}
-/* FORM ELEMENTS */
-.form-wrap {
-    margin: 3em auto 0;
-}
-.form-wrap .tabs-content {
-    padding: 1.5em 2.5em;
-}
-.tabs-content p {
-    position: relative;
-}
-/* ARROW */
-.tabs-content .fa {
-    position: absolute;
-    top: 8px;
-    left: -16px;
-    display: block;
-    font-size: .8em;
-    color: #fff;
-    opacity: .3;
-    -webkit-transform: translate(0, 0);
-    -moz-transform: translate(0, 0);
-    -o-transform: translate(0, 0);
-    transform: translate(0, 0);
-    -webkit-transition: transform .3s .3s ease, opacity .6s .0s ease;
-    -moz-transition: transform .3s .3s ease, opacity .6s .0s ease;
-    -o-transition: transform .3s .3s ease, opacity .6s .0s ease;
-    transition: transform .3s .3s ease, opacity .6s .0s ease;
-}
-.tabs-content .fa.active {
-    -webkit-transform: translate(-3px, 0);
-    -moz-transform: translate(-3px, 0);
-    -o-transform: translate(-3px, 0);
-    transform: translate(-3px, 0);
-    opacity: .8;
-}
-.tabs-content .fa.inactive {
-    -webkit-transform: translate(0, 0);
-    -moz-transform: translate(0, 0);
-    -o-transform: translate(0, 0);
-    transform: translate(0, 0);
-    opacity: .3;
-}
+    /* CONTENT */
+    .content, .content.full {
+        position: relative;
+        float: left;
+        width: 50%;
+        height: 500px;
+        -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        border-radius: 10px 0 0 10px;
+    }
+    /* TERMS */
+    .terms, .recovery {
+        position: absolute;
+        width: 50%;
+        height: 440px;
+        float: left;
+        margin: 60px 0 0;
+        -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        border-radius: 0 0 0 10px;
+    }
+    /* USER (FORM WRAPPER) */
+    .user {
+        padding-top: 0;
+        float: left;
+        width: 50%;
+        height: 500px;
+        -webkit-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        -moz-box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        box-shadow: -3px 0px 45px -6px rgba(56,75,99,0.61);
+        border-radius: 0 10px 10px 0;
+        border: 0;
+    }
+    .user .actions {
+        margin: 0;
+        text-align: right;
+    }
+    /* FORM ELEMENTS */
+    .form-wrap {
+        margin: 3em auto 0;
+    }
+    .form-wrap .tabs-content {
+        padding: 1.5em 2.5em;
+    }
+    .tabs-content p {
+        position: relative;
+    }
+    /* ARROW */
+    .tabs-content .fa {
+        position: absolute;
+        top: 8px;
+        left: -16px;
+        display: block;
+        font-size: .8em;
+        color: #fff;
+        opacity: .3;
+        -webkit-transform: translate(0, 0);
+        -moz-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        -webkit-transition: transform .3s .3s ease, opacity .6s .0s ease;
+        -moz-transition: transform .3s .3s ease, opacity .6s .0s ease;
+        -o-transition: transform .3s .3s ease, opacity .6s .0s ease;
+        transition: transform .3s .3s ease, opacity .6s .0s ease;
+    }
+    .tabs-content .fa.active {
+        -webkit-transform: translate(-3px, 0);
+        -moz-transform: translate(-3px, 0);
+        -o-transform: translate(-3px, 0);
+        transform: translate(-3px, 0);
+        opacity: .8;
+    }
+    .tabs-content .fa.inactive {
+        -webkit-transform: translate(0, 0);
+        -moz-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        opacity: .3;
+    }
 }
 /* LARGE VIEWPORT */
 @media only screen and (min-width: 60em) {
@@ -939,211 +925,3 @@ input {
   opacity: 0.0;
   transform: scale(1) translate3d(0,0,0);
 }
-/*Error style */
-.alert.alert-block.alert-danger{
-    font-size: 15px;
-    text-align: center;
-    list-style-position: inside;
-    width: 110%;
-    border: none;
-    background: none;
-    color: red;
-    font-weight: bolder;
-    box-shadow: none;
-    }
-    label{
-    border: none;
-    font-weight: bolder;    
-    font-family: Overpass Mono;
-    font-size: 15px;
-    color: #0019;
-  }
-</style>
-</head>
-<!-- LOGIN MODULE -->
-<div class="login">
-    <div class="wrap">
-        <!-- TOGGLE -->
-        <div id="toggle-wrap">
-            <div id="toggle-terms">
-                <div id="cross">
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-        <!-- RECOVERY -->
-        <div class="recovery" id="recovery">
-            <h2>Password Recovery</h2>
-            <p>Enter either the <strong>email address</strong> or <strong>username</strong> on the account and <strong>click Submit</strong></p>
-            <p>We'll email instructions on how to reset your password.</p>
-            <form class="recovery-form" action="" method="post">
-                {% csrf_token %}
-                <input type="text" class="input" id="user_recover" placeholder="Enter Email or Username Here">
-                <input type="submit" class="button" value="Submit">
-            </form>
-            <p class="mssg">An email has been sent to you with further instructions.</p>
-        </div>
-
-        <!-- SLIDER -->
-        <div class="content">            
-            <!-- SLIDESHOW -->
-            <div id="slideshow">
-                <div class="one">
-                    <h2><span>Online code editor</span></h2>
-                    <p>Run your code online and check the output</p>
-                    <img src="{% static 'admin/img/testcode.jpg' %}" width="290px" height="230px">
-                </div>
-                <div class="two">
-                    <h2><span>Languages</span></h2>
-                    <p>Multiple Programming languages</p>
-                    <img src="{% static 'admin/img/codingLanguages.jpg' %}" width="290px" height="230px">
-                </div>
-                <div class="three">
-                    <h2><span>MCQ support</span></h2>
-                    <p>Categorically divided</p>
-                </div>
-                <div class="four">
-                    <h2><span>Scoring</span></h2>
-                    <p>Scoring of test  is done automatically.</p>
-                    <img src="{% static 'admin/img/score.jpg' %}" width="290px" height="230px">
-
-                </div>
-            </div>
-        </div>
-        <!-- LOGIN FORM -->
-        <div class="user">
-                    <!-- ACTIONS
-                    <div class="actions">
-                        <a class="help" href="#signup-tab-content">Sign Up</a><a class="faq" href="#login-tab-content">Login</a>
-                    </div>
-                     -->
-                <div class="form-wrap">
-                    <!-- TABS -->
-                    <div class="tabs">
-                        <h3 class="login-tab"><a class="log-in active" href="#login-tab-content"><span style="color: white;">Login<span></a></h3>
-                        </div>
-                        <!-- TABS CONTENT -->
-                        <div class="tabs-content">
-                            <!-- TABS CONTENT LOGIN -->
-                            <div id="login-tab-content" class="active">                                
-                                <form action="" method="POST"  class="login-form">
-                                    {% csrf_token %}                                                        
-                                    {{form|crispy}}
-                                    <button type="submit" class="btn btn-success">Submit</button>
-                                </form>
-                                <div class="help-action">
-                                    <p><i class="fa fa-arrow-left" aria-hidden="true"></i><a class="forgot" href="#"  style="color: white;">Forgot your password?</a></p>
-                                </div>
-                            </div>                       
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-        <script >/* LOGIN - MAIN.JS - dp 2017 */
-
-// LOGIN TABS
-$(function() {
-    var tab = $('.tabs h3 a');
-    tab.on('click', function(event) {
-        event.preventDefault();
-        tab.removeClass('active');
-        $(this).addClass('active');
-        tab_content = $(this).attr('href');
-        $('div[id$="tab-content"]').removeClass('active');
-        $(tab_content).addClass('active');
-    });
-});
-
-// SLIDESHOW
-$(function() {
-    $('#slideshow > div:gt(0)').hide();
-    setInterval(function() {
-        $('#slideshow > div:first')
-        .fadeOut(1000)
-        .next()
-        .fadeIn(1000)
-        .end()
-        .appendTo('#slideshow');
-    }, 3850);
-});
-
-// CUSTOM JQUERY FUNCTION FOR SWAPPING CLASSES
-(function($) {
-    'use strict';
-    $.fn.swapClass = function(remove, add) {
-        this.removeClass(remove).addClass(add);
-        return this;
-    };
-}(jQuery));
-
-// SHOW/HIDE PANEL ROUTINE (needs better methods)
-// I'll optimize when time permits.
-
-$(function() {
-    $('.agree,.forgot, #toggle-terms, .log-in, .sign-up').on('click', function(event) {
-        event.preventDefault();
-        var terms = $('.terms'),
-        recovery = $('.recovery'),
-        close = $('#toggle-terms'),
-        arrow = $('.tabs-content .fa');
-        if ($(this).hasClass('agree') || $(this).hasClass('log-in') || ($(this).is('#toggle-terms')) && terms.hasClass('open')) {
-            if (terms.hasClass('open')) {
-                terms.swapClass('open', 'closed');
-                close.swapClass('open', 'closed');
-                arrow.swapClass('active', 'inactive');
-            } else {
-                if ($(this).hasClass('log-in')) {
-                    return;
-                }
-                terms.swapClass('closed', 'open').scrollTop(0);
-                close.swapClass('closed', 'open');
-                arrow.swapClass('inactive', 'active');
-            }
-        }
-        else if ($(this).hasClass('forgot') || $(this).hasClass('sign-up') || $(this).is('#toggle-terms')) {
-            if (recovery.hasClass('open')) {
-                recovery.swapClass('open', 'closed');
-                close.swapClass('open', 'closed');
-                arrow.swapClass('active', 'inactive');
-            } else {
-                if ($(this).hasClass('sign-up')) {
-                    return;
-                }
-                recovery.swapClass('closed', 'open');
-                close.swapClass('closed', 'open');
-                arrow.swapClass('inactive', 'active');
-            }
-        }
-    });
-});
-
-// DISPLAY MSSG
-$(function() {
-    $('.recovery .button').on('click', function(event) {
-        event.preventDefault();
-        $('.recovery .mssg').addClass('animate');
-        setTimeout(function() {
-            $('.recovery').swapClass('open', 'closed');
-            $('#toggle-terms').swapClass('open', 'closed');
-            $('.tabs-content .fa').swapClass('active', 'inactive');
-            $('.recovery .mssg').removeClass('animate');
-        }, 200);
-    });
-});
-
-// DISABLE SUBMIT FOR DEMO
-$(function() {
-    $('.button').on('click', function(event) {
-        $(this).stop();
-        event.preventDefault();
-        return false;
-    });
-});
-//# sourceURL=pen.js
-</script>
-{% endblock %}
-

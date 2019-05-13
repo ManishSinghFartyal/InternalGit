@@ -16,3 +16,5 @@ rl.on('line', function (line) {
    console.log(fact);
    }
 });    
+
+                    

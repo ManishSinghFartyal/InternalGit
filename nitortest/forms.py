@@ -94,10 +94,6 @@ VALID_USERNAME = letters + '._' + digits
 VALID_PASSWORD = letters + digits + punctuation
 
 
-#####################################
-''' User Registration form  '''
-#####################################
-
 class UserRegisterForm(forms.Form):
     ''' User Registration form  '''
     first_name = forms.CharField(max_length=30)
@@ -162,10 +158,12 @@ class UserLoginForm(forms.Form):
                           self.cleaned_data["password"]
             user = authenticate(username=u_name, password=pwd)
         except Exception:
+            print("manish1")
             raise forms.ValidationError(
                 "Username and/or Password is not entered"
             )
         if not user:
+            print("manish2")            
             raise forms.ValidationError("Invalid username/password")
         return user
 
@@ -238,7 +236,7 @@ class AddCodingTestForm(forms.Form):
         return title
 
 class CreateQuestionPaper(forms.Form):
-    """docstring for createQuestionPaper"forms.rm def __init__(self,  arg):
+    """docstring for createQuestionPaper forms.rm def __init__(self,  arg):
         super (createQuestionPaper, forms.Form.__init__()
         sexlf.arg  =  arg"""
     title_qp = forms.CharField(max_length=500, \

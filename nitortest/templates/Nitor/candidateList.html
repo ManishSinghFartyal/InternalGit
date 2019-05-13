@@ -2,6 +2,17 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
+<link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>  
+<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+<style>
+  .left{
+        font-weight: bolder;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family: Righteous;
+    }
+</style>
 <div class="wrapper ">
   {% include 'Nitor/sidebar.html' %}
   {% include 'Nitor/navbar.html'  %}
@@ -9,10 +20,10 @@
    <div class="content" >
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 left">
           <div class="card text-center" >  
             <div class="card-header card-header-primary">
-              <h4 class="card-title">Candidate list</h4>
+              <h4 class="card-title left">Candidate list</h4>
             </div>   
             <div class="card-body">
               {% for key,values in candidates.items %}
@@ -23,7 +34,7 @@
                 <div class="col-md-8">
                   <div class="row text-left">
                     <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Name : {{values.fname}}&nbsp;{{values.lname}}</font></div>
-                    <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;">email : {{values.email}}</div>
+                    <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;"><span style="font-family: ubuntu;">email : {{values.email}}</span></div>
                       <div class="col-md-12">contact : {{values.contact}}</div>
 
                     </div>

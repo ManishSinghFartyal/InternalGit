@@ -214,11 +214,11 @@ def get_candidate_status(candidateid):
 
 
 
-def get_answered(userid, testid):
-    ''' This function will return the answered questions '''
+def get_answered(userid, qp_id,tid):
+    ''' This function will return the answered questions tid is that test id and testid is t'''
     details = {}
     scores = {}
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=qp_id)&Q(id=tid))
     scores["score"] = math.ceil(float(candidate.score))
     scores["mcq_score"] = candidate.correct_mcq
     scores["total_mcq_score"] = candidate.total_mcq_score
@@ -320,17 +320,16 @@ def questionpaper_remove_from_assigned(question_paper_id):
 def get_all_candidate_status():
     all_candiates_status = {}
     candidates_in_status = CandidateStatus.objects.all()
-    for candidate in candidates_in_status:        
-        all_candiates_status[candidate.id] = get_candidate_status2(candidate.candidate,candidate.question_paper)
-    print(all_candiates_status)
+    for candidate in candidates_in_status:
+        all_candiates_status[candidate.id] = get_candidate_status2(candidate.id,candidate.candidate,candidate.question_paper)
     return all_candiates_status
 
 
-def get_candidate_status2(candidateid, question_id):
+def get_candidate_status2(_id,candidateid, question_id):
     '''Will return candidate dictionary which contains the related status of candidate'''
     candidate_status = {}
     try:        
-        i = CandidateStatus.objects.get(Q(candidate=candidateid)&Q(question_paper=question_id))
+        i = CandidateStatus.objects.get(Q(candidate=candidateid)&Q(question_paper=question_id)&Q(id=_id))
         paper = QuestionPaper.objects.filter(id=i.question_paper)
         title = ""
         max_time = ""
@@ -338,7 +337,7 @@ def get_candidate_status2(candidateid, question_id):
             title = _p.title_qp
             max_time = _p.max_time
         candidate =get_candidate_profile(candidateid)
-        candidate_status = {'candidate':candidate, 'paperId':i.question_paper, 'paper_title':title,\
+        candidate_status = {'test_id':_id,'candidate':candidate, 'paperId':i.question_paper, 'paper_title':title,\
          'date':i.exam_date, 'attempted':i.attempted, 'score':i.score,\
          'time_taken':i.total_time, 'mcq_correct':i.correct_mcq,\
          'coding_correct':i.correct_ct, 'total_score':i.total_score,\

@@ -38,7 +38,7 @@
 									<img src="{% static 'admin/img/wrong.png' %}" width="70px" height="70px"> Not attempted
 									{% endif %}
 								</div>
-								<div class="col-md-12"><a href="/remassigned/{{cid}}/{{value.paperId}}" class="btn btn-sm btn-danger" >Remove</a></div>
+								<div class="col-md-12"><a href="/remassigned/{{cid}}/{{value.paperId}}/{{key}}" class="btn btn-sm btn-danger" >Remove</a></div>
 								{% if value.attempted == True%}
 								<div class="col-md-12"><a href="/showscore/{{cid}}/{{value.paperId}}" class="btn btn-sm btn-info"  >Show Answer sheet</a></div>
 								{% endif %}

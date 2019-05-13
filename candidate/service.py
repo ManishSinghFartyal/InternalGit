@@ -36,7 +36,7 @@ def get_test(candidate_id):
     return candidate_status
 
 def get_question_paper(testid):
-    '''GET question paper assigned to tests id'''
+    ''' GET question paper assigned to tests id '''
     i = 1
     paper = {}
     try:
@@ -90,9 +90,9 @@ def save_answer(answer, userid, testid):
     candidate.save()
     return mcq_ans
 
-def get_answered(userid, testid):
+def get_answered(userid, pid, tid):
     ''' to get questions already answered by candidate '''
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
     try:
         mcq_ans = ast.literal_eval(candidate.mcq_ans)
         mcq_ans = json.dumps(mcq_ans)
@@ -106,11 +106,11 @@ def get_answered(userid, testid):
     return mcq_ans, code_ans
 
 
-def save_time(starttime, userid, testid):
+def save_time(starttime, userid, pid, tid):
     '''  candidates times'''
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
     candidate.starttime = starttime
-    paper = get_question_paper(testid)
+    paper = get_question_paper(pid)
     endtime = starttime + timezone.timedelta(minutes=paper["max_time"])
     candidate.endtime = endtime
     candidate.save()
@@ -125,9 +125,9 @@ def get_remaining_time(seconds):
     return _h, _m, _s
 
 
-def save_code(queid, code, json1, userid, testid):
+def save_code(queid, code, json1, userid, testid, tid):
     '''Save code'''
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid)&Q(id=tid))
     code_ans = {}
     cases = {}
     for key, value in json1.items():
@@ -143,13 +143,13 @@ def save_code(queid, code, json1, userid, testid):
     candidate.save()
 
 
-def count_score(userid, testid):
+def count_score(userid, pid, tid):
     '''  count score  '''
     count = 0
     correct = 0
     total = 0
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
-    mcq_ans, code_ans = get_answered(userid, testid)
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
+    mcq_ans, code_ans = get_answered(userid, pid, tid)
     if mcq_ans != 0:
         for key, value in mcq_ans.items():
             question = Question.objects.get(id=key)

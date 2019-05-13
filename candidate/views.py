@@ -31,24 +31,24 @@ def candidate_home(request):
     return render(request, 'candidateHome.html', {'tests':tests})
 
 
-def starttest(request, testid):
+def starttest(request, pid, tid):
     ''' Starts test '''
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
             return index(request)
         #If user submit a mcq answer
-        request.session['testid'] = testid
+        request.session['testid'] = pid
         userid = get_id(user)
         starttime = timezone.localtime(timezone.now())
-        save_time(starttime, userid, testid)
-        test_str = "/candidate/test/"+testid
+        save_time(starttime, userid, pid, tid)
+        test_str = "/candidate/test/"+pid+"/"+tid
         request.session['currentpage'] = 1
         return HttpResponseRedirect(test_str)
     return index(request)
 
 
-def test(request, testid):
+def test(request, pid, tid):
     ''' Test fucntions '''
     user = request.user
     if user.is_authenticated:
@@ -58,11 +58,11 @@ def test(request, testid):
         if 'testid' not in request.session:
             return candidate_home(request)
         userid = get_id(user)
-        mcq_answered, code_answered = get_answered(userid, testid)
+        mcq_answered, code_answered = get_answered(userid, pid, tid)
         page = request.GET.get('page', 1)
-        i = testid
+        i = pid
         paper = get_question_paper(i)
-        candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+        candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
         candidate.attempted = True
         candidate.save()
         if request.method == 'POST':
@@ -73,11 +73,11 @@ def test(request, testid):
                 _h, _m, _s = get_remaining_time(time)
                 if request.GET.get('page') and request.POST.get("correct"):
                     ans = request.POST.get("correct")
-                    save_answer(ans, userid, testid)
+                    save_answer(ans, userid, pid, tid)
                     page = int(request.GET.get('page'))
                 else:
                     page = int(request.GET.get('page'))
-                mcq_answered, code_answered = get_answered(userid, testid)
+                mcq_answered, code_answered = get_answered(userid, pid, tid)
                 question = {'mcq':paper['mcq'], 'code':paper["coding"]}
                 question_paper = {}
                 for key, value in question.items():
@@ -107,7 +107,7 @@ def test(request, testid):
                 time = remanining.total_seconds()
                 _h, _m, _s = get_remaining_time(time)
                 page = int(request.GET.get('page'))
-                mcq_answered, code_answered = get_answered(userid, testid)
+                mcq_answered, code_answered = get_answered(userid, pid, tid)
                 question = {'mcq':paper['mcq'], 'code':paper["coding"]}
                 question_paper = {}
                 for key, value in question.items():
@@ -147,13 +147,13 @@ def test(request, testid):
             request.session['currentpage'] = page
             paginate = _p.page(page)
             pages = dict(paginate)
-        return render(request, 'test.html', {'testid':testid, 'paper_details':paper, \
+        return render(request, 'test.html', {'pid':pid, 'tid':tid, 'paper_details':paper, \
             'paper':question_paper, 'pages':pages, 'paginator':paginate, \
             'mcq_answered':mcq_answered, 'code_answered':code_answered, \
             'hour':int(_h), 'minute':int(_m), 'second':int(_s)})
     return redirect("/login")
 
-def savetest(request, testid):
+def savetest(request, pid, tid):
     ''' To save test '''
     user = request.user
     if user.is_authenticated:
@@ -161,7 +161,7 @@ def savetest(request, testid):
             return index(request)
         request.message = 'Successfully submitted test.'
         userid = get_id(user)
-        count_score(userid, testid)
+        count_score(userid, pid, tid)
         try:
             del request.session['testid']
         except KeyError:
@@ -170,19 +170,21 @@ def savetest(request, testid):
     return redirect("/login")
 
 
-def ajaxcall(request, queid):
+def ajaxcall(request, pid):
     ''' AJAX FUNCTION TO RUN CODE'''
+    print("manish")
     userid = get_id(request.user)
     code = request.GET['code']
-    testid = request.GET['testid']
+    testid = request.GET['testid']    
+    tid = request.GET['tid']
     language = request.GET['language']
     if language == 'python':
-        json = cPython.run_code2(code, userid, queid)
+        json = cPython.run_code2(code, userid, pid)
     elif language == 'java':
-        json = cJava.run_code2(code, userid, queid)
+        json = cJava.run_code2(code, userid, pid)
     elif language == 'javascript':
-        json = cNode.run_code2(code, userid, queid)
-    save_code(queid, code, json, userid, testid)
+        json = cNode.run_code2(code, userid, pid)
+    save_code(pid, code, json, userid, testid, tid)
     return JsonResponse(json)
 
 
@@ -191,13 +193,13 @@ def ex(request):
     return render(request, 'ex.html')
 
 
-def rules(request, testid):
+def rules(request, pid, tid):
     '''TO show rules'''
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
             return index(request)
-        return render(request, 'rules.html', {'testid':testid})
+        return render(request, 'rules.html', {'pid':pid, 'tid':tid})
     return redirect("/login")
 
 def remove_que(queid):

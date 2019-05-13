@@ -59,20 +59,21 @@ def add_user(request):
     return index(request)
 
 def login(request):
-    """ To check user login    """
+    """ To check user login """
     user = request.user
     if user.is_authenticated:
         return index(request)
     next_url = request.GET.get('next')
-    if request.method == 'POST':
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data
-            auth_login(request, user)
-            return index(request, next_url)
-        context = {'form':form}
     form = UserLoginForm()
     context = {'form':form}
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)        
+        if form.is_valid():
+            user = form.cleaned_data
+            print(user)
+            i = auth_login(request, user)
+            return index(request, next_url)
+        context = {'form':form}    
     return render(request, 'Nitor/loginNew.html', context)
 
 def user_logout(request):
@@ -303,9 +304,9 @@ def candidate_status(request, candidateid):
     cst = get_candidate_status(_id)
     return render(request, 'Nitor/candidateStatus1.html', {'status':cst, 'cid':candidateid})
 
-def rem_candidate_status(request, cid, pid):
+def rem_candidate_status(request, cid, pid, tid):
     """#To remove Assigned test of candidate"""
-    CandidateStatus.objects.get(candidate=cid, question_paper=pid).delete()
+    CandidateStatus.objects.get(candidate=cid, question_paper=pid, id=tid).delete()
     url = "/candidatestatus/"+cid
     return HttpResponseRedirect('/assignTest')
 
@@ -319,12 +320,13 @@ def remove_question_paper(request, pid):
         message = "Question paper is already assigned to some candidates cannot be deleted."
     return question_papers(request, message)
 
-def show_score(request, cid, pid):
+def show_score(request, cid, pid,tid):
     """ To show selected candidate score of his/her attempted assigned exam """
+    print(tid)
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            details, scores = get_answered(cid, pid)
+            details, scores = get_answered(cid, pid,tid)
             return render(request, 'Nitor/answerSheet.html', {'scores':scores, 'details':details})
     return index(request)
 

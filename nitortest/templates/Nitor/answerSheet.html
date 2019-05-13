@@ -32,7 +32,7 @@
                                 <li>
                                     <div class="col-sm-12">
                                         <div>
-                                            <p style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;font-size: 16px;">
+                                            <p style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;font-size: 16px;margin-top: -10px;">
                                                 {{value.description}}
                                             </p>
                                             
@@ -56,7 +56,7 @@
                                 <li style="list-style-position: inside;">
                                     <div class="col-sm-12" >
                                         <div>
-                                           <textarea disabled="true" style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;" cols="94" {% if value.description|length > 100  %}rows="14" {% else %}rows="10"{% endif %} >{{value.description.strip}}
+                                           <textarea disabled="true" style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;margin-top: -30px;" cols="94" {% if value.description|length > 100  %}rows="14" {% else %}rows="10"{% endif %} >{{value.description.strip}}
                                            </textarea>                                           
                                         </div>
                                         <div><span style="font-weight: bolder;font-size: 19px;"><u>Answer</u></span></div>
@@ -79,6 +79,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
+                                <hr>
                                 {% endfor %}
                             </ol>
                         </div>
