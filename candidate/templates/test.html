@@ -26,14 +26,14 @@
    font-size: 24px;"
  } 
  .loader {
-  margin-left: 300px;
-  border: 16px solid #f3f3f3;
+  margin-left: 200px;
+  border: 10px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid green;
+  border-top: 12px solid green;
   width: 80px;
   height: 80px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
+  -webkit-animation: spin .1s linear infinite; /* Safari */
+  animation: spin .99s linear infinite;
 }
 
 /* Safari */
@@ -200,6 +200,8 @@
             </div>
             {% endif %}
           </div>
+          {% else %}
+          <p class="lead">Only one question.</p>
           {% endif %}
         </div>
       </div>   

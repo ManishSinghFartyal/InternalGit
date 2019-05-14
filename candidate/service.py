@@ -70,14 +70,14 @@ def get_question_paper(testid):
     'mcq':mcq, 'coding':code, 'max_time':q_paper.max_time}
     return paper
 
-def save_answer(answer, userid, testid):
+def save_answer(answer, userid, pid, tid):
     ''' to save candidate answer into dATAbase '''
     ans_split = answer.split("|")
     question = ans_split[0]
     ans = ans_split[1]
-    testid = str(testid)
+    testid = str(pid)
     #GETTING CANDIDATE OBJECT
-    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid))
+    candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid)&Q(id=tid))
     #Saving MCQ answered
     try:
         mcq_ans = ast.literal_eval(candidate.mcq_ans)

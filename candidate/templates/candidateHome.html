@@ -2,7 +2,8 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
-<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;">
+
+<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;  background: #fff0 !important;">
  {% include 'navbar.html'  %}         
  <form>
   {% csrf_token %}
@@ -10,64 +11,77 @@
    <div class="content"> 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12 ">
-          <div class="card ">
+        <div class="col-sm-12"  style="background-image: url({%static 'admin/img/background1.jpg'%});box-shadow: none !important;margin-top: 3px;border: none !important;border-radius:0px !important;">
+          <div class="card"   style="background: #5670;box-shadow: none !important;margin-top: 3px;border: none !important;border-radius:0px !important;">
             <div class="card-header card-header-primary">
               <h4 class="card-title">Tests assigned to you</h4>
             </div>
-            <div class="card-body  jumbotron">
-              {% if not tests %}
-              <br><br>
-              <h4 class="lead">No tests assigned !<br><br> Please contact admin.</h4>
-              {% endif %}
-             {% for key,value in tests.items %} 
-             <div class="row" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 10px 10px 10px 10px;box-shadow: 2px 2px 10px #1119;">
-              <div class="col-md-2" style="background: #1113;border-top-left-radius:50px;border-bottom-left-radius:50px;padding: 10px 10px 10px 10px;">
-                <img src="{% static 'admin/img/testAssigned.png' %}" width="160px" height="160px">
-              </div>
-              <div class="col-md-1" style="{% if value.attempted == False%} background: #9113;{% else %}background: #1913;{% endif %}"></div>
-              <div class="col-md-7" style="{% if value.attempted == False%} background: #9113;{% else %}background: #1913;{% endif %}">
-                <div class="row" style="padding: 10px 10px 10px 10px;">
-                  <div class="col-md-12"><hr></div>
-                  <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Test Assigned : {{value.paper_title}}</font></div>
-                  <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Scheduled in :{{value.date}}</font></div>
-                  <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Time limit : {{value.max_time}} minutes</font></div>
-                  <div class="col-md-12"><hr></div>                           
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="row">&nbsp;</div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="row">&nbsp;</div>
-                    
-                    {% if value.attempted == True%}
-                    <img src="{% static 'admin/img/right.svg' %}" width="80px" height="70px" >Attempted
-                    {% else %}
-                    <img src="{% static 'admin/img/wrong.png' %}" width="50px" height="50px"> Not attempted
-                    {% endif %}
-                  </div>
-                  <div class="row">&nbsp;</div>
-                  <div class="col-md-12"></div>
-                  {% if value.attempted == False%}
-                  <div class="col-md-12"><a href="/candidate/rules/{{value.paperId}}/{{key}}" class="btn btn-success btn-sm">Give test</a>  </div>
+            <div class="card-body" style="background: #5670;padding: 30px 30px 30px 30px;">
+              <div class="row">
+                <div class="col-sm-7">
+                  {% if not tests %}
+                  <br><br>
+                  <h4 class="lead">No tests assigned !<br><br> Please contact admin.</h4>
                   {% endif %}
+                  {% for key,value in tests.items %} 
+                  <div class="row" style="background: #2226; border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 5px 5px 5px 5px;">
+                    <div class="col-sm-2" style="background: #fff6;border-top-left-radius:50px;border-bottom-left-radius:50px;padding: 15px 5px 5px 15px;">
+                      <img src="{% static 'admin/img/testAssigned.png' %}" width="90px" height="90px">
+                    </div>
+                    <div class="col-sm-1" style="{% if value.attempted == False%} background: #9118;{% else %}background: #1918;{% endif %}"></div>
+                    <div class="col-sm-7" style="{% if value.attempted == False%} background: #9118;{% else %}background: #1918;{% endif %}">
+                      <div class="row" style="padding-top: 15px;">
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Test Assigned : {{value.paper_title}}</font></div>
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Scheduled in :{{value.date}}</font></div>
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Time limit : {{value.max_time}} minutes</font></div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="row">&nbsp;</div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          {% if value.attempted == True%}
+                          <img src="{% static 'admin/img/right.svg' %}" width="80px" height="70px" >
+                          {% else %}
+                          <img src="{% static 'admin/img/wrong.png' %}" width="50px" height="50px"> <br>
+                          {% endif %}
+                        </div>
+                        {% if value.attempted == False%}
+                        <div class="col-sm-12"><a href="/candidate/rules/{{value.paperId}}/{{key}}" class="btn btn-success btn-sm">Give test</a>  </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <br>          
+                  {% endfor %}
+                </div>                
+                <div class="col-sm-5">
+                  <div class="row" style="background: #3333;margin-left: 5px;">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10" style="color: black;font-weight: bolder;padding: 10px 10px 10px 10px;"><h3><i><b><u>Rules:</u></b></i></h3></div>
+                    <div class="col-sm-12">
+                      <ol style="font-weight: bolder;font-size: 16px; font-style: italic; line-height: 30px;">
+                        <li>Once test has started it cannot be restart.</li>
+                        <li>Each test has time limit, so you need to attempt test in that time limit.</li>
+                        <li>After attempting each question you need to save the answer.</li>
+                        <li>Once test is completed you need to make final submission.</li>
+                        <li>Test will be evaluated on the basis of your attempt and certain parameters (tab changes, time taken etc.).</li>
+                      </ol>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </div>                
             </div>
-            <br>          
-            {% endfor %}
           </div>
         </div>
-      </div> 
-      {% include 'Nitor/footer.html'  %}           
-    </div>
+        
+      </div>              
+    </div>    
   </div>
-</div>
+{% include 'Nitor/footer.html'  %}
 </div>
 </form>
 </div>
-
 <script type="text/javascript">        
   (function(){
     sessionStorage.clear();

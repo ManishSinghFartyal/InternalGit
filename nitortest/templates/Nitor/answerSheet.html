@@ -23,6 +23,11 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card"  style="margin-top: -10px;">
+                        {%  if not details %}
+                        <div  style="padding: 50px 0px 0px 50px;">
+                            <p class="lead" style="font-weight: bolder;">Not attempted any question !</p>
+                        </div>                        
+                        {% endif %}
                         <div class="row" style="padding: 10px 10px 10px 20px;color: black;font-size: 15px;">
                             <ol>
                                 {% for key,value in details.items %}
