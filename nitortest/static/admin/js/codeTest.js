@@ -16,9 +16,19 @@ function addTestCase(){
       input = document.createElement('input'); 
       input.setAttribute('name','input_'+count);
       input.setAttribute('size','35');
-      input.setAttribute('id','id_input_'+count) ;       
-      document.getElementById('tc').appendChild(input) ;
+      input.setAttribute('id','id_input_'+count) ;
+      document.getElementById('tc').appendChild(input);
 
+     /* add_more = document.createElement('a'); 
+      add_more.setAttribute('name','add_more_'+count);
+      add_more.setAttribute('href','#');
+      add_more.setAttribute('onclick','add_more_input(this)');      
+      add_more.setAttribute('size','35');
+      add_more.setAttribute('id','add_more_'+count);
+      add_more.innerHTML='+';
+
+      document.getElementById('tc').appendChild(add_more);
+*/
       output_label = document.createElement('label');
       output_label.setAttribute('for','id_output_'+count);
       output_label.setAttribute('id','id_output_label_'+count) ; 
@@ -215,5 +225,26 @@ function showAddQuestion(){
   }    
 };
 
+/*function add_more_input(c){
+    count_array = c.name.split("_");
+    count=Number(count_array[2])+1;
+    console.log(count)   
 
+    input = document.createElement('input'); 
+    input.setAttribute('name',c.name);
+    input.setAttribute('placeholder',"Input value "+count++);
+    input.setAttribute('size','35');
+    input.setAttribute('id',c.id) ;
+    document.getElementById('tc').appendChild(input);
+
+    add_more = document.createElement('a'); 
+    add_more.setAttribute('name','add_more_'+count);
+    add_more.setAttribute('href','#');
+    add_more.setAttribute('onclick','add_more_input(this)');      
+    add_more.setAttribute('size','35');
+    add_more.setAttribute('id','add_more_'+count);
+    add_more.innerHTML='+';  
+};
+
+*/
 

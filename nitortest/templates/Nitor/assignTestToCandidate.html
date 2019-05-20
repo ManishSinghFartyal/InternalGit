@@ -1,53 +1,77 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load static %}
-{% block content %}
-<link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
-<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>  
-<style type="text/css">
-    strong{
-        font-size: 13px;
-        font-weight: bolder;
-        color:red;
-    }
-    #left{
-        font-weight: bolder;
-        background: #5937;
-        padding: 10px 10px 10px 10px;
-        border-radius: 2px;
-        font-family: ubuntu;
-    }
-    .marquee1{        
-        font-size: 20px;
-        font-weight: bolder;
-        padding: 10px 10px 10px 10px;
-        border-radius: 2px;
-        font-family: ubuntu;
-        color: #12f9;
-        border-radius: 20px;
-    }
-    .marquee2{
-        font-size: 20px;
-        font-weight: bolder;
-        padding: 10px 10px 10px 10px;
-        border-radius: 2px;
-        font-family:ubuntu;
-        color: #111;
-        border-radius: 20px;
-    }  
-    #icon{
-        font-size: 27px;
-        position:absolute;
-        color: red;
-        background: #1113;
-        padding: 2px 2px 2px 2px;
-    }
-</style>
-
-<div class="wrapper ">
+    {% extends 'base.html' %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    {% block content %}
+    <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>  
+    <style type="text/css">
+        strong{
+            font-size: 13px;
+            font-weight: bolder;
+            color:red;
+        }
+        #left{
+            font-weight: bolder;
+            background: #5937;
+            padding: 10px 10px 10px 10px;
+            border-radius: 2px;
+            font-family: ubuntu;
+        }
+        .marquee1{
+            font-size: 20px;
+            font-weight: bolder;
+            padding: 10px 10px 10px 10px;
+            border-radius: 2px;
+            font-family: ubuntu;
+            color: #12f9;
+            border-radius: 20px;
+        }
+        .marquee2{
+            font-size: 20px;
+            font-weight: bolder;
+            padding: 10px 10px 10px 10px;
+            border-radius: 2px;
+            font-family:ubuntu;
+            color: #111;
+            border-radius: 20px;
+        }  
+        #icon{
+            font-size: 27px;
+            position:absolute;
+            color: red;
+            background: #1113;
+            padding: 2px 2px 2px 2px;
+        }
+        td{
+            border-top: solid black 1px;
+            border-left:  solid black 1px;
+            border-right: solid black 1px;
+        }
+        tr{
+            border: solid black 1px;
+        }
+        thead,th{
+            border: solid #111 2px;
+        }
+        #myInput {
+          background-position: 10px 10px;
+          background-repeat: no-repeat;
+          width: 100%;
+          font-size: 15px;
+          padding: 10px 20px 10px 40px;
+          border: 2px solid #ddd;
+          border-radius: 20px;
+          margin-bottom: 12px;
+      }
+      ::placeholder{
+          color: blue;
+          font-weight: bold;
+      }
+  </style>
+  <div class="wrapper ">
     {{que_paper_assigned}}
     {% include 'Nitor/sidebar.html' %}
-    {% include 'Nitor/navbar.html'  %}
+    {% include 'Nitor/navbar.html' %}
     <div class="main-panel">
         <div class="content" style="margin-top: 20px;">
             <div class="container-fluid">
@@ -61,122 +85,128 @@
                                     <strong>Error : {{message}}</strong>
                                     {% endfor %}
                                 </div> 
-                <!--
-                Candidates list to be select first
-            -->
-            <div id='c_list' class="col-md-12">
-                <div class="col-md-12 text-info"  style="background: #9997;width: 98%; border-radius: 10px;padding: 4px 4px 4px 4px;">
-                    <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;"> <b><u>Assign Test</u></b></h4>
-                </div> 
-                <div class="row"><hr></div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label for="candidate">*Select candidate</label>
-                            </div>
-                            <div class="col-sm-12">
-                                <select name="candidate" id="candidate" class="form-control form-control-md browser-default custom-select"  onchange="findAssigned(this)" required="true">
-                                    <option disabled="true" selected="true">Select candidate</option>
-                                    {% for key,value in candidates.items %}
-                                    <option  name="{{value.user_id}}" value="{{value.user_id}}">{{value.fname}}&nbsp;{{value.lname}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3">
-                        <div class="row">
-                            <div class="col-sm-12" >
-                                <label for="paper" id="paper-label" style="visibility: hidden;">*Select Test</label>
-                            </div>
-                            <div class="col-sm-12">
-                                <select style="visibility: hidden;" name="paper" id="paper" class="form-control form-control-md browser-default custom-select" onchange="showBox();">
-                                    <option value="Select candidate" disabled="true" selected="true">Select Test</option>
-                                    {% for question in papers %}
-                                    <option value="{{question.id}}"  id="test-{{question.id}}">{{question.title_qp}}</option>
-                                    {% endfor %}
-                                </select>
+                    <!--
+                    Candidates list to be select first
+                -->
+                <div id='c_list' class="col-md-12">
+                    <div class="col-md-12 text-info"  style="background: #9997;width: 98%; border-radius: 10px;padding: 4px 4px 4px 4px;">
+                        <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;"> <b><u>Assign Test</u></b></h4>
+                    </div> 
+                    <div class="row"><hr></div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="candidate">*Select candidate</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <select name="candidate" id="candidate" class="form-control form-control-md browser-default custom-select"  onchange="findAssigned(this)" required="true">
+                                        <option disabled="true" selected="true">Select candidate</option>
+                                        {% for key,value in candidates.items %}
+                                        <option  name="{{value.user_id}}" value="{{value.user_id}}">{{value.fname}}&nbsp;{{value.lname}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3">
-                        <div class="row">
-                            <div class="col-sm-12" id="date-label" style="visibility: hidden;"><label for="date">*Test Date</label></div>
-                            <div class="col-sm-12" id="date-input" style="visibility: hidden;"><input type="date" class="form-control" required="true" name="date_str"></div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-sm-12" >
+                                    <label for="paper" id="paper-label" style="visibility: hidden;">*Select Test</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <select style="visibility: hidden;" name="paper" id="paper" class="form-control form-control-md browser-default custom-select" onchange="showBox();">
+                                        <option value="Select candidate" disabled="true" selected="true">Select Test</option>
+                                        {% for question in papers %}
+                                        <option value="{{question.id}}"  id="test-{{question.id}}">{{question.title_qp}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-sm-12" id="date-label" style="visibility: hidden;"><label for="date">*Test Date</label></div>
+                                <div class="col-sm-12" id="date-input" style="visibility: hidden;"><input type="date" class="form-control" required="true" name="date_str"></div>
+                            </div>
+                        </div>
+                    </div> 
+                    <br>
+                    <div class="col-md-12 ">
+                        <button class="btn btn-md btn-success text-center"> Submit</button>
                     </div>
-                </div> 
-                <br>
-                <div class="col-md-12 ">
-                    <button class="btn btn-md btn-success text-center"> Submit</button>
+                    <div class="row"><hr></div>
+                    <div class="row text-center" style="border-radius: 20px;"><marquee behavior="" direction="right" class="marquee1" id="marquee">Select candidate &nbsp;<i class="material-icons" id="icon">person</i></marquee></div>
                 </div>
-                <div class="row"><hr></div>
-                <div class="row text-center" style="border-radius: 20px;"><marquee behavior="" direction="right" class="marquee1" id="marquee">Select candidate &nbsp;<i class="material-icons" id="icon">person</i></marquee></div>
+                <div>
+                </div>
             </div>
-            <div>
-            </div>
-        </div>
+        </form>
+
         <!-- Records of previously assigned -->
         {% if all_candidate_status %}
-        <div class="card">
-            <div class="col-md-12 text-info" style="background: #9997;width: 98%; border-radius: 10px;padding: 4px 4px 4px 4px;margin-top: 3px;margin-left: 10px;">
-                <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;" ><b><u>Previously assigned</u>&nbsp;<img src="{% static 'admin/img/testAssigned.png' %}" width="25px" height="25px"></b></h4>
+        <div class="card" style="padding: 10px 10px 10px 10px;">
+            <div class="row">                
+                <div class="col-sm-12 text-info" style=" border-radius: 10px;padding: 4px 4px 4px 4px;margin-top: 3px;">
+                    <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;" ><b><u>Previously assigned</u>&nbsp;<img src="{% static 'admin/img/testAssigned.png' %}" width="25px" height="25px"></b></h4>
+                </div>
+                <div class="col-sm-12 container-fluid"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+                </div>
+                <div class="col-sm-12"><hr> </div>
+                <div class="col-sm-12">
+                    <div class="table-responsive" style="border-top: solid black 1px;border-left:  solid black 1px;border-right: solid black 1px; font-family: ubuntu">
+                        <table class="table" id="myTable" style="border:  solid 2px black;">
+                            <thead class=" text-primary" id="left"> 
+                                <th >
+                                    <b> Name</b>
+                                </th>
+                                <th>
+                                    <b>email</b>
+                                </th>
+                                <th>
+                                    <b>Test assigned</b>
+                                </th>
+                                <th>
+                                    <b>Max time</b>
+                                </th>
+                                <th>
+                                    <b>Attempted</b>
+                                </th>
+                                <th><b>Date</b></th> 
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                {% for key,value in all_candidate_status.items %}
+                                <tr>
+                                    <td id="left">{{value.candidate.fname}}&nbsp;{{value.candidate.lname}}</td>
+                                    <td>{{value.candidate.email}}</td>
+                                    <td>{{value.paper_title}}</td>
+                                    <td>{{value.max_time}}</td>
+                                    <td>{{value.attempted}}</td>
+                                    <td>{{value.date}}</td>
+                                    <td>
+                                        {% if value.attempted == True %}
+                                        <a class="btn btn-sm btn-success" href="/showscore/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}">  <i class="material-icons">visibility</i>
+                                        </a>
+                                        {% else %}
+                                        <a class="btn btn-sm" style="background: #9999;"><i class="material-icons">visibility</i>
+                                        </a>
+                                        {% endif %}
+                                        <a class="btn btn-sm btn-danger" href="/remassigned/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}" onclick="return confirmRemove();"> <i class="material-icons">clear</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="row"><hr>   </div>
-            <div class="table-responsive" style="padding-left: 10px;padding-right: 10px;font-family: ubuntu">
-                <table class="table">
-                    <thead class=" text-primary" id="left"> 
-                        <th >
-                            <b> Name</b>
-                        </th>
-                        <th>
-                            <b>email</b>
-                        </th>
-                        <th>
-                            <b>Test assigned</b>
-                        </th>
-                        <th>
-                            <b>Max time</b>
-                        </th>
-                        <th>
-                            <b>Attempted</b>
-                        </th>
-                        <th><b>Date</b></th> 
-                        <th></th>
-                    </thead>
-                    <tbody>
-                        {% for key,value in all_candidate_status.items %}
-                        <tr>
-                            <td id="left">{{value.candidate.fname}}&nbsp;{{value.candidate.lname}}</td>
-                            <td>{{value.candidate.email}}</td>
-                            <td>{{value.paper_title}}</td>
-                            <td>{{value.max_time}}</td>
-                            <td>{{value.attempted}}</td>
-                            <td>{{value.date}}</td>
-
-                            <td>
-                                {% if value.attempted == True %}
-                                <a class="btn btn-sm btn-success" href="/showscore/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}">  <i class="material-icons">visibility</i>
-                                </a>
-                                {% else %}
-                                <a class="btn btn-sm" style="background: #9999;"><i class="material-icons">visibility</i>
-                                </a>
-                                {% endif %}
-                                <a class="btn btn-sm btn-danger" href="/remassigned/{{value.candidate.user_id}}/{{value.paperId}}/{{value.test_id}}" onclick="return confirmRemove();"> <i class="material-icons">clear</i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
-            </div> 
         </div>
     </div>
-</form>
 </div> 
 </div>
 </div>
@@ -184,51 +214,70 @@
 </div>
 <script type="text/javascript">
     function findAssigned(tag){
-/*        op = document.getElementById('paper').getElementsByTagName('option');
-        for(var i=1; i<op.length; i++){
-            op[i].disabled = false;
+    /*        op = document.getElementById('paper').getElementsByTagName('option');
+            for(var i=1; i<op.length; i++){
+                op[i].disabled = false;
+            }
+            document.getElementsByTagName('option').disabled = false;
+            user_id = tag.value;
+            {% for key,value in candidates.items %}
+            userid ="{{value.user_id}}"
+            if(userid == user_id){
+                {% for p in value.que_paper_assigned %}
+                option = "test-{{p}}"
+                document.getElementById(option).disabled = true;
+                {% endfor %}
+            }
+            {% endfor %}*/
+            document.getElementById("paper-label").style.visibility="visible";
+            document.getElementById("paper").style.visibility="visible";  
+            i = document.createElement('i');
+            i.setAttribute('class','material-icons');
+            i.setAttribute('id','icon');
+            i.innerHTML='file_copy';
+            document.getElementById("marquee").textContent = "*Select test - ";
+            document.getElementById("marquee").className = "marquee2";
+            document.getElementById("marquee").appendChild(i);
         }
-        document.getElementsByTagName('option').disabled = false;
-        user_id = tag.value;
-        {% for key,value in candidates.items %}
-        userid ="{{value.user_id}}"
-        if(userid == user_id){
-            {% for p in value.que_paper_assigned %}
-            option = "test-{{p}}"
-            document.getElementById(option).disabled = true;
-            {% endfor %}
-        }
-        {% endfor %}*/
-        document.getElementById("paper-label").style.visibility="visible";
-        document.getElementById("paper").style.visibility="visible";  
-        i = document.createElement('i');
-        i.setAttribute('class','material-icons');
-        i.setAttribute('id','icon');
-        i.innerHTML='file_copy';
-        document.getElementById("marquee").textContent = "*Select test - ";
-        document.getElementById("marquee").className = "marquee2";
-        document.getElementById("marquee").appendChild(i);
-    }
-    function showBox(){
-        document.getElementById("date-label").style.visibility="visible";
-        document.getElementById("date-input").style.visibility="visible";
-        i = document.createElement('i');
-        i.setAttribute('class','material-icons');
-        i.setAttribute('id','icon');
-        i.innerHTML='access_time';    
-        document.getElementById("marquee").textContent = "*Select Date - ";
-        document.getElementById("marquee").className = "marquee1";
-        document.getElementById("marquee").appendChild(i);        
+        function showBox(){
+            document.getElementById("date-label").style.visibility="visible";
+            document.getElementById("date-input").style.visibility="visible";
+            i = document.createElement('i');
+            i.setAttribute('class','material-icons');
+            i.setAttribute('id','icon');
+            i.innerHTML='access_time';    
+            document.getElementById("marquee").textContent = "*Select Date - ";
+            document.getElementById("marquee").className = "marquee1";
+            document.getElementById("marquee").appendChild(i);        
 
+        }
+        function confirmRemove(){
+          result = confirm("Are you sure ?");
+          if(result){
+            return true;
+        }
+        else{
+            return false;
+        }
+        
     }
-    function confirmRemove(){
-      result = confirm("Are you sure ?");
-      if(result){
-        return true;
-    }
-    else{
-        return false;
-    }
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }       
+}
 }
 </script>
 {% endblock %}

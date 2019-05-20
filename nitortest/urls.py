@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^addQuestion/$', views.show_add_question, name='addCode'),
     url(r'^successQue/$', views.success_que, name='successQue'),
     url(r'^createQuePaper/$', views.create_que_paper, name='createQuePaper'),
-    url(r'^assignTest/$', views.assign_test2, name='assignTest'),
+    #url(r'^assignTest/$', views.assign_test2, name='assignTest'),
     url(r'^questionPapers/$', views.question_papers, name='questionPapers'),
     url(r'^fetchQuestionPaper/(?P<questionid>\d+)', views.fetch_question_paper,\
      name='fetchQuestionPaper'),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('showscore/<cid>/<pid>/<tid>', views.show_score, name='showscore'),
     url(r'^listQuestions/$', views.list_questions, name='listQuestion'),
     url(r'^removeQue/(?P<queid>\d+)', views.remove_question, name='removeQue'),
+    path('assignTest/<name>', views.assign_test2, name='assignTest'),
 ]

@@ -4,7 +4,7 @@ class Factorial
 {
    public static void main(String args[])
    {
-      int n, c, fact = 1;
+      int n, c, fact = 1;     
      
       Scanner in = new Scanner(System.in);
      
@@ -14,11 +14,10 @@ class Factorial
          System.out.println("Not valid");
       else
       {
-         for (c = 1; c <= n; c++)
-            fact = fact*c;
-     
-         System.out.println(fact);
       }
    }
 }
-
+                      
+                      
+                      
+                      

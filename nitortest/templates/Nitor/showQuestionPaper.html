@@ -14,11 +14,10 @@
     font-size: 20px;
   }
 </style>
-<div class="wrapper" style="margin-left: -250px;">
+{% include 'Nitor/sidebar.html' %}
   {% include 'Nitor/navbar.html'  %}
   <div class="main-panel">      
     <div class="content">
-      <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
             <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
@@ -30,7 +29,6 @@
                     <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Created question papers</u></b></h3>
                   </div>
                   <form>
-
                   <div class="table-responsive" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px;border-radius: 10px;width: 98%; border-radius: 10px;margin-top: 10px;">
                     <table class="table">
                       <thead class=" text-primary"> 
@@ -62,9 +60,9 @@
                     <div class="col-md-12"><br></div>
                     <ol>
                       {% for key,value in paper.mcq.items %}
-                      <div class="col-sm-10">
-                        <li>
-                          {{value.desc}}
+                      <div class="col-sm-12">
+                        <li style="line-height: 40px;">
+                          <span style="background: #1113;padding: 8px 8px 8px 8px; border-radius: 8px;">{{value.desc}}</span>
                           <br>
                           <ol>
                             {%for k,v in value.options.items %}
@@ -88,8 +86,10 @@
                     <ol>
                       {% for key,value in paper.coding.items %}
                       <div class="col-sm-12">
-                        <li>
+                        <li style="line-height: 45px;">
+                           <span style="background: #1113;padding: 8px 8px 8px 8px; border-radius: 8px;">
                           {{value.title}}
+                        </span>
                           <br>
                         </li>
                         <br>
@@ -113,8 +113,6 @@
           </div>
         </form>
       </div> 
-    </div>
   </div>
-</div>
 
 {% endblock %}

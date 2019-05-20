@@ -52,6 +52,7 @@ main,
 nav,
 section {
   display: block;
+  margin: 0 auto; 
 }
 
 body {
@@ -14522,7 +14523,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .sidebar-wrapper .navbar-form .input-group {
   font-size: 1.7em;
   height: 36px;
-  width: 78%;
+  width: 100%;
   padding-left: 17px;
 }
 
@@ -16783,7 +16784,7 @@ label {
 .card.bg-primary,
 .card.card-rotate.bg-primary .front,
 .card.card-rotate.bg-primary .back {
-  background: linear-gradient(90deg, #ab7321, #3b0748e0);
+  background: linear-gradient(50deg, #2590b6ab, #1b0d1f72);
 }
 
 .card .card-header-info .card-icon,

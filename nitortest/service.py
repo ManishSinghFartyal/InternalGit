@@ -317,13 +317,12 @@ def questionpaper_remove_from_assigned(question_paper_id):
             existed_in.append(c_d.candidate)
     return existed_in
 
-def get_all_candidate_status():
+def get_all_candidate_status(name="ALL"):
     all_candiates_status = {}
     candidates_in_status = CandidateStatus.objects.all()
     for candidate in candidates_in_status:
         all_candiates_status[candidate.id] = get_candidate_status2(candidate.id,candidate.candidate,candidate.question_paper)
-    return all_candiates_status
-
+    return all_candiates_status    
 
 def get_candidate_status2(_id,candidateid, question_id):
     '''Will return candidate dictionary which contains the related status of candidate'''
@@ -345,3 +344,5 @@ def get_candidate_status2(_id,candidateid, question_id):
     except ObjectDoesNotExist:
         candidate_status = {}
     return candidate_status
+
+

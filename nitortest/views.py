@@ -67,7 +67,7 @@ def login(request):
     form = UserLoginForm()
     context = {'form':form}
     if request.method == 'POST':
-        form = UserLoginForm(request.POST)        
+        form = UserLoginForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data
             print(user)
@@ -308,7 +308,7 @@ def rem_candidate_status(request, cid, pid, tid):
     """#To remove Assigned test of candidate"""
     CandidateStatus.objects.get(candidate=cid, question_paper=pid, id=tid).delete()
     url = "/candidatestatus/"+cid
-    return HttpResponseRedirect('/assignTest')
+    return HttpResponseRedirect('/assignTest/name="ALL"')
 
 def remove_question_paper(request, pid):
     """ To remove question paper """
@@ -356,12 +356,12 @@ def remove_question(request, queid):
                 questions, 'message' : message})
     return index(request)
 
-def assign_test2(request):
+def assign_test2(request, name="ALL"):
     """ Code to assign the test for canidates."""
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            all_candidate_status = get_all_candidate_status()
+            all_candidate_status = get_all_candidate_status(name)
             context = {'candidates':get_all_candidates(), 'papers':QuestionPaper.objects.all(), "all_candidate_status":all_candidate_status}
             if request.method == 'POST':
                 ids = request.POST.get('candidate')                
@@ -378,7 +378,6 @@ def assign_test2(request):
                           total_score=total_score, total_code_score=code_score,\
                           total_mcq_score=mcq_score)
                 _c.save()
-                return HttpResponseRedirect('/assignTest')
+                return HttpResponseRedirect('/assignTest/name="ALL"')
             return render(request, 'Nitor/assignTestToCandidate.html', context)
         return index(request)
-

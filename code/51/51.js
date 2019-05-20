@@ -6,15 +6,9 @@ var rl = readline.createInterface({
   terminal: false
 });
 
-rl.on('line', function (line) {
-  fact=1;
-  if(line<0){console.log("Not valid");}
-  else{
-   for(i=1;i<=line;i++){
-   fact = fact*i;
-   }
-   console.log(fact);
-   }
-});    
-
+rl.on('value', function (value) {
+   /* write your code from here */
+   /* take value as the number for which factorial needs to be find */
+   console.log("Factorial")
+});
                     

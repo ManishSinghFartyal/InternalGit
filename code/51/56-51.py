@@ -1,10 +1,7 @@
-num = int(input())  
-if num > 1:
-   for i in range(num):
-       if (num % i) == 0:  
-           print(num,"is not a prime number")            
-           break
-   else:
-       print(num,"is a prime number")     
+string=input()
+# write your program from here
+if string == string[::-1]:
+	print("yes")
 else:
-   print(num,"is not a prime number")
+	print("no")
+                      
