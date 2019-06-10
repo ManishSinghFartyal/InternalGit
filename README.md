@@ -1,4 +1,4 @@
-# InternalGit
+# InternalGit -: Online test platform
 ## Project in taking online test for the candidates on different coding language and knowledge based MCQ.
 ## Usage
    This project can replace the manual and typical machine test procedure for a candidate who has came for the interview process. <br/>
