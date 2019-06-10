@@ -20,3 +20,4 @@
 (4) Make modifications whichever is required (mostly in the UI part :) ), test heavily. Add tests if you can. <br/>
 (5) Keep commits simple and clear and please make it informative. Show what, but also explain why. <br/>
 (6) Submit a Pull Request from your feature branch to master. <br/>
+(7) All the best
