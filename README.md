@@ -15,7 +15,7 @@
         (b) Attempt the test within the time limits and specified rules.
 ## For contributers
 (1) Fork this repo. <br/>
-(2) Check out the code and made necessary changes to run the code,
+(2) Check out the code and made necessary changes to run the code, <br/>
 (3) Create your own branch. <br/>
 (4) Make modifications whichever is required (mostly in the UI part :) ), test heavily. Add tests if you can. <br/>
 (5) Keep commits simple and clear and please make it informative. Show what, but also explain why. <br/>
