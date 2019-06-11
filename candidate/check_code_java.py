@@ -1,9 +1,8 @@
-
-'''
+"""
 Following function will create a output python file using file handling in python
 which stores the code passed through parameters and will run this code and
 return the output to be print on UI
-'''
+"""
 import ast
 import json
 import os
@@ -13,12 +12,13 @@ from django.conf import settings
 from nitortest.models import Question
 MEDIA = settings.MEDIA_ROOT
 
+
 def run_code(code, userid):
-    '''
+    """
         a contains code user entered in given code editor
         now this code needs to create a folder which contains the user code into its respective
         folder.
-    '''
+    """
     hi_code = MEDIA+str(userid)+"/"+str(userid)+'.java'
     _a = code
     os.makedirs(os.path.dirname(hi_code), exist_ok=True)
@@ -35,11 +35,11 @@ def run_code(code, userid):
 
 
 def fetch_test_cases(queid):
-    '''
+    """
     a contains code user entered in given code editor
     now this code needs to create a folder which contains the user code into its respective
     folder.
-    '''
+    """
     que = Question.objects.get(id=queid)
     if que.qtype == "ct":
         testcases = ast.literal_eval(que.testcases)
@@ -48,9 +48,8 @@ def fetch_test_cases(queid):
     return testcases
 
 
-
 def get_output(testcase, code, userid):
-    ''' TO get output'''
+    """ TO get output"""
     testcase = str.encode(testcase)
     _a = code
     class_name = get_class_name(_a)
@@ -77,13 +76,12 @@ def get_output(testcase, code, userid):
     return new_output
 
 
-
 def run_code2(code, userid, queid):
-    '''
+    """
         a contains code user entered in given code editor
         now this code needs to create a folder which contains the user code into its respective
         folder.
-    '''
+    """
     testcases = fetch_test_cases(queid)
     answers = {}
     for case in testcases:
@@ -91,16 +89,19 @@ def run_code2(code, userid, queid):
         old_output = testcases[case]['output']
         new_output = get_output(value, code, userid)
         if new_output.strip() != old_output.strip():
-            answers[case] = {"input":value, "result":"incorrect", "your_output":new_output, \
-            "expected_output":old_output}
+            answers[case] = {
+                "input":value, "result": "incorrect", "your_output": new_output,
+                "expected_output": old_output}
         else:
-            answers[case] = {"result":"correct", "your_output":new_output,\
-             "expected_output":old_output}
+            answers[case] = {
+                "result": "correct", "your_output": new_output,
+                "expected_output": old_output
+            }
     return answers
 
 
 def get_class_name(code):
-    ''' TO GET CLASS NAME '''
+    """ TO GET CLASS NAME """
     lines = code.split("\n")
     for line in lines:
         if 'class' in line:

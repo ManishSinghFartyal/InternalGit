@@ -1,4 +1,4 @@
-''' Provides candidates based services '''
+""" Provides candidates based services """
 import ast
 import json
 from django.db.models import Q
@@ -8,7 +8,7 @@ from nitortest.models import Profile, CandidateStatus, QuestionPaper, Question
 
 
 def get_id(user):
-    ''' get id by username '''
+    """ get id by username """
     try:
         profile = Profile.objects.get(userid=user)
         i_d = profile.user_id
@@ -16,8 +16,9 @@ def get_id(user):
         i_d = None
     return i_d
 
+
 def get_test(candidate_id):
-    ''' get tests allocated to candiadte '''
+    """get tests allocated to candidate """
     candidate_status = {}
     try:
         status = CandidateStatus.objects.filter(candidate=candidate_id)
@@ -27,16 +28,18 @@ def get_test(candidate_id):
             _p = None
             for _p in paper:
                 title = _p.title_qp
-            candidate_status[i.id] = {'paperId':i.question_paper,\
-            'paper_title':title, 'date':i.exam_date, 'attempted':i.attempted, 'score':i.score,\
-            'time_taken':i.total_time, 'mcq_correct':i.correct_mcq,\
-            'coding_correct':i.correct_ct, 'max_time':_p.max_time}
+            candidate_status[i.id] = {'paperId': i.question_paper,
+                                      'paper_title': title, 'date': i.exam_date, 'attempted': i.attempted,
+                                      'score': i.score,'time_taken':i.total_time, 'mcq_correct':i.correct_mcq,
+                                      'coding_correct':i.correct_ct, 'max_time':_p.max_time
+                                      }
     except ObjectDoesNotExist:
         candidate_status = {}
     return candidate_status
 
+
 def get_question_paper(testid):
-    ''' GET question paper assigned to tests id '''
+    """ GET question paper assigned to tests id """
     i = 1
     paper = {}
     try:
@@ -62,36 +65,40 @@ def get_question_paper(testid):
         testcases = ast.literal_eval(value['testcases'])
         testcases = json.dumps(testcases)
         testcases = json.loads(testcases)
-        code[key] = {'desc':value['desc'], 'title':value['title'], \
-        'language':value['language'], 'snippet':value['snippet'], "testcases":testcases, \
-        "sr":i, "type":"code"}
+        code[key] = {'desc': value['desc'], 'title': value['title'],
+                     'language': value['language'], 'snippet': value['snippet'], "testcases": testcases,
+                     "sr": i, "type": "code"
+                     }
         i = i+1
-    paper = {'title':q_paper.title_qp, 'total':q_paper.total_question, \
-    'mcq':mcq, 'coding':code, 'max_time':q_paper.max_time}
+    paper = {'title': q_paper.title_qp, 'total': q_paper.total_question,
+             'mcq': mcq, 'coding': code, 'max_time': q_paper.max_time
+             }
     return paper
 
+
 def save_answer(answer, userid, pid, tid):
-    ''' to save candidate answer into dATAbase '''
+    """ to save candidate answer into database """
     ans_split = answer.split("|")
     question = ans_split[0]
     ans = ans_split[1]
     testid = str(pid)
-    #GETTING CANDIDATE OBJECT
+    # GETTING CANDIDATE OBJECT
     candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid)&Q(id=tid))
-    #Saving MCQ answered
+    # Saving MCQ answered
     try:
         mcq_ans = ast.literal_eval(candidate.mcq_ans)
         mcq_ans = json.dumps(mcq_ans)
         mcq_ans = json.loads(mcq_ans)
     except ValueError:
         mcq_ans = {}
-    mcq_ans[question] = {"answer":ans}
+    mcq_ans[question] = {"answer": ans}
     candidate.mcq_ans = mcq_ans
     candidate.save()
     return mcq_ans
 
+
 def get_answered(userid, pid, tid):
-    ''' to get questions already answered by candidate '''
+    """to get questions already answered by candidate """
     candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
     try:
         mcq_ans = ast.literal_eval(candidate.mcq_ans)
@@ -107,7 +114,7 @@ def get_answered(userid, pid, tid):
 
 
 def save_time(starttime, userid, pid, tid):
-    '''  candidates times'''
+    """ candidates times """
     candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=pid)&Q(id=tid))
     candidate.starttime = starttime
     paper = get_question_paper(pid)
@@ -118,7 +125,7 @@ def save_time(starttime, userid, pid, tid):
 
 
 def get_remaining_time(seconds):
-    '''Remaining time of candidates'''
+    """ Remaining time of candidates """
     _h = seconds//(60*60)
     _m = (seconds-_h*60*60)//60
     _s = seconds-(_h*60*60)-(_m*60)
@@ -126,7 +133,7 @@ def get_remaining_time(seconds):
 
 
 def save_code(queid, code, json1, userid, testid, tid):
-    '''Save code'''
+    """ Save code """
     candidate = CandidateStatus.objects.get(Q(candidate=userid)&Q(question_paper=testid)&Q(id=tid))
     code_ans = {}
     cases = {}
@@ -144,7 +151,7 @@ def save_code(queid, code, json1, userid, testid, tid):
 
 
 def count_score(userid, pid, tid):
-    '''  count score  '''
+    """  count score  """
     count = 0
     correct = 0
     total = 0

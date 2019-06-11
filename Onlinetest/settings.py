@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import mongoengine
+import urllib.parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,7 +81,7 @@ WSGI_APPLICATION = 'Onlinetest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-'''
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
@@ -92,18 +93,20 @@ DATABASES = {
         'AUTH_SOURCE': 'onlinetest',      
     }
 }
-'''
+"""
+username = urllib.parse.quote_plus('manish.fartyal')
+pwd = urllib.parse.quote_plus('admin@12345')
+
 DATABASES = {
 'default': {
 'ENGINE': 'djongo',
-'NAME': 'onlinetest',
-'USERNAME': 'manish',
-'USER':'manish',
-'PASSWORD': 'Mf@#$2211',
-'HOST': '127.0.0.1',
-'PORT': 27017,
-'SOURCE': 'onlinetest',
-'AUTH_MECHANISM': 'SCRAM-SHA-1'
+'NAME': 'otdb',
+'USERNAME': 'manish.fartyal',
+'USER':'manish.fartyal',
+'PASSWORD': 'admin@12345',
+'HOST': 'mongodb://'+username+':'+pwd+'@ds159216.mlab.com:59216/otdb',
+'PORT': 59216,
+'SOURCE': 'otdb',
 }
 }
 
@@ -159,3 +162,9 @@ SESSION_EXPIRE_SECONDS = 3600  # 1 hour
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 LOGIN_URL = '/login/'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'prashantmali.info@gmail.com'
+EMAIL_HOST_PASSWORD = 'Prashant@#123'
+EMAIL_PORT = 587

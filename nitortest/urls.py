@@ -1,4 +1,4 @@
-''' URLS SETTING FOR NITROTEST'''
+""" URLS SETTING FOR NITROTEST """
 
 
 from django.conf.urls import url

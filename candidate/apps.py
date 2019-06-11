@@ -1,7 +1,7 @@
-'''APPS'''
+"""APPS"""
 from django.apps import AppConfig
 
 
 class CandidateConfig(AppConfig):
-    '''app config'''
+    """app config"""
     name = 'candidate'
