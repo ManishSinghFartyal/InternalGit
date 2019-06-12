@@ -1,0 +1,99 @@
+{% extends 'baser.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load static %}
+<style>
+  footer{
+    text-align: center !important;
+  }
+</style>
+
+<div class="wrapper" style="padding: 5px 15px 10px 10px;  background: #fff0 !important;">
+ {% include 'navbar.html'  %}
+ <form>
+  {% csrf_token %}
+  <div class="main-panel">
+   <div class="content"> 
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title" style="font-family: serif;font-weight: bolder;">Tests assigned to you</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-7">
+                  {% if not tests %}
+                  <br><br>
+                  <h4 class="lead">No tests assigned !<br><br> Please contact admin.</h4>
+                  {% endif %}
+                  {% for key,value in tests.items %} 
+                  <div>
+                    <div>
+                      <img src="{% static 'admin/img/testAssigned.png' %}" width="90px" height="90px">
+                    </div>
+                    <div class="col-sm-1" style="{% if value.attempted == False%} background: #9118;{% else %}background: #1918;{% endif %}"></div>
+                    <div class="col-sm-7" style="{% if value.attempted == False%} background: #9118;{% else %}background: #1918;{% endif %}">
+                      <div class="row" style="padding-top: 15px;">
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Test Assigned : {{value.paper_title}}</font></div>
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Scheduled in :{{value.date}}</font></div>
+                        <div class="col-sm-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Time limit : {{value.max_time}} minutes</font></div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="row">&nbsp;</div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          {% if value.attempted == True%}
+                          <img src="{% static 'admin/img/right.svg' %}" width="80px" height="70px" >
+                          {% else %}
+                          <img src="{% static 'admin/img/wrong.png' %}" width="50px" height="50px"> <br>
+                          {% endif %}
+                        </div>
+                        {% if value.attempted == False%}
+                        <div class="col-sm-12"><a href="/candidate/rules/{{value.paperId}}/{{key}}" class="btn btn-success btn-sm">Give test</a>  </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  {% endfor %}
+                </div>
+                <div class="col-sm-5">
+                  <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10"><h3><i><b><u>Rules:</u></b></i></h3></div>
+                    <div class="col-sm-12">
+                      <ol>
+                        <li>Once test has started it cannot be restart.</li>
+                        <li>Each test has time limit, so you need to attempt test in that time limit.</li>
+                        <li>After attempting each question you need to save the answer.</li>
+                        <li>Once test is completed you need to make final submission.</li>
+                        <li>Test will be evaluated on the basis of your attempt and certain parameters (tab changes, time taken etc.).</li>
+                        <li>Use of any kind of software and compiler other that online provided by website is prohibited.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  {% include 'Nitor/footer.html'  %}
+</div>
+</form>
+</div>
+<script type="text/javascript">
+  (function(){
+    sessionStorage.clear();
+  })();
+  function alertShow() {
+    alert('Already attempted');
+  };
+</script>
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends 'Nitor/navside.html' %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+  strong{
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .question_css {
+    font-family: 'Roboto';
+    font-size: 16px;
+  }
+  .tabel_css {
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: bold;
+  }
+  #myInput {
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 15px;
+    padding: 10px 20px 10px 40px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  #myInput2 {
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 15px;
+    padding: 10px 20px 10px 40px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  ::placeholder{
+  color: blue;
+  font-weight: bold;
+  }
+</style>
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
+<div class="main-panel">    
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10" id='id_questions'>
+          <div class="card" style="width: 120%">
+            <form action="" method="POST">
+              {% csrf_token %}
+              <div class="row"  style=" background-image: url('/static/admin/img/background1.jpg');">
+                <div class="col-md-12 text-center">
+                  <div class="card-header card-header-primary">
+                    <h4 class="card-title"><u>Questions</u></h4>
+                  </div>
+                </div>
+                <div class="col-md-12 text-center" >
+                 <strong style="font-size: 20px">{{message}}</strong>
+               </div>
+               <br><br>
+               {% with question as questionss %}
+               <div class="col-sm-12 container-fluid form-check text-center">
+                <br>
+                <input type="radio" name="radio" id="radio" id="myInput" onchange="filterQue(this.value)" value="" checked>&nbsp;All&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="radio" id="radio"  onchange="filterQue(this.value)" value="CODE" id="myInput">&nbsp;Code&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="radio" id="radio" onchange="filterQue(this.value)" value="MCQ" id="myInput">&nbsp;Mcq   &nbsp;&nbsp;&nbsp;&nbsp;
+                <br>
+               </div>
+               <div class="col-sm-10 container-fluid"><input type="text" id="myInput2" onkeyup="myFunction()" placeholder="Search for questions by subject.." title="Type in a name">
+                </div>
+               <div class="col-md-12 container">
+                <div class="table-responsive">
+                  <table class="table" id="myTable">
+                    <thead class=" text-primary  tabel_css">
+                      <th>
+                        <b>Type</b>
+                      </th>
+                      <th>
+                        <b>Subject</b>
+                      </th>
+                      <th>
+                        <b>Question</b>
+                      </th>
+                      <th>
+                       <b>Level</b>
+                     </th>
+                   </thead>
+                   <tbody>
+                     {% for key,value in questions.items %}
+                     <tr id="{{key}}-row" class="question_css">
+                      <td>
+                       {% if value.qtype == 'mcq'%}
+                       <font style="color:black;font-weight: bold;font-style: italic;font-size: 12px;"><i class="material-icons">view_list</i>
+                        <sub>mcq</sub> </font>
+                        {% else %}
+                        <font style="color:green;font-weight: bold;font-size: 12px;"><i class="material-icons">code</i>
+                          <sub>code</sub>
+                        </font>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if value.subject%}
+                        {{value.subject}}
+                        {% else %}
+                        {{value.language}}
+                        {% endif %}
+                      </td>
+                      <td>
+                       <div id='div{{key}}'>
+                        {{value.pre}}
+                        <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                          document.getElementById('div{{key}}').style.display = 'none';
+                          return false;
+                        })();"><u><i>show more</i></u></button>
+                      </a>
+                    </div>
+                    <div id="demo{{key}}" class="collapse">
+                      {% if value.qtype == 'mcq' %}
+                      {{value.post}} &nbsp; &nbsp; <i>
+                       <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                        document.getElementById('div{{key}}').style.display = 'initial';  
+                        return false;
+                      })();"><u><i>show less</i></u></button>
+                    </a>
+                  </i>
+                  <ol>
+                    {% for k,v in value.options.items %}
+                    <li>{{v}}</li>
+                    {% endfor %}
+                    <br>
+                    <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger" onclick="return confirmRemove()">Remove</a>
+                  </ol>
+                  {%elif value.qtype == 'ct' %}
+                  <b>{{value.title}}&nbsp; &nbsp; <i>
+                   <a class="" data-toggle="collapse" data-target="#demo{{key}}" onclick="(function(){
+                    document.getElementById('div{{key}}').style.display = 'initial';
+                    return false;
+                  })();"><u><i>show less</i></u></button>
+                </a></b>
+                <br>
+                {{value.description}}
+                <br>
+                <textarea disabled="true" class="md-textarea" id="code"  {% if value.snippet|length > 300 %} rows="14" {% elif value.snippet|length > 200 %} 
+                  rows = "7" {% elif value.snippet|length > 100 %} 
+                  rows = "7" {% else %} rows="7" {% endif %} cols="90">{{value.snippet}}</textarea>
+                  <br>
+                  <i><b>Testcases</b></i><br>
+                  <table>
+                    <tr>
+                      <th>Input</th><th>Output</th>
+                    </tr>
+                    {% for k,v in value.testcases.items %}
+                    <tr>
+                      <td>{{v.testcase}}</td><td>{{v.output}}</td>
+                    </tr>
+                    {% endfor %}
+                  </table>
+                  <a href="/removeQue/{{key}}" class="btn btn-sm btn-danger" onclick="return confirmRemove()">Remove</a>
+                  {% endif %}
+                </div>
+              </td>
+              <td>
+                {% if value.level%}
+                {{value.level}}
+                {% else %}
+                ---
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+            {% endwith %} 
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+</div>
+</div>
+<div style="width: 30%;text-align: center;">
+  <hr>
+  <a href="/addQuestion" class="btn btn-success"><i class="material-icons">add_box</i>&nbsp;Add questions</a>
+  <hr>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
+<script type="text/javascript">
+
+  function showRelatedQue(){
+    qtype = document.getElementById('qtype').value;
+    console.log('questions =>', JSON.stringify("{{ questions }}"))
+    {% for question in questions %}
+    type="{{question.qtype}}"
+    if(type==qtype){
+
+    }
+    {% endfor %}
+  };
+
+
+  function changeTotal(cb,key){
+    row = key+"-row";
+    total = parseInt(document.getElementById("id_totalquestions").value);
+
+    if(cb.checked){
+      document.getElementById("id_totalquestions").value = total+1;
+      document.getElementById(row).style.background = '#0007';
+    }
+    else{
+     document.getElementById("id_totalquestions").value =total-1;
+     document.getElementById(row).style.background = '#fff'; 
+   }
+ };
+
+
+ function show_message(){
+  console.log("manish");
+  message = "{{message}}";
+  console.log(message);
+};
+
+
+
+function confirmRemove() {
+  var txt;
+  if (confirm("Are you sure?")) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+  }
+}
+function filterQue(x) {
+      var input, filter, table, tr, td, i, txtValue;
+      input = x;
+      filter = input.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+  }
+}
+</script>
+{% endblock %}
