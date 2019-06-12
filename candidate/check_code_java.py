@@ -68,7 +68,7 @@ def get_output(test_case, code, user_id):
         new_output = code_output.decode()
         return new_output
     try:
-        code_output = subprocess.check_output(command, stderr=None, \
+        code_output = subprocess.check_output(command, stderr=None,
                                               shell=True, input=test_case)
     except subprocess.CalledProcessError as c_l:
         code_output = c_l.output
@@ -89,10 +89,10 @@ def run_code2(code, user_id, que_id):
         old_output = test_cases[case]['output']
         new_output = get_output(value, code, user_id)
         if new_output.strip() != old_output.strip():
-            answers[case] = {"input": value, "result": "incorrect", "your_output": new_output, \
+            answers[case] = {"input": value, "result": "incorrect", "your_output": new_output,
                              "expected_output": old_output}
         else:
-            answers[case] = {"result": "correct", "your_output": new_output,\
+            answers[case] = {"result": "correct", "your_output": new_output,
                              "expected_output": old_output}
     return answers
 

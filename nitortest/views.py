@@ -481,10 +481,12 @@ def remove_question(request, que_id):
         if user.is_superuser:
             existed_in = question_remove_from_paper(que_id)
             if not existed_in:
+                Question.objects.get(id=que_id).delete()
                 message = ""
             else:
                 message = "Question existed in papers cannot be deleted,\
                     first delete the paper."
+                print(message)
             questions = create_question_object()
             return render(request, 'Nitor/questions.html', {'questions': questions, 'message': message})
     return index(request)

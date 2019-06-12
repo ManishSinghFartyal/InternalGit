@@ -3,12 +3,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Profile(models.Model):
 
+class Profile(models.Model):
     """ User profile admin and candidate """
-    #exporting user module
+    # exporting user module
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    #additional fields
+    # additional fields
     userid = models.CharField(max_length=100, null=True)
     skills = models.CharField(max_length=20, null=True)
     education = models.CharField(max_length=50, null=True)
@@ -30,7 +30,6 @@ class Question(models.Model):
     correct_option = models.CharField(max_length=2, null=True)
     testcases = models.CharField(max_length=1300, null=True)
     level = models.CharField(max_length=10, null=True)
-
 
 
 class QuestionPaper(models.Model):

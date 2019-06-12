@@ -5,7 +5,7 @@ try:
 except ImportError:
     from string import ascii_letters as letters
 from string import punctuation, digits
-from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django import forms
@@ -161,8 +161,8 @@ class UserRegisterForm(forms.Form):
         # to=[email],
         # )
         # send_mail('Password', 'password_msg',  settings.EMAIL_HOST_USER, [email])
-        email = EmailMessage('Password', 'password_msg', to=[email])
-        email.send()
+        # email = EmailMessage('Password', 'password_msg', to=[email])
+        # email.send()
         new_user_profile.save()
         return new_user_profile
 
@@ -225,8 +225,6 @@ class AddMcqForm(forms.Form):
         return options
 
 
-
-# coding test form
 class AddCodingTestForm(forms.Form):
     """coding test form"""
     title = forms.CharField(max_length=1500)
@@ -234,7 +232,7 @@ class AddCodingTestForm(forms.Form):
     snippet = forms.CharField(max_length=1500, widget=forms.Textarea)
     language = forms.ChoiceField(choices=LANGUAGES)
     total_testcases_count = forms.CharField(max_length=300, \
-        widget=forms.TextInput(attrs={'readonly':'readonly'}))
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     level = forms.ChoiceField(choices=LEVEL)
 
     def __init__(self, *args, **kwargs):
@@ -257,14 +255,16 @@ class AddCodingTestForm(forms.Form):
             raise forms.ValidationError('*Title missing.')
         return title
 
+
 class CreateQuestionPaper(forms.Form):
     """docstring for createQuestionPaper forms.rm def __init__(self,  arg):
         super (createQuestionPaper, forms.Form.__init__()
         sexlf.arg  =  arg"""
-    title_qp = forms.CharField(max_length=500, \
-        help_text="Question paper explanation like (For candidates/Level of difficulty etc.)",\
-        label='Title')
-    totalquestions = forms.CharField(max_length=10,\
-    widget=forms.TextInput(attrs={'readonly':'readonly'}), initial=0,\
-    label='Total questions you have selected.')
+    title_qp = forms.CharField(max_length=500,
+                               help_text="Question paper explanation like (For candidates"
+                                         "/Level of difficulty etc.)",
+                               label='Title')
+    totalquestions = forms.CharField(max_length=10,
+                                     widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+                                     initial=0, label='Total questions you have selected.')
     max_time = forms.DecimalField(label='Maximum time to solve test(minutes)', initial=0)

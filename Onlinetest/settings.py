@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import mongoengine
 import urllib.parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -113,7 +112,6 @@ DATABASES = {
 }
 }
 
-import dj_database_url
 
 AUTH_PASSWORD_VALIDATORS = [
     {
