@@ -1,9 +1,9 @@
 
-'''
+"""
 Following function will create a output python file using file handling in python 
 which stores the code passed through parameters and will run this code and
 return the output to be print on UI
-'''
+"""
 import ast
 import json
 from os.path import join
@@ -16,14 +16,12 @@ from .service import get_question_paper
 media = settings.MEDIA_ROOT
 
 
-
-
-def run_code(code,userid):	
-	''' 
+def run_code(code, userid):
+	""" 
 		a contains code user entered in given code editor
 		now this code needs to create a folder which contains the user code into its respective 
 		folder.
-	'''	
+	"""
 	hi_code = media+str(userid)+"/"+str(userid)+'.py'
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
@@ -39,9 +37,12 @@ def run_code(code,userid):
 	return new_output
 
 
-
-
 def fetch_test_cases(queid):
+	"""
+
+	:param queid:
+	:return:
+	"""
 	que= Question.objects.get(id=queid)
 	if que.qtype == "ct":
 		testcases=ast.literal_eval(que.testcases)
@@ -50,8 +51,15 @@ def fetch_test_cases(queid):
 	return testcases
 
 
+def get_output(testcase, code, userid, queid):
+	"""
 
-def get_output(testcase,code,userid,queid):
+	:param testcase:
+	:param code:
+	:param userid:
+	:param queid:
+	:return:
+	"""
 	testcase = str.encode(testcase)
 	hi_code = media+str(userid)+"/"+str(queid)+"-"+str(userid)+'.py'
 	a=code	
@@ -71,11 +79,11 @@ def get_output(testcase,code,userid,queid):
 
 
 def run_code2(code,userid,queid):	
-	''' 
+	""" 
 		a contains code user entered in given code editor
 		now this code needs to create a folder which contains the user code into its respective 
 		folder.
-	'''
+	"""
 	testcases  = fetch_test_cases(queid)
 	answers = {}
 	for case in testcases:

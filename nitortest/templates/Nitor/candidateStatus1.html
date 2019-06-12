@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'Nitor/navside.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
-<div class="wrapper" style="margin-left: -250px;padding: 2px 20px 10px 10px;">
-	{% include 'Nitor/navbar.html'  %}
+ <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+<div class="wrapper">
 	<div class="main-panel">
 		<div class="row">
 			<div class="col-sm-12">

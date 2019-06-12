@@ -1,14 +1,14 @@
-""" MODEL FORMS """
+"""MODEL FORMS"""
 
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Profile(models.Model):
-    """  User profile admin and candidate  """
-    # exporting user module
+
+    """ User profile admin and candidate """
+    #exporting user module
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # additional fields
+    #additional fields
     userid = models.CharField(max_length=100, null=True)
     skills = models.CharField(max_length=20, null=True)
     education = models.CharField(max_length=50, null=True)
@@ -32,8 +32,9 @@ class Question(models.Model):
     level = models.CharField(max_length=10, null=True)
 
 
+
 class QuestionPaper(models.Model):
-    """  Question paper model to create question paper for exam  """
+    """ Question paper model to create question paper for exam """
     title_qp = models.CharField(max_length=500, null=True)
     total_question = models.PositiveIntegerField(null=True)
     mcq = models.CharField(max_length=2000, null=True)
@@ -42,7 +43,7 @@ class QuestionPaper(models.Model):
 
 
 class CandidateStatus(models.Model):
-    """  Candidate status for test  """
+    """ Candidate status for test """
     candidate = models.PositiveIntegerField(null=True)
     exam_date = models.DateField()
     question_paper = models.PositiveIntegerField(null=True)

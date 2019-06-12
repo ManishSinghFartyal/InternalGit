@@ -1,9 +1,9 @@
 
-'''
+"""
 Following function will create a output python file using file handling in python 
 which stores the code passed through parameters and will run this code and
 return the output to be print on UI
-'''
+"""
 import ast
 import json
 from os.path import join
@@ -19,11 +19,11 @@ media = settings.MEDIA_ROOT
 
 
 def run_code(code,userid):	
-	''' 
+	""" 
 		a contains code user entered in given code editor
 		now this code needs to create a folder which contains the user code into its respective 
 		folder.
-	'''	
+	"""
 	hi_code = media+str(userid)+"/"+str(userid)+'.java'
 	a=code	
 	os.makedirs(os.path.dirname(hi_code), exist_ok=True)
@@ -78,11 +78,11 @@ def get_output(testcase,code,userid):
 
 
 def run_code2(code,userid,queid):	
-	''' 
+	""" 
 		a contains code user entered in given code editor
 		now this code needs to create a folder which contains the user code into its respective 
 		folder.
-	'''
+	"""
 	testcases  = fetch_test_cases(queid)
 	answers = {}
 	for case in testcases:

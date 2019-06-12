@@ -1,85 +1,90 @@
-    {% extends 'base.html' %}
-    {% load crispy_forms_tags %}
-    {% load static %}
-    {% block content %}
-    <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>  
-    <style type="text/css">
-        strong{
-            font-size: 13px;
-            font-weight: bolder;
-            color:red;
-        }
-        #left{
-            font-weight: bolder;
-            background: #5937;
-            padding: 10px 10px 10px 10px;
-            border-radius: 2px;
-            font-family: ubuntu;
-        }
-        .marquee1{
-            font-size: 20px;
-            font-weight: bolder;
-            padding: 10px 10px 10px 10px;
-            border-radius: 2px;
-            font-family: ubuntu;
-            color: #12f9;
-            border-radius: 20px;
-        }
-        .marquee2{
-            font-size: 20px;
-            font-weight: bolder;
-            padding: 10px 10px 10px 10px;
-            border-radius: 2px;
-            font-family:ubuntu;
-            color: #111;
-            border-radius: 20px;
-        }  
-        #icon{
-            font-size: 27px;
-            position:absolute;
-            color: red;
-            background: #1113;
-            padding: 2px 2px 2px 2px;
-        }
-        td{
-            border-top: solid black 1px;
-            border-left:  solid black 1px;
-            border-right: solid black 1px;
-        }
-        tr{
-            border: solid black 1px;
-        }
-        thead,th{
-            border: solid #111 2px;
-        }
-        #myInput {
-          background-position: 10px 10px;
-          background-repeat: no-repeat;
-          width: 100%;
-          font-size: 15px;
-          padding: 10px 20px 10px 40px;
-          border: 2px solid #ddd;
-          border-radius: 20px;
-          margin-bottom: 12px;
-      }
-      ::placeholder{
-          color: blue;
-          font-weight: bold;
-      }
-  </style>
-  <div class="wrapper ">
-    {{que_paper_assigned}}
-    {% include 'Nitor/sidebar.html' %}
-    {% include 'Nitor/navbar.html' %}
-    <div class="main-panel">
-        <div class="content" style="margin-top: 20px;">
+ {% extends 'Nitor/navside.html' %}
+ {% load crispy_forms_tags %}
+ {% load static %}
+ {% block content %}
+ <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
+ <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>  
+ <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+ <style type="text/css">
+    strong{
+        font-size: 13px;
+        font-weight: bolder;
+        color:red;
+    }
+    #left{
+        font-weight: bolder;
+        background: #5937;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family: ubuntu;
+    }
+    .marquee1{
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family: ubuntu;
+        color: #12f9;
+        border-radius: 20px;
+    }
+    .marquee2{
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 10px 10px 10px 10px;
+        border-radius: 2px;
+        font-family:ubuntu;
+        color: #111;
+        border-radius: 20px;
+    }  
+    #icon{
+        font-size: 27px;
+        position:absolute;
+        color: red;
+        background: #1113;
+        padding: 2px 2px 2px 2px;
+    }
+    td{
+        border-top: solid black 1px;
+        border-left:  solid black 1px;
+        border-right: solid black 1px;
+    }
+    tr{
+        border: solid black 1px;
+    }
+    thead,th{
+        border: solid #111 2px;
+    }
+    #myInput {
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      width: 100%;
+      font-size: 15px;
+      padding: 10px 20px 10px 40px;
+      border: 2px solid #ddd;
+      border-radius: 20px;
+      margin-bottom: 12px;
+  }
+  ::placeholder{
+    color: #1193;
+      font-weight: bold;
+  }
+  .content{
+    padding: 5px 5px 5px 5px !important;
+    background: #fff1;
+  }
+</style>
+<div class="row">
+    <div class="col-sm-12">
+      {{que_paper_assigned}}        
+
+      <div class="main-panel">
+        <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
+                        <form action='' method="POST" onsubmit="return checkBeforeSubmit();" >
                             {% csrf_token %}
-                            <div class="card" >
+                            <div class="card"   style="background-color: #fff;" >
                                 <div class="col-md-12">
                                     {% for message in messages %}
                                     <strong>Error : {{message}}</strong>
@@ -89,7 +94,7 @@
                     Candidates list to be select first
                 -->
                 <div id='c_list' class="col-md-12">
-                    <div class="col-md-12 text-info"  style="background: #9997;width: 98%; border-radius: 10px;padding: 4px 4px 4px 4px;">
+                    <div class="col-md-12 text-info" >
                         <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;"> <b><u>Assign Test</u></b></h4>
                     </div> 
                     <div class="row"><hr></div>
@@ -100,7 +105,7 @@
                                     <label for="candidate">*Select candidate</label>
                                 </div>
                                 <div class="col-sm-12">
-                                    <select name="candidate" id="candidate" class="form-control form-control-md browser-default custom-select"  onchange="findAssigned(this)" required="true">
+                                    <select name="candidate" id="candidate" class="form-control custom-select"  onchange="findAssigned(this)" required="true" style="font-family: monospace;font-size: 17px;padding-left: 5px;">
                                         <option disabled="true" selected="true">Select candidate</option>
                                         {% for key,value in candidates.items %}
                                         <option  name="{{value.user_id}}" value="{{value.user_id}}">{{value.fname}}&nbsp;{{value.lname}}</option>
@@ -116,7 +121,7 @@
                                     <label for="paper" id="paper-label" style="visibility: hidden;">*Select Test</label>
                                 </div>
                                 <div class="col-sm-12">
-                                    <select style="visibility: hidden;" name="paper" id="paper" class="form-control form-control-md browser-default custom-select" onchange="showBox();">
+                                    <select style="visibility: hidden;font-family:sans-serif; font-size: 17px;padding-left: 5px;" name="paper" id="paper" class="form-control form-control-md browser-default custom-select" onchange="showBox();" >
                                         <option value="Select candidate" disabled="true" selected="true">Select Test</option>
                                         {% for question in papers %}
                                         <option value="{{question.id}}"  id="test-{{question.id}}">{{question.title_qp}}</option>
@@ -147,7 +152,7 @@
 
         <!-- Records of previously assigned -->
         {% if all_candidate_status %}
-        <div class="card" style="padding: 10px 10px 10px 10px;">
+        <div class="card" style="background-color: #fff0;padding: 10px 10px 10px 10px;">
             <div class="row">                
                 <div class="col-sm-12 text-info" style=" border-radius: 10px;padding: 4px 4px 4px 4px;margin-top: 3px;">
                     <h4 style="padding: 10px 10px 0px 15px; font-family: monospace;" ><b><u>Previously assigned</u>&nbsp;<img src="{% static 'admin/img/testAssigned.png' %}" width="25px" height="25px"></b></h4>
@@ -212,6 +217,8 @@
 </div>
 </div>
 </div>
+
+</div>
 <script type="text/javascript">
     function findAssigned(tag){
     /*        op = document.getElementById('paper').getElementsByTagName('option');
@@ -248,8 +255,7 @@
             i.innerHTML='access_time';    
             document.getElementById("marquee").textContent = "*Select Date - ";
             document.getElementById("marquee").className = "marquee1";
-            document.getElementById("marquee").appendChild(i);        
-
+            document.getElementById("marquee").appendChild(i);
         }
         function confirmRemove(){
           result = confirm("Are you sure ?");

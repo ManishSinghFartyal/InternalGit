@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'Nitor/navside.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
@@ -10,20 +10,18 @@
   }
 
 </style>
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
 
-<div class="wrapper ">
-    {% include 'Nitor/sidebar.html' %}
-    {% include 'Nitor/navbar.html'  %}
-    <div class="main-panel">
-    
+<div class="wrapper">    
+    <div class="main-panel"   style=" background-image: url('/static/admin/img/background1.jpg');">    
     	<div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
+        <div class="container-fluid"   style=" background-image: url('/static/admin/img/background1.jpg');">
+          <div class="row"   style=" background-image: url('/static/admin/img/background1.jpg');">
+            <div class="col-md-12"  style=" background-image: url('/static/admin/img/background1.jpg');" >
+              <form action='' method="POST" onsubmit="return checkBeforeSubmit();"   style="background:  #fff;">
                 {% csrf_token %}
-              <div class="card" >
-                    <div class="col-md-12 text-center">                      
+              <div class="card"   style=" background-image: url('/static/admin/img/background1.jpg');">
+                    <div class="col-md-12 text-center"   style="background:  #fff;">                      
                        <strong style="font-size: 20px">{{message}}</strong>
                     </div>
                 <div class="col-md-12">

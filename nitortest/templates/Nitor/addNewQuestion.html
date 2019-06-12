@@ -1,6 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'Nitor/navside.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
+  <script type="text/javascript" src="{% static 'admin/js/codeTest.js' %}"></script>
+
 <link href='https://fonts.googleapis.com/css?family=Luckiest Guy' rel='stylesheet'> 
 <link href='https://fonts.googleapis.com/css?family=Overpass Mono' rel='stylesheet'> 
 <style type="text/css">
@@ -22,23 +25,29 @@
   }
   label{
     border: none;
-    background: #fff;
-    font-weight: bolder;    
+    font-weight: bolder !important;    
     font-family: Overpass Mono;
-    font-size: 19px;
+    font-size: 17px !important;
+
+  }
+  select{
+    border: solid 1px #1114 !important ;
+    padding: 5px 5px 5px 5px !importants;
+  }
+  .content{
+    margin-top:0px !important;
   }
 </style>
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
 
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css"/>
-<div class="wrapper" style="background: ">
-  {% include 'Nitor/sidebar.html' %}
-  {% include 'Nitor/navbar.html'  %}
+<div class="wrapper">  
   <div class="main-panel">    	
    <div class="content">           
     <form action="" method="POST"  novalidate="true"> 
       <div class="container-fluid">            
-        {% csrf_token %}    
-        <div class="row">
+        {% csrf_token %}
+        <div class="row" >
          <div class="col-md-12">
           <select  id='qtype' class="form-control form-control-md browser-default custom-select" onchange="showAddQuestion();" name='qtype'>
             <option disabled="true" selected="true">Select question type here</option>
@@ -50,8 +59,8 @@
       </div>
       <!-- *************************Interface for coding test**************************** -->
       <div class="row">
-        <div class="col-md-11"  style="{%if current == 'mcq'  or not current%}visibility: hidden;{%endif%}position: absolute;" id='addct' style="padding: 10px 10px 10px 10px;">                          
-          <div class="card" style="padding: 20px 20px 20px 20px;"> 
+        <div class="col-md-12"  style="{%if current == 'mcq'  or not current%}visibility: hidden;{%endif%}position: absolute; width:95%;" id='addct'>                          
+          <div class="card" style="padding: 20px 20px 20px 20px;background-image: url('/static/admin/img/background1.jpg');"> 
             <div class="row">
               <div class="col-sm-6">{{form2.title|as_crispy_field}}</div>
               <div class="col-sm-6">{{form2.level|as_crispy_field}}</div>
@@ -72,7 +81,7 @@
       <!--****************************** Interface for mcq ******************************-->
       <div class="row">
         <div class="col-md-12"  style="{%if current == 'ct' or not current%}visibility: hidden{%endif%};position: absolute;width: 95%;" id='addmcq'>
-          <div class="card">
+          <div class="card"  style="padding: 20px 20px 20px 20px;background-image: url('/static/admin/img/background1.jpg');">
             <div class="col-md-12">{{form1.subject|as_crispy_field}}</div>
             <br>
             <div class="col-md-12">{{form1.question|as_crispy_field}}</div>

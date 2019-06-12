@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'Nitor/navside.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
@@ -12,24 +12,24 @@
   .heading_css{
     font-family: Rubik mono one;
     font-size: 20px;
-  }
+  } 
+  .col-md-12{
+    background-image: url('/static/admin/img/background1.jpg');
+  } 
 </style>
-{% include 'Nitor/sidebar.html' %}
-  {% include 'Nitor/navbar.html'  %}
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
   <div class="main-panel">      
-    <div class="content">
         <div class="row">
           <div class="col-md-12">
             <form action='' method="POST" onsubmit="return checkBeforeSubmit();">
               {% csrf_token %}
-              <div class="card" >
+              <div class="card" style="padding: 0px 0px 0px 0px !important;" >
                 <div class="col-md-12">
-                 <div id='c_list' class="col-md-12">
-                  <div class="col-md-12 text-info text-center " style="background: #9997;width: 98%; border-radius: 10px;margin-top: 10px;padding-bottom: 4px;">
+                  <div class="col-md-12 text-info text-center " style="width: 98%; border-radius: 10px;">
                     <h3 style="padding: 15px 15px 0px 10px;" > <b><u>Created question papers</u></b></h3>
                   </div>
                   <form>
-                  <div class="table-responsive" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px;border-radius: 10px;width: 98%; border-radius: 10px;margin-top: 10px;">
+                  <div class="table-responsive" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);border-radius: 10px;width: 100%;">
                     <table class="table">
                       <thead class=" text-primary"> 
                         <th>
@@ -107,10 +107,9 @@
                   </div>
                 </div>
               </form>
-            </div>
+           
             <div>
             </div>
-          </div>
         </form>
       </div> 
   </div>

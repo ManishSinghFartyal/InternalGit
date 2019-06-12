@@ -1,3 +1,4 @@
+
 """
 Following function will create a output python file using file handling in python
 which stores the code passed through parameters and will run this code and
@@ -14,9 +15,9 @@ MEDIA = settings.MEDIA_ROOT
 
 def run_code(code, userid):
     """
-    a contains code user entered in given code editor
-    now this code needs to create a folder which contains the user code into its respective
-    folder
+        a contains code user entered in given code editor
+        now this code needs to create a folder which contains the user code into its respective
+        folder
     """
     hi_code = MEDIA+str(userid)+"/"+str(userid)+'.py'
     _a = code
@@ -32,10 +33,8 @@ def run_code(code, userid):
     new_output = code_output.decode()
     return new_output
 
-
 def fetch_test_cases(queid):
-    """ fetched test cases """
-    testcases = {}
+    """ fetched testcases """
     que = Question.objects.get(id=queid)
     if que.qtype == "ct":
         testcases = ast.literal_eval(que.testcases)
@@ -44,8 +43,9 @@ def fetch_test_cases(queid):
     return testcases
 
 
+
 def get_output(testcase, code, userid, queid):
-    """ To get output """
+    """TO get output"""
     testcase = str.encode(testcase)
     hi_code = MEDIA+str(userid)+"/"+str(queid)+"-"+str(userid)+'.py'
     _a = code
@@ -65,9 +65,9 @@ def get_output(testcase, code, userid, queid):
 
 def run_code2(code, userid, queid):
     """
-    a contains code user entered in given code editor
-    now this code needs to create a folder which contains the user code into its respective
-    folder.
+        a contains code user entered in given code editor
+        now this code needs to create a folder which contains the user code into its respective
+        folder.
     """
     testcases = fetch_test_cases(queid)
     answers = {}
@@ -76,9 +76,9 @@ def run_code2(code, userid, queid):
         old_output = testcases[case]['output']
         new_output = get_output(value, code, userid, queid)
         if new_output.strip() != old_output.strip():
-            answers[case] = {"input": value, "result": "incorrect", "your_output": new_output,
-                             "expected_output": old_output}
+            answers[case] = {"input":value, "result":"incorrect", "your_output":new_output,\
+             "expected_output":old_output}
         else:
-            answers[case] = {"result": "correct",
-                             "your_output": new_output, "expected_output": old_output}
+            answers[case] = {"result":"correct",\
+             "your_output":new_output, "expected_output":old_output}
     return answers

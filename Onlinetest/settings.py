@@ -15,8 +15,8 @@ import mongoengine
 import urllib.parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = '57*up87hz5k8(1lp391)0)z!ui-99!1g5p5t81h2f50f4^tr5v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','onlinetestitachi.herokuapp.com']
 
 
 # Application definition
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'Onlinetest.urls'
@@ -76,24 +77,26 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'Onlinetest.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'USERNAME':'manish',
-        'PASSWORD':'admin112',
-        'NAME': 'onlinetest',
-        'HOST': '127.0.0.1',
-        'PORT': 27017,
-        'AUTH_SOURCE': 'onlinetest',      
-    }
-}
-"""
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'USERNAME':'manish',
+#         'PASSWORD':'admin112',
+#         'NAME': 'onlinetest',
+#         'HOST': '127.0.0.1',
+#         'PORT': 27017,
+#         'AUTH_SOURCE': 'onlinetest',      
+#     }
+# }
+
+
 username = urllib.parse.quote_plus('manish.fartyal')
 pwd = urllib.parse.quote_plus('admin@12345')
 
@@ -110,8 +113,7 @@ DATABASES = {
 }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+import dj_database_url
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -147,9 +149,9 @@ DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
-STATIC_ROOT = 'nitortest/static/'
+#STATIC_ROOT = 'nitortest/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'code/') # 'data' is my media folder
 MEDIA_URL = '/code/'
@@ -162,6 +164,19 @@ SESSION_EXPIRE_SECONDS = 3600  # 1 hour
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 LOGIN_URL = '/login/'
+
+PROJECT_ROOT   =   os.path.join(os.path.abspath(__file__))
+STATIC_ROOT  =   os.path.join(BASE_DIR, '/static/')
+STATIC_URL = '/static/'
+
+# Extra lookup directories for collectstatic to find static files
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+#  Add configuration for static files storage using whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

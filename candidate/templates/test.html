@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'baser.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
@@ -55,7 +55,7 @@
 #result{
   font-size: 19px;
   background: #9115;
-  font-family: sans-serif;  
+  font-family: sans-serif;
   font-weight: bolder;
   color: red;
   border-radius: 5px;
@@ -65,10 +65,10 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.min.css">
 <div class="wrapper" style="padding: 10px 30px 10px 10px;">
-  <form onload="timer2();"></form>    
+  <form onload="timer2();"></form>
   {% csrf_token %}
   <div class="main-panel" style="width: 100% !important;">
-    {% include 'navbar2.html'%}    
+    {% include 'navbar.html'%}
     <div class="content" >
       <div class="container-fluid">
        <div class="row" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px;border-radius: 10px;">
@@ -76,14 +76,14 @@
           <div class="col-sm-12">
             <p class="lead" style="color: white;font-weight: bolder;font-size: 27px;"><b>Test will ends in &nbsp;&nbsp;&nbsp;</b></p>
           </div>
-          <div class="col-sm-12">                                  
+          <div class="col-sm-12">
             <input type="text" name="hours" id="hours" style="background: #1113; width: 50px;height: 50px;text-align: center;color: white;font-size: 24px;border: none;" disabled="true" value="{{hour}}">
             <span id="span">:</span>
             <input type="text" name="minutes" id="minutes" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{minute}}">
             <span id="span">:</span>
             <input type="text" name="seconds" id="seconds" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{second}}">
           </p>
-        </div>                                    
+        </div>
       </div> 
       <div class="col-sm-4">
         <div class="col-sm-4">
@@ -94,11 +94,11 @@
       </div>           
     </div>
   </div>
-
+  <div id="ajaxUrl" url="/candidate/hello/"></div>
   <div class="row " style="font-family: cursive;">  
     <div class="col-md-8">
       <div class="card" id="testcase" style="padding: 20px 20px 20px 20px;">
-        <div class="card-body" style="margin-top: 30px;">                
+        <div class="card-body" style="margin-top: 30px;">
           {% for ke,va in pages.items %}
           <div class="row">
             <div class="col-md-1"><span>{{va.sr}}</span></div>                   
@@ -108,11 +108,11 @@
 
                <!-- If question is MCQ type -->
                {% if va.type == 'mcq'%}
-               <textarea style="background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: red;padding: 5px 5px 5px 5px;font-size: 17px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+               <textarea class="form-control " style="user-select: none; background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: red;padding: 5px 5px 5px 5px;font-size: 17px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
                 rows = "7" {% elif va.desc|length > 100 %} 
                 rows = "5" {% else %} rows="2" {% endif %} cols="60" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
-                {% for k,v in va.options.items %}  
-                <br>                         
+                {% for k,v in va.options.items %}
+                <br>
                 <div>
                   <input type="radio" name="correct" value="{{ke}}|{{k}}|{{va.sr}}" id="{{ke}}|{{v}}|{{va.sr}}"
                   {% for x,y in mcq_answered.items %}
@@ -133,16 +133,16 @@
                <!-- For coding type -->
                {%elif va.type == 'code' %}
                {% csrf_token %}
-               <div class="col-md-12">
-                <textarea class="md-textarea" style="background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: #111;padding: 5px 5px 5px 5px;font-size: 20px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
+               <div class="col-md-12" style="user-select: none; ">
+                <textarea class="md-textarea form-control" style="background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: #111;padding: 5px 5px 5px 5px;font-size: 20px;" {% if va.title|length > 300 %} rows="14" {% elif va.title|length > 200 %} 
                   rows = "7" {% elif va.title|length > 100 %} 
                   rows = "3" {% else %} rows="2" {% endif %} cols="55" disabled="true" style="border: none;background:none;">Title : {{va.title}}</textarea> 
-                  <textarea class="md-textarea"  style="background: #fff1;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 17px;font-family: monospace;font-weight: bolder;font-size: 16px;border: none;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 200 %} 
+                  <textarea class="md-textarea form-control"  style="background: #fff1;color: red;padding: 5px 5px 5px 5px;size: 14px;font-size: 17px;font-family: monospace;font-weight: bolder;font-size: 16px;border: none;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 200 %} 
                     rows = "12" {% elif va.desc|length > 100 %} 
                     rows = "10" {% else %} rows="7" {% endif %} cols="57" disabled="true" style="border: none;background:none;">Description : {{va.desc}}</textarea> 
                     <div><p class="lead"><u>Write your code</u>&nbsp;&nbsp;<span style="font-family:sans-serif;color: black;font-weight: bolder;">[ctrl+enter : To compile and run code]</span><hr></p></div>
-                    <div class="col-md-12">                                
-                      <textarea class="md-textarea" id="code">{%if not code_answered%}{{va.snippet}}{%else%}{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%endif%}{%endfor%}{%endif%}
+                    <div class="col-md-12">
+                      <textarea class="md-textarea form-control" id="code">{%if not code_answered%}{{va.snippet}}{%else%}{% for x,y in code_answered.items %}{% if x == ke%}{{y.code}}{%endif%}{%endfor%}{%endif%}
                       </textarea>
                       <hr>
                     </div>   
@@ -212,17 +212,17 @@
    {% include 'Nitor/footer.html'  %}
  </div>          
 </div>
-
-
 </div>
 
 <script type="text/javascript" src="http://www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
+<!-- <script src="static 'admin/js/ajaxRunTest.js'"></script> -->
 <script type="text/javascript">
   pid = "{{pid}}";
   tid = "{{tid}}";
+  ajaxUrl = document.getElementById("ajaxUrl").getAttribute("url");
+  console.log(ajaxUrl)
   window.onload = checkThis();
-
   function checkThis(){
     if(!document.getElementsByClassName('CodeMirror-scroll')){
       var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
@@ -315,6 +315,7 @@ var editor = CodeMirror.fromTextArea(document.querySelector('#code'), {
 
 $("#runajax").click(function(){
   //Hiding the loader
+  console.log("Running ajax")
   document.getElementById('loader').style.visibility="visible";  
 
   //Running code
@@ -322,7 +323,9 @@ $("#runajax").click(function(){
   arr=  id_lang.split("-");
   que_id = arr[0];
   language = arr[1];  
-  url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
+  //url = "http://127.0.0.1:8000/candidate/hello/"+que_id;
+  url = ajaxUrl+que_id;
+  console.log(url)
   code = editor.getValue()
   $.ajax({
     type : "GET",
@@ -344,7 +347,7 @@ $("#runajax").click(function(){
       console.log("Got error");
     },
     error: function(xhr,status,error) { 
-      console.log(xhr.responseText + " error  "+error);
+      console.log(xhr);
     }
   });
   return false;
@@ -460,68 +463,9 @@ for (var key in json) {
   div.appendChild(form_group3);
 }
 
-  shortcut.add("ctrl+enter", function() {
-     document.getElementById('runajax').click();
-    }); 
+shortcut.add("ctrl+enter", function() {
+ document.getElementById('runajax').click();
+}); 
 
- /*function incorrect_output12(testcase,input,result1,output,expected,div){    
-     divcol1 = document.createElement('div');
-     divcol1.setAttribute("class","col-sm-3");
-     image = document.createElement("img");
-     if(result1 == 'correct'){
-      image.setAttribute("src","{% static 'right.svg'%}");
-     }
-     else{
-      image.setAttribute("src","{% static 'wrong.png'%}");
-     }
-     image.setAttribute("width","50px");
-     image.setAttribute("height","50px");
-     divcol1.appendChild(image);
-     divcol1 = document.createElement('div');     
-     divcol2.setAttribute("class","col-sm-7");
-     line = document.createElement('br');
-     result = document.createElement('p');
-     result.setAttribute("class","lead btn btn-sm btn-danger")
-     result.setAttribute('id','result');
-     result.innerHTML='Testcase '+i+ '&nbsp;&nbsp;&nbsp;&nbsp;'+result1;     
-     label1 = document.createElement('label');
-     label1.setAttribute("for","inputvalue");
-     label1.innerHTML = "Input";
-     input1 = document.createElement('input');
-     input1.setAttribute("type","text");
-     input1.setAttribute("class","container");
-     input1.setAttribute("disabled","True");
-     input1.setAttribute("value",input);
-     label2 = document.createElement('label');
-     label2.setAttribute("for","outputvalue");
-     label2.innerHTML = "Your output";
-     output1 = document.createElement('textarea');
-     output1.setAttribute("type","text");
-     output1.setAttribute("class","container");
-     output1.setAttribute("disabled","True");
-     output1.innerHTML = output;
-     if(output.length > 80){
-      output1.setAttribute("rows","5");
-     }
-     else{
-      output1.setAttribute("cols","50");
-     }
-     label3 = document.createElement('label');
-     label3.setAttribute("for","outputvalue");
-     label3.innerHTML = "Expected output";
-     output2 = document.createElement('input');
-     output2.setAttribute("type","text");
-     output2.setAttribute("class","container");
-     output2.setAttribute("disabled","True");
-     output2.setAttribute("value",expected);
-     div.appendChild(result)
-     div.appendChild(line)
-     div.appendChild(label1);
-     div.appendChild(input1);
-     div.appendChild(label2);
-     div.appendChild(output1);
-     div.appendChild(label3);
-     div.appendChild(output2);
-   }*/
- </script>
- {% endblock %}
+</script>
+{% endblock %}

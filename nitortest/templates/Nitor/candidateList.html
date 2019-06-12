@@ -1,10 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'Nitor/navside.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
 <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>  
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>  
 <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+
 <style>
   .left{
         font-weight: bolder;
@@ -12,11 +14,16 @@
         border-radius: 2px;
         font-family: Righteous;
     }
+    .content{
+  margin-top: -10px !important; 
+  }
+  footer{
+  text-align: center !important;
+  }
 </style>
-<div class="wrapper ">
-  {% include 'Nitor/sidebar.html' %}
-  {% include 'Nitor/navbar.html'  %}
-  <div class="main-panel">    	
+
+<div class="wrapper" >  
+  <div class="main-panel">
    <div class="content" >
     <div class="container-fluid">
       <div class="row">
@@ -58,4 +65,3 @@
  </div>
 </div>     
 {% endblock %}
-

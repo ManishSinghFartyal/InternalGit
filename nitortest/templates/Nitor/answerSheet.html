@@ -1,51 +1,135 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% block content %}
-{% load static %}
-<div class="wrapper" style="margin-left: -210px; padding: 10px 60px 19px 10px;">
-    {% include 'Nitor/navbar.html'  %}
-    <div class="main-panel">
-        <div class="content"> 
-            <div class="container-fluid">
-                <div class="card" style="margin-top: -20px;">         
-                  <div class="row" style="padding: 10px 10px 10px 10px; text-align: center; font-weight: bold;font-size: 19px;font-family:sans-serif;color: black;">
-                    <div class="col-sm-4">
-                        Total score : {{scores.score}} out of {{scores.total_score}}
-                    </div>
-                    <div class="col-sm-4">
-                        Total MCQ score : {{scores.mcq_score}} out of {{scores.total_mcq_score}}                    
-                    </div>
-                    <div class="col-sm-4">
-                        Total coding score : {{scores.code_score}} out of {{scores.total_code_score}}
-                    </div>                  
-                </div>
-            </div>  
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card"  style="margin-top: -10px;">
-                        {%  if not details %}
-                        <div  style="padding: 50px 0px 0px 50px;">
-                            <p class="lead" style="font-weight: bolder;">Not attempted any question !</p>
-                        </div>                        
-                        {% endif %}
-                        <div class="row" style="padding: 10px 10px 10px 20px;color: black;font-size: 15px;">
-                            <ol>
-                                {% for key,value in details.items %}
-                                {% if value.type == 'mcq' %}
-                                <hr>
-                                <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;text-align: center;">{{value.type}}</h6>
-                                <li>
+    {% extends 'Nitor/navside.html' %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    {% load static %}
+    <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+
+    <div class="wrapper" style="padding: 10px 60px 19px 10px;">
+        <div class="main-panel">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="card" style="margin-top: -20px;">
+                        <div class="row" style="padding: 10px 10px 10px 10px; text-align: center; font-weight: bold;font-size: 19px;font-family:sans-serif;color: black;">
+                            <div class="col-sm-4">
+                                Total score : {{scores.score}} out of {{scores.total_score}}
+                            </div>
+                            <div class="col-sm-4">
+                                Total MCQ score : {{scores.mcq_score}} out of {{scores.total_mcq_score}}                    
+                            </div>
+                            <div class="col-sm-4">
+                                Total coding score : {{scores.code_score}} out of {{scores.total_code_score}}
+                            </div>                  
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card"  style="margin-top: -10px;">
+                                {%  if not details %}
+                                <div  style="padding: 50px 0px 0px 50px;">
+                                    <p class="lead" style="font-weight: bolder;">Not attempted any question !</p>
+                                </div>
+                                {% endif %}
+                                <div class="row" style="padding: 10px 10px 10px 20px;color: black;font-size: 15px;">
                                     <div class="col-sm-12">
+                                        <ol class="list-group">
+                                            {% for key,value in details.items %}
+                                            {% if value.type == 'mcq' %}
+                                            <hr>
+                                            <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;text-align: center;">{{value.type}}</h6>
+                                            <li class="list-group-item">
+                                                <div>
+                                                    <p style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;font-size: 16px;margin-top: -10px;">
+                                                        {{value.description}}
+                                                    </p>
+                                                </div>
+                                                <ol type="i">
+                                                    {% for k,v in value.options.items%}
+                                                    <li  class="list-group-item" style="{% if k == value.selected %}{%if k == value.correct %}color:green;font-weight: bold;{% else %}color:red;font-weight: bold;{%endif%}{% endif %}">{{v}}
+                                                        {%if k == value.correct %} <i class="material-icons">done_outline</i>{% endif %}
+                                                    </li>
+                                                    {% endfor %}
+                                                </ol>
+                                            </li>
+                                            {% elif value.type == 'ct' %}
+                                            <br>
+                                            <div style="text-align: center;">
+                                                <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;">Coding</h6>
+                                            </div>
+                                            <li  class="list-group-item" style="list-style-position: inside;">
+                                                <div class="col-sm-12" >
+                                                    <div>
+                                                       <textarea class="form-control"  disabled="true" style="resize: both;overflow: auto; background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;" cols="94" {% if value.description|length > 100  %}rows="14" {% else %}rows="10"{% endif %} >{{value.description.strip}}
+                                                       </textarea>                                           
+                                                   </div>
+                                                   <div><span style="font-weight: bolder;font-size: 19px;"><u>Answer</u></span></div>
+                                                   <div style="padding: 5px 5px 5px 5px;">
+                                                    <textarea class="form-control"  disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px; background: #1112;color:black;font-size: 15px;font-family: Microsoft Sans Serif">{{value.code}}</textarea>
+                                                </div>
+
+                                                <ol type="i">
+                                                    {% for k,v in value.cases.items%}
+                                                    <li  class="list-group-item" style="{% if v == 'correct' %}color:green;font-weight: bold;text-transform:uppercase; {% else %}color:red;font-weight: bold;text-transform:uppercase;{%endif%}">
+                                                        {{k}}&nbsp;&nbsp;&nbsp;{{v}}
+                                                        {%if v == 'correct' %}
+                                                        <img src="{% static 'admin/img/right.svg' %}" width="20px" height="20px" style="position: absolute;">
+                                                        {%else%}
+                                                        <img src="{% static 'admin/img/wrong.png' %}" width="20px" height="20px" style="position: absolute;">
+                                                        {% endif %} 
+                                                    </li>
+                                                    {% endfor %}
+                                                </ol>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     <!--    <div class="main-panel">
+            <div class="content"> 
+                <div class="container-fluid">
+                    <div class="card" style="margin-top: -20px;">         
+                      <div class="row" style="padding: 10px 10px 10px 10px; text-align: center; font-weight: bold;font-size: 19px;font-family:sans-serif;color: black;">
+                        <div class="col-sm-4">
+                            Total score : {{scores.score}} out of {{scores.total_score}}
+                        </div>
+                        <div class="col-sm-4">
+                            Total MCQ score : {{scores.mcq_score}} out of {{scores.total_mcq_score}}                    
+                        </div>
+                        <div class="col-sm-4">
+                            Total coding score : {{scores.code_score}} out of {{scores.total_code_score}}
+                        </div>                  
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card"  style="margin-top: -10px;">
+                            {%  if not details %}
+                            <div  style="padding: 50px 0px 0px 50px;">
+                                <p class="lead" style="font-weight: bolder;">Not attempted any question !</p>
+                            </div>
+                            {% endif %}
+                            <div class="row" style="padding: 10px 10px 10px 20px;color: black;font-size: 15px;">
+                                <div class="col-sm-12">
+                                   <ol class="list-group">
+                                    {% for key,value in details.items %}
+                                    {% if value.type == 'mcq' %}
+                                    <hr>
+                                    <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;text-align: center;">{{value.type}}</h6>
+                                    <li class="list-group-item">
                                         <div>
                                             <p style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;font-size: 16px;margin-top: -10px;">
                                                 {{value.description}}
                                             </p>
-                                            
                                         </div>
-                                        
                                         <ol type="i">
                                             {% for k,v in value.options.items%}
-                                            <li style="{% if k == value.selected %}{%if k == value.correct %}color:green;font-weight: bold;{% else %}color:red;font-weight: bold;{%endif%}{% endif %}">{{v}}
+                                            <li  class="list-group-item" style="{% if k == value.selected %}{%if k == value.correct %}color:green;font-weight: bold;{% else %}color:red;font-weight: bold;{%endif%}{% endif %}">{{v}}
                                                 {%if k == value.correct %} <i class="material-icons">done_outline</i>{% endif %}
                                             </li>
                                             {% endfor %}
@@ -55,44 +139,43 @@
                                 {% elif value.type == 'ct' %}
                                 <br>
                                 <div style="text-align: center;">
-                                    <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;">Coding</h6>                                        
+                                    <h6 style="border:3px solid;width: 160px;padding: 5px 5px 5px 5px;">Coding</h6>
                                 </div>
-
-                                <li style="list-style-position: inside;">
+                                <li  class="list-group-item" style="list-style-position: inside;">
                                     <div class="col-sm-12" >
                                         <div>
-                                           <textarea disabled="true" style="background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;margin-top: -30px;" cols="94" {% if value.description|length > 100  %}rows="14" {% else %}rows="10"{% endif %} >{{value.description.strip}}
-                                           </textarea>                                           
-                                        </div>
-                                        <div><span style="font-weight: bolder;font-size: 19px;"><u>Answer</u></span></div>
-                                        <div style="padding: 5px 5px 5px 5px;">
-                                            <textarea disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px; background: #1112;color:black;font-size: 15px;font-family: Microsoft Sans Serif">{{value.code}}</textarea>
-                                        </div>
-                                        
-                                        <ol type="i">
-                                            {% for k,v in value.cases.items%}
-                                            <li style="{% if v == 'correct' %}color:green;font-weight: bold;text-transform:uppercase; {% else %}color:red;font-weight: bold;text-transform:uppercase;{%endif%}">
-                                                {{k}}&nbsp;&nbsp;&nbsp;{{v}}
-                                                {%if v == 'correct' %}
-                                                <img src="{% static 'admin/img/right.svg' %}" width="20px" height="20px" style="position: absolute;">
-                                                {%else%}
-                                                <img src="{% static 'admin/img/wrong.png' %}" width="20px" height="20px" style="position: absolute;">
-                                                {% endif %} 
-                                            </li>
-                                            {% endfor %}
-                                        </ol>
+                                         <textarea class="form-control"  disabled="true" style="resize: both;overflow: auto; background: #fff;padding: 10px 10px 10px 10px;border: none;font-family: monospace; font-weight: bolder;" cols="94" {% if value.description|length > 100  %}rows="14" {% else %}rows="10"{% endif %} >{{value.description.strip}}
+                                         </textarea>                                           
+                                     </div>
+                                     <div><span style="font-weight: bolder;font-size: 19px;"><u>Answer</u></span></div>
+                                     <div style="padding: 5px 5px 5px 5px;">
+                                        <textarea class="form-control"  disabled="true" rows="13" cols="90" style="padding: 20px 20px 20px 20px; background: #1112;color:black;font-size: 15px;font-family: Microsoft Sans Serif">{{value.code}}</textarea>
                                     </div>
-                                </li>
-                                {% endif %}
-                                <hr>
-                                {% endfor %}
-                            </ol>
-                        </div>
-                    </div>	
-                </div>
-            </div> 
-        </div>
+
+                                    <ol type="i">
+                                        {% for k,v in value.cases.items%}
+                                        <li  class="list-group-item" style="{% if v == 'correct' %}color:green;font-weight: bold;text-transform:uppercase; {% else %}color:red;font-weight: bold;text-transform:uppercase;{%endif%}">
+                                            {{k}}&nbsp;&nbsp;&nbsp;{{v}}
+                                            {%if v == 'correct' %}
+                                            <img src="{% static 'admin/img/right.svg' %}" width="20px" height="20px" style="position: absolute;">
+                                            {%else%}
+                                            <img src="{% static 'admin/img/wrong.png' %}" width="20px" height="20px" style="position: absolute;">
+                                            {% endif %} 
+                                        </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </li>
+                            {% endif %}
+                            <hr>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>	
+            </div>
+        </div> 
     </div>
 </div>
 </div>
+</div> -->
 {% endblock %}

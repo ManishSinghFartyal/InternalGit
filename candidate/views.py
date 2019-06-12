@@ -16,30 +16,28 @@ from . import check_code_python as cPython
 from . import check_code_java as cJava
 from . import check_code_node as cNode
 
-
 def index(request, next_url=None):
-    """  INDEX FOR VALIDATIONS """
+    """ INDEX FOR VALIDATIONS"""
     user = request.user
     if user.is_superuser:
         return render(request, 'Nitor/adminHome.html')
     return HttpResponseRedirect('/candidate/candidateHome')
 
-
 def candidate_home(request):
-    """  Candidate home page """
+    """ Candidate home page"""
     user = request.user
     i_d = get_id(user)
-    tests = get_test(i_d)
+    tests = get_test(i_d)    
     return render(request, 'candidateHome.html', {'tests':tests})
 
 
 def starttest(request, pid, tid):
-    """  Starts test """
+    """ Starts test """
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
             return index(request)
-        # If user submit a mcq answer
+        #If user submit a mcq answer
         request.session['testid'] = pid
         userid = get_id(user)
         starttime = timezone.localtime(timezone.now())
@@ -51,12 +49,13 @@ def starttest(request, pid, tid):
 
 
 def test(request, pid, tid):
-    """ Test fucntions  """
+    """ Test fucntions """
+    print("getting all test")
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
             return index(request)
-        # If user submit a mcq answer
+        #If user submit a mcq answer
         if 'testid' not in request.session:
             return candidate_home(request)
         userid = get_id(user)
@@ -104,6 +103,7 @@ def test(request, pid, tid):
                     pages = None
                     request.session['currentpage'] = 1
             elif request.GET.get("type") == 'code':
+                print("Get coding question")
                 endtime = candidate.endtime
                 remanining = endtime -  timezone.localtime(timezone.now())
                 time = remanining.total_seconds()
@@ -155,9 +155,8 @@ def test(request, pid, tid):
             'hour':int(_h), 'minute':int(_m), 'second':int(_s)})
     return redirect("/login")
 
-
 def savetest(request, pid, tid):
-    """ To save test  """
+    """ To save test """
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -174,8 +173,8 @@ def savetest(request, pid, tid):
 
 
 def ajaxcall(request, pid):
-    """  AJAX FUNCTION TO RUN CODE """
-    print("manish")
+    """ AJAX FUNCTION TO RUN CODE"""
+    print("Running ajax in views")
     userid = get_id(request.user)
     code = request.GET['code']
     testid = request.GET['testid']    
@@ -197,7 +196,7 @@ def ex(request):
 
 
 def rules(request, pid, tid):
-    """ TO show rules """
+    """TO show rules"""
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -205,14 +204,13 @@ def rules(request, pid, tid):
         return render(request, 'rules.html', {'pid':pid, 'tid':tid})
     return redirect("/login")
 
-
 def remove_que(queid):
-    """ Remove question """
+    """Remove question"""
     Question.object.filter(id=queid).delete()
 
 
 def home(request):
-    """ Home page """
+    """HOme page"""
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -222,6 +220,6 @@ def home(request):
 
 
 def user_logout(request):
-    """ To logout user django logout() method """
+    """To logout user django logout() method"""
     logout(request)
     return redirect('/login')

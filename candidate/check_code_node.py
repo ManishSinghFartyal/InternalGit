@@ -12,12 +12,11 @@ from nitortest.models import Question
 
 MEDIA = settings.MEDIA_ROOT
 
-
 def run_code(code, userid):
     """
-    a contains code user entered in given code editor
-    now this code needs to create a folder which contains the user code into its respective
-    folder.
+        a contains code user entered in given code editor
+        now this code needs to create a folder which contains the user code into its respective
+        folder.
     """
     hi_code = MEDIA+str(userid)+"/"+str(userid)+'.py'
     _a = code
@@ -33,9 +32,8 @@ def run_code(code, userid):
     new_output = code_output.decode()
     return new_output
 
-
 def fetch_test_cases(queid):
-    """ Fetches question related test cases for coding test """
+    """ Fetches question related test cases for codeing test """
     que = Question.objects.get(id=queid)
     if que.qtype == "ct":
         testcases = ast.literal_eval(que.testcases)
@@ -45,7 +43,7 @@ def fetch_test_cases(queid):
 
 
 def get_output(testcase, code, userid):
-    """  TO match the output with its respective test cases """
+    """  TO macthc the output with its respective testcases """
     testcase = str.encode(testcase)
     hi_code = MEDIA+str(userid)+"/"+str(userid)+'.js'
     _a = code
@@ -55,8 +53,8 @@ def get_output(testcase, code, userid):
     _f.close()
     command = 'node '+hi_code
     try:
-        code_output = subprocess.check_output(command,
-                                              stderr=subprocess.STDOUT, shell=True, input=testcase)
+        code_output = subprocess.check_output(command,\
+         stderr=subprocess.STDOUT, shell=True, input=testcase)
     except subprocess.CalledProcessError as c_l:
         code_output = c_l.output
     new_output = code_output.decode()
@@ -65,9 +63,9 @@ def get_output(testcase, code, userid):
 
 def run_code2(code, userid, queid):
     """
-    a contains code user entered in given code editor
-    now this code needs to create a folder which contains the user code into its respective
-    folder.
+        a contains code user entered in given code editor
+        now this code needs to create a folder which contains the user code into its respective
+        folder.
     """
     testcases = fetch_test_cases(queid)
     answers = {}
@@ -76,9 +74,9 @@ def run_code2(code, userid, queid):
         old_output = testcases[case]['output']
         new_output = get_output(value, code, userid)
         if new_output.strip() != old_output.strip():
-            answers[case] = {"input": value, "result": "incorrect",
-                             "your_output": new_output, "expected_output": old_output}
+            answers[case] = {"input":value, "result":"incorrect", \
+            "your_output":new_output, "expected_output":old_output}
         else:
-            answers[case] = {"result": "correct", "your_output": new_output,
-                             "expected_output": old_output}
+            answers[case] = {"result":"correct", "your_output":new_output,\
+             "expected_output":old_output}
     return answers

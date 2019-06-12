@@ -1,4 +1,4 @@
-""" URLS SETTING FOR NITROTEST """
+"""  URLS setting for nitortest application"""
 
 
 from django.conf.urls import url
@@ -17,11 +17,10 @@ urlpatterns = [
     url(r'^addQuestion/$', views.show_add_question, name='addCode'),
     url(r'^successQue/$', views.success_que, name='successQue'),
     url(r'^createQuePaper/$', views.create_que_paper, name='createQuePaper'),
-    #url(r'^assignTest/$', views.assign_test2, name='assignTest'),
     url(r'^questionPapers/$', views.question_papers, name='questionPapers'),
     url(r'^fetchQuestionPaper/(?P<questionid>\d+)', views.fetch_question_paper,\
-     name='fetchQuestionPaper'),
-    url(r'^candidatestatus/(?P<candidateid>\d+)', views.candidate_status, name='candidatestatus'),
+        name='fetchQuestionPaper'),
+    url(r'^candidatestatus/(?P<candidate_id>\d+)', views.candidate_status, name='candidatestatus'),
     path('remassigned/<cid>/<pid>/<tid>', views.rem_candidate_status, name='remcandidatestatus'),
     path('removeQuestionPaper/<pid>', views.remove_question_paper, name='removeQuestionPaper'),
     path('showscore/<cid>/<pid>/<tid>', views.show_score, name='showscore'),

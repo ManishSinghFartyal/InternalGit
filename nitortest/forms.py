@@ -1,17 +1,17 @@
-""" FORMS HAVE BEEN CREATED """
+""" FORMS HAVE BEEN CREATED"""
 
 try:
     from string import letters
 except ImportError:
     from string import ascii_letters as letters
 from string import punctuation, digits
+from django.core.mail import EmailMessage
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django import forms
 from .models import Profile
-from django.core.mail import send_mail
-from Onlinetest import settings
-
+# from django.core.mail import send_mail
+# from Onlinetest import settings
 from .service import generate_password
 LANGUAGES = (
     ("select", "Select Language"),
@@ -89,7 +89,11 @@ SUB = (
     ('english', 'English'),
     ('gk', 'Computer awareness'),
     ('ds', 'Data Structure'),
-    ('dp', 'Design Pattern'),    
+    ('dp', 'Design Pattern'),
+    ('py', 'Python'),
+    ('java', 'Java'),
+    ('c', 'C'),
+    ('net', '.Net'),
     )
 
 VALID_USERNAME = letters + '._' + digits
@@ -145,43 +149,48 @@ class UserRegisterForm(forms.Form):
         _experience = cleaned_data['experience']
         contact = cleaned_data['contact']
         skills = cleaned_data['skill']
-        print(password)
-        new_user_profile = Profile(
-            user=new_user, userid=email,
-            education=education, department=_department, experience=_experience,
-            contact=contact, skills=skills, role=2
-            )
-        password_msg = "Your password = "+password
-        send_mail('Password', password_msg, settings.EMAIL_HOST_USER, [email])
+        new_user_profile = Profile(user=new_user, userid=email,
+                                   education=education, department=_department,
+                                   experience=_experience, contact=contact, skills=skills,
+                                   role=2)
+        password_msg = "Password for test : "+password
+        # email = EmailMessage(
+        # subject='Password',
+        # body=password_msg,
+        # from_email='manishfartyal9090@gmail.com',
+        # to=[email],
+        # )
+        # send_mail('Password', 'password_msg',  settings.EMAIL_HOST_USER, [email])
+        email = EmailMessage('Password', 'password_msg', to=[email])
+        email.send()
         new_user_profile.save()
         return new_user_profile
 
 
 class UserLoginForm(forms.Form):
-    """ User login form """
+
+    """ User login form  """
     username = forms.CharField(max_length=30)
     password = forms.CharField(max_length=30, widget=forms.PasswordInput())
 
     def clean(self):
-        """ Validation """
+        """ Validation  """
         super(UserLoginForm, self).clean()
         try:
-            u_name, pwd = self.cleaned_data["username"],
-            self.cleaned_data["password"]
+            u_name, pwd = self.cleaned_data["username"], self.cleaned_data["password"]
             user = authenticate(username=u_name, password=pwd)
         except Exception:
-            print("manish1")
             raise forms.ValidationError(
                 "Username and/or Password is not entered"
             )
         if not user:
-            print("manish2")            
+
             raise forms.ValidationError("Invalid username/password")
         return user
 
 
 class AddMcqForm(forms.Form):
-    """ Add Question  forms """
+    """Add Question  forms"""
     subject = forms.ChoiceField(choices=SUB)
     question = forms.CharField(max_length=500, help_text='(Question)', widget=forms.Textarea)
     correct_option = forms.ChoiceField(choices=CORRECT_OPTION)
@@ -190,7 +199,7 @@ class AddMcqForm(forms.Form):
 
     # To create extra fields
     def __init__(self, *args, **kwargs):
-        """ Validation """
+        """ Validation  """
         extra_options = kwargs.pop('extra', 0)
         super(AddMcqForm, self).__init__(*args, **kwargs)
         self.fields['total_options'].initial = extra_options
@@ -199,7 +208,7 @@ class AddMcqForm(forms.Form):
             self.fields['option_{index}'.format(index=index)] = forms.CharField()
 
     def clean_question(self):
-        """ validation """
+        """ validation"""
         question = self.cleaned_data['question']
         if question:
             question = self.cleaned_data['question']
@@ -208,22 +217,24 @@ class AddMcqForm(forms.Form):
         return question
 
     def clean_total_options(self):
-        """ validation """
+        """ validation"""
+
         options = int(self.cleaned_data['total_options'])
         if options < 2:
             raise forms.ValidationError('*Atleast needs two options for a question.')
         return options
 
 
+
 # coding test form
 class AddCodingTestForm(forms.Form):
-    """ coding test form """
+    """coding test form"""
     title = forms.CharField(max_length=1500)
     description = forms.CharField(max_length=1500, widget=forms.Textarea)
     snippet = forms.CharField(max_length=1500, widget=forms.Textarea)
     language = forms.ChoiceField(choices=LANGUAGES)
-    total_testcases_count = forms.CharField(max_length=300,
-                                            widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    total_testcases_count = forms.CharField(max_length=300, \
+        widget=forms.TextInput(attrs={'readonly':'readonly'}))
     level = forms.ChoiceField(choices=LEVEL)
 
     def __init__(self, *args, **kwargs):
@@ -238,7 +249,7 @@ class AddCodingTestForm(forms.Form):
             self.fields['outputs_{index}'.format(index=index)] = forms.CharField()
 
     def clean_title(self):
-        """ Check title is not empty """
+        """Check title is not empty"""
         title = self.cleaned_data['title']
         if title:
             title = self.cleaned_data['title']
@@ -246,15 +257,14 @@ class AddCodingTestForm(forms.Form):
             raise forms.ValidationError('*Title missing.')
         return title
 
-
 class CreateQuestionPaper(forms.Form):
     """docstring for createQuestionPaper forms.rm def __init__(self,  arg):
         super (createQuestionPaper, forms.Form.__init__()
         sexlf.arg  =  arg"""
-    title_qp = forms.CharField(max_length=500,
-                               help_text="Question paper explanation like (For candidates/Level of difficulty etc.)",
-                               label='Title')
-    totalquestions = forms.CharField(max_length=10,
-                                     widget=forms.TextInput(attrs={'readonly':'readonly'}), initial=0,
-                                     label='Total questions you have selected.')
+    title_qp = forms.CharField(max_length=500, \
+        help_text="Question paper explanation like (For candidates/Level of difficulty etc.)",\
+        label='Title')
+    totalquestions = forms.CharField(max_length=10,\
+    widget=forms.TextInput(attrs={'readonly':'readonly'}), initial=0,\
+    label='Total questions you have selected.')
     max_time = forms.DecimalField(label='Maximum time to solve test(minutes)', initial=0)
