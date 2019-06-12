@@ -1,29 +1,7 @@
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -31,26 +9,12 @@ wheels/
 *.manifest
 *.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# virtualenv
-.venv
-venv/
-ENV/
-.vscode
-
-# django migrations 
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
-
-# mypy
-.mypy_cache/
-
-.DS_Store
-*.sqlite3
+### Django ###
+*.log
+*.pot
 *.pyc
-*.db
-*.pid
+__pycache__/
+local_settings.py
+
+.env
+db.sqlite3
