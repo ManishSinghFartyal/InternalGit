@@ -146,7 +146,6 @@ def candidate_profile(request, user_id):
     :param user_id: user_id for which profile needs to be create
     :return: If user is authenticated Candidate profile else index
     """
-    """"""
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -164,6 +163,7 @@ def show_profile(request, profile):
     """
     if request.user.is_authenticated:
         if request.user.is_superuser:
+            print(profile)
             return render(request, 'Nitor/candidateProfile.html', {'candidate': profile})
     return index(request)
 

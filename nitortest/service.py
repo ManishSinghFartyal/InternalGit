@@ -69,10 +69,12 @@ def get_candidate_profile(user_id):
     :param user_id:Candidate id for which profile to show
     :return: Candidate details
     """
+    print(user_id)
     que_paper_assigned = []
     _candidate = {}
     try:
-        _profile = Profile.objects.get(user_id=user_id)
+        _profile = User.objects.get(user_id=user_id)
+        print("_profile = ", _profile)
         if CandidateStatus.objects.filter(candidate=user_id).count() >= 1:
             assigned = CandidateStatus.objects.filter(candidate=user_id)
             for _a in assigned:
@@ -87,6 +89,7 @@ def get_candidate_profile(user_id):
                       'contact': _profile.contact, 'department': _profile.department,
                       'status': c_s, 'que_paper_assigned': que_paper_assigned}
     except ObjectDoesNotExist:
+        print("Exception")
         return _candidate
     return _candidate
 

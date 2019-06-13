@@ -11,4 +11,4 @@ rl.on('value', function (value) {
    /* take value as the number for which factorial needs to be find */
    console.log("Factorial")
 });
-                    
+                      
