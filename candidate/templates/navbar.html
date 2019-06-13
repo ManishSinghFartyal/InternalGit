@@ -18,15 +18,15 @@
     <span class="navbar-toggler-icon"></span>    
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarTop">
+  <div class="collapse navbar-collapse justify-content-end" id="navbarTop">
     <ul class="nav navbar-nav navbar-right">
  
-        <li class="nav-item dropdown ">              
+        <li class="nav-item dropdown ">
             <a class="nav-link" href="#" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="material-icons" style="color: white;">menu</i>              
+             <i class="material-icons" style="color: white;word-spacing: -10px;">person</i><i class="material-icons" style="color: white;">add</i>
             </a>            
-            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdownProfile">
-              <a class="dropdown-item" href="/candidateProfile/{{request.user.id}}">{{ request.user }}</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+              <a class="dropdown-item" href="#" disabled="true">{{ request.user }}</a>
 
               <div class="dropdown-divider font-sheet-header"></div>
               <a class="dropdown-item" href="/logout">Log out</a>

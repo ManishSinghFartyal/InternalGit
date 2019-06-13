@@ -261,6 +261,10 @@ def home(request):
 
 
 def user_logout(request):
-    """To logout user django logout() method"""
+    """
+    To logout user django logout() method
+    :param request:  contains the details of the user who requested the URL
+    :return: clear the user session and return to the login page
+    """
     logout(request)
     return redirect('/login')

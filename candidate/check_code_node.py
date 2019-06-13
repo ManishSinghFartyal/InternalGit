@@ -15,9 +15,12 @@ MEDIA = settings.MEDIA_ROOT
 
 def run_code(code, user_id):
     """
-        a contains code user entered in given code editor
-        now this code needs to create a folder which contains the user code into its respective
-        folder.
+    a contains code user entered in given code editor
+    now this code needs to create a folder which contains the user code into its respective
+    folder.
+    :param code: code written by user
+    :param user_id: Id of user who writes the code
+    :return: Output of the user code
     """
     hi_code = MEDIA+str(user_id)+"/"+str(user_id)+'.py'
     _a = code
@@ -35,7 +38,11 @@ def run_code(code, user_id):
 
 
 def fetch_test_cases(que_id):
-    """ Fetches question related test cases for codeing test """
+    """
+    Fetches question related test cases for codeing test
+    :param que_id: ID of question
+    :return: Test cases
+    """
     que = Question.objects.get(id=que_id)
     if que.qtype == "ct":
         test_cases = ast.literal_eval(que.testcases)
@@ -45,7 +52,13 @@ def fetch_test_cases(que_id):
 
 
 def get_output(test_case, code, user_id):
-    """  TO match the output with its respective test cases """
+    """
+    TO match the output with its respective test cases
+    :param test_case: Question's test cases
+    :param code:code written by user
+    :param user_id: Id of user who writes the code
+    :return: Output of code match against the test cases
+    """
     test_case = str.encode(test_case)
     hi_code = MEDIA+str(user_id)+"/"+str(user_id)+'.js'
     _a = code
@@ -65,9 +78,13 @@ def get_output(test_case, code, user_id):
 
 def run_code2(code, user_id, que_id):
     """
-        a contains code user entered in given code editor
-        now this code needs to create a folder which contains the user code into its respective
-        folder.
+    a contains code user entered in given code editor
+    now this code needs to create a folder which contains the user code into its respective
+    folder.
+    :param code: code written by user
+    :param user_id: Id of user who writes the code
+    :param que_id: Id of question to be run
+    :return: answer of the question
     """
     testcases = fetch_test_cases(que_id)
     answers = {}

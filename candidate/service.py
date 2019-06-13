@@ -161,7 +161,11 @@ def save_time(start_time, user_id, pid, tid):
 
 
 def get_remaining_time(seconds):
-    """Remaining time of candidates"""
+    """
+    Remaining time of candidates
+    :param seconds: remaining seconds
+    :return: updated remaining seconds
+    """
     _h = seconds//(60*60)
     _m = (seconds-_h*60*60)//60
     _s = seconds-(_h*60*60)-(_m*60)
@@ -198,7 +202,13 @@ def save_code(que_id, code, json1, user_id, test_id, tid):
 
 
 def count_score(user_id, pid, tid):
-    """  count score  """
+    """
+    count score of user answers
+    :param user_id: Id of user for which count the score
+    :param pid: Paper id
+    :param tid: Test id
+    :return: Total score, MCQ score, Code test score
+    """
     count = 0
     correct = 0
     total = 0

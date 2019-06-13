@@ -15,9 +15,12 @@ MEDIA = settings.MEDIA_ROOT
 
 def run_code(code, user_id):
     """
-        a contains code user entered in given code editor
-        now this code needs to create a folder which contains the user code into its respective
-        folder.
+    a contains code user entered in given code editor
+    now this code needs to create a folder which contains the user code into its respective
+    folder.
+    :param code: User written code
+    :param user_id: Id of user who is running code
+    :return: Output of code
     """
     hi_code = MEDIA+str(user_id)+"/"+str(user_id)+'.java'
     _a = code
@@ -39,6 +42,8 @@ def fetch_test_cases(que_id):
     a contains code user entered in given code editor
     now this code needs to create a folder which contains the user code into its respective
     folder.
+    :param que_id: Id of question for which test cases needed
+    :return: Test cases
     """
     que = Question.objects.get(id=que_id)
     if que.qtype == "ct":
@@ -49,7 +54,13 @@ def fetch_test_cases(que_id):
 
 
 def get_output(test_case, code, user_id):
-    """ To get output """
+    """
+    To get output
+    :param test_case: Question's test cases
+    :param code: Code user have written
+    :param user_id: Id of user who writes the code
+    :return: Output of code match against the test cases
+    """
     test_case = str.encode(test_case)
     _a = code
     class_name = get_class_name(_a)
@@ -78,9 +89,13 @@ def get_output(test_case, code, user_id):
 
 def run_code2(code, user_id, que_id):
     """
-        a contains code user entered in given code editor
-        now this code needs to create a folder which contains the user code into its respective
-        folder.
+    a contains code user entered in given code editor
+    now this code needs to create a folder which contains the user code into its respective
+    folder.
+    :param code: code written by user
+    :param user_id: Id of user who writes the code
+    :param que_id: Id of question to be run
+    :return: answer of the question
     """
     test_cases = fetch_test_cases(que_id)
     answers = {}
@@ -98,7 +113,11 @@ def run_code2(code, user_id, que_id):
 
 
 def get_class_name(code):
-    """ TO GET CLASS NAME """
+    """
+    TO GET CLASS NAME
+    :param code: Code written by user
+    :return: class name of java using its code
+    """
     lines = code.split("\n")
     for line in lines:
         if 'class' in line:
