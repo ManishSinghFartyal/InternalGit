@@ -21,21 +21,25 @@ def index(request, next_url=None):
     :param next_url: where to fetch the user after confirmation
     :return: returning the user tp its respective URL
     """
+    print(next_url)
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            return render(request, 'Nitor/adminHome.html')
+            if not next_url:
+                next_url = 'Nitor/adminHome.html'
+            return HttpResponseRedirect(next_url)
+            #return render(request, next_url)
         return HttpResponseRedirect('/candidate')
     return redirect('/login')
 
-
-def success(request):
-    """
-    success : To send user response after Candidate successfully saved
-    :param request: contains the details of the user who requested the URL
-    :return: returns to the save candidate success message page
-    """
-    return render(request, 'Nitor/saveCandidate.html')
+#
+# def success(request):
+#     """
+#     success : To send user response after Candidate successfully saved
+#     :param request: contains the details of the user who requested the URL
+#     :return: returns to the save candidate success message page
+#     """
+#     return render(request, 'Nitor/saveCandidate.html')
 
 
 def is_admin(user_id):
@@ -118,7 +122,7 @@ def list_candidates(request):
             candidates = list_of_candidates()
             return render(request, 'Nitor/candidateList.html', {'candidates': candidates})
         return index(request)
-    return render(request, '/login')
+    return index(request)
 
 
 def candidate_profile(request, user_id):
@@ -196,8 +200,9 @@ def show_add_question(request):
                 qtype = request.POST.get('qtype')
                 # code to add coding test in database
                 if qtype == 'ct':
-                    form2 = AddCodingTestForm(request.POST, \
-                                              {'extra': int(request.POST.get('total_testcases_count'))})
+                    form2 = AddCodingTestForm(request.POST,
+                                              {'extra': int(request.POST.get('total_testcases_count'))
+                                               })
                     if form2.is_valid():
                         test_cases = {}
                         title = request.POST.get('title')
@@ -208,22 +213,22 @@ def show_add_question(request):
                         total_test_cases = int(request.POST.get('total_testcases_count'))
                         if total_test_cases:
                             total_test_cases += 1
-                            for index in range(1, total_test_cases):
-                                case = 'case'+str(index)
-                                input_str = 'input_'+str(index)
-                                output_str = 'output_'+str(index)
-                                test_cases[case] = {'testcase': request.POST.get(input_str), \
+                            for index_range in range(1, total_test_cases):
+                                case = 'case'+str(index_range)
+                                input_str = 'input_'+str(index_range)
+                                output_str = 'output_'+str(index_range)
+                                test_cases[case] = {'testcase': request.POST.get(input_str),
                                                     'output': request.POST.get(output_str)}
                         testcases = test_cases
-                        question = Question(qtype=qtype, language=language, \
-                                            title=title, level=level, description=description,\
+                        question = Question(qtype=qtype, language=language,
+                                            title=title, level=level, description=description,
                                             snippet=snippet, testcases=testcases)
                         question.save()
                         return success_message(request, "One coding question saved successfully.")
 
                 # code to add mcq in database
                 elif qtype == 'mcq':
-                    form1 = AddMcqForm(request.POST,\
+                    form1 = AddMcqForm(request.POST,
                                        {'extra': int(request.POST.get('total_options'))})
                     if form1.is_valid():
                         test_options = {}
@@ -231,21 +236,21 @@ def show_add_question(request):
                         total_options = int(request.POST.get('total_options'))
                         if total_options:
                             total_options += 1
-                            for index in range(1, total_options):
-                                option = str(index)
-                                option_val = "option_"+str(index)
+                            for index_range in range(1, total_options):
+                                option = str(index_range)
+                                option_val = "option_"+str(index_range)
                                 test_options[option] = request.POST.get(option_val)
                         options = test_options
                         correct_option = request.POST.get('correct_option')
                         subject = request.POST.get('subject')
-                        question = Question(qtype=qtype, subject=subject,\
-                                            description=question, options=options,\
+                        question = Question(qtype=qtype, subject=subject,
+                                            description=question, options=options,
                                             correct_option=correct_option)
                         question.save()
-                        return success_message(request,\
+                        return success_message(request,
                                                "One multiple choice question saved successfully.")
-                    return render(request, 'Nitor/addCodingQuiz.html', {'form1': form1,\
-                                                                        'form2': form2,\
+                    return render(request, 'Nitor/addCodingQuiz.html', {'form1': form1,
+                                                                        'form2': form2,
                                                                         'current': 'mcq'})
             form1 = AddMcqForm()
             form2 = AddCodingTestForm()
@@ -273,8 +278,12 @@ def get_questions(request):
     :param request: contains the details of the user who requested the URL
     :return: returns all the question from database as json reponse
     """
-    questions = Question.objects.values()
-    return JsonResponse({'questions': list(questions)})
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            questions = Question.objects.values()
+            return JsonResponse({'questions': list(questions)})
+    return index(request)
 
 
 def create_que_paper(request):
@@ -330,41 +339,41 @@ def success_message(request, message):
     return index(request)
 
 
-def assign_test(request):
-    """
-    Code to assign the test for candidates.
-    :param request: contains the details of the user who requested the URL
-    :return: redirects to page which is used to assign test to candidate
-    """
-    user = request.user
-    if user.is_authenticated:
-        if user.is_superuser:
-            context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all()}
-            if request.method == 'POST':
-                ids = request.POST.getlist('candidate_id')
-                if not ids:
-                    messages.error(request, '**No candidate selected.')
-                else:
-                    for i in ids:
-                        test_str = i+"-paper"
-                        date_str = i+"-date"
-                        assigned_test = request.POST.get(test_str)
-                        total_score, mcq_score, code_score = get_scores(assigned_test)
-                        assigned_date = request.POST.get(date_str)
-                        mcq_ans = {}
-                        code_ans = {}
-                        if assigned_date == "" or assigned_test is None:
-                            messages.error(request, ' Either date of test or exam not selected.')
-                            return render(request, 'Nitor/assignTest.html', context)
-                        _c = CandidateStatus(candidate=i, exam_date=assigned_date,
-                                             question_paper=assigned_test, mcq_ans=mcq_ans,
-                                             code_ans=code_ans, total_score=total_score,
-                                             total_code_score=code_score,
-                                             total_mcq_score=mcq_score)
-                        _c.save()
-                    return success_message(request, "Successfully asssigned")
-            return render(request, 'Nitor/assignTestToCandidate.html', context)
-        return index(request)
+# def assign_test(request):
+#     """
+#     Code to assign the test for candidates.
+#     :param request: contains the details of the user who requested the URL
+#     :return: redirects to page which is used to assign test to candidate
+#     """
+#     user = request.user
+#     if user.is_authenticated:
+#         if user.is_superuser:
+#             context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all()}
+#             if request.method == 'POST':
+#                 ids = request.POST.getlist('candidate_id')
+#                 if not ids:
+#                     messages.error(request, '**No candidate selected.')
+#                 else:
+#                     for i in ids:
+#                         test_str = i+"-paper"
+#                         date_str = i+"-date"
+#                         assigned_test = request.POST.get(test_str)
+#                         total_score, mcq_score, code_score = get_scores(assigned_test)
+#                         assigned_date = request.POST.get(date_str)
+#                         mcq_ans = {}
+#                         code_ans = {}
+#                         if assigned_date == "" or assigned_test is None:
+#                             messages.error(request, ' Either date of test or exam not selected.')
+#                             return render(request, 'Nitor/assignTest.html', context)
+#                         _c = CandidateStatus(candidate=i, exam_date=assigned_date,
+#                                              question_paper=assigned_test, mcq_ans=mcq_ans,
+#                                              code_ans=code_ans, total_score=total_score,
+#                                              total_code_score=code_score,
+#                                              total_mcq_score=mcq_score)
+#                         _c.save()
+#                     return success_message(request, "Successfully asssigned")
+#             return render(request, 'Nitor/assignTestToCandidate.html', context)
+#         return index(request)
 
 
 def question_papers(request, message=""):
@@ -390,10 +399,14 @@ def fetch_question_paper(request, question_id):
     :param question_id: id of question paper which details need to be fetch
     :return: redirects to page which shows the particular question paper
     """
-    _id = int(question_id)
-    q_paper = QuestionPaper.objects.get(id=question_id)
-    paper = get_paper(q_paper)
-    return render(request, 'Nitor/showQuestionPaper.html', {'paper': paper, 'id': _id})
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            _id = int(question_id)
+            q_paper = QuestionPaper.objects.get(id=question_id)
+            paper = get_paper(q_paper)
+            return render(request, 'Nitor/showQuestionPaper.html', {'paper': paper, 'id': _id})
+    return index(request)
 
 
 def candidate_status(request, candidate_id):
@@ -403,9 +416,13 @@ def candidate_status(request, candidate_id):
     :param candidate_id: id of candidate whose status to be show
     :return: Redirect to page whose status to be show
     """
-    _id = int(candidate_id)
-    cst = get_candidate_status(_id)
-    return render(request, 'Nitor/candidateStatus1.html', {'status':cst, 'cid':candidate_id})
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            _id = int(candidate_id)
+            cst = get_candidate_status(_id)
+            return render(request, 'Nitor/candidateStatus1.html', {'status': cst, 'cid': candidate_id})
+    return index(request)
 
 
 def rem_candidate_status(request, cid, pid, tid):
@@ -417,9 +434,13 @@ def rem_candidate_status(request, cid, pid, tid):
     :param tid: test id
     :return: To assigned page after removing assigned page
     """
-    CandidateStatus.objects.get(candidate=cid, question_paper=pid, id=tid).delete()
-    url = "/candidatestatus/"+cid
-    return HttpResponseRedirect('/assignTest/name="ALL"')
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            CandidateStatus.objects.get(candidate=cid, question_paper=pid, id=tid).delete()
+            url = "/candidatestatus/" + cid
+            return HttpResponseRedirect('/assignTest/name="ALL"')
+    return index(request)
 
 
 def remove_question_paper(request, pid):
@@ -429,13 +450,17 @@ def remove_question_paper(request, pid):
     :param pid:Question paper id
     :return:
     """
-    existed_in = questionpaper_remove_from_assigned(pid)
-    if not existed_in:
-        QuestionPaper.objects.get(id=pid).delete()
-        message = ""
-    else:
-        message = "Question paper is already assigned to some candidates cannot be deleted."
-    return question_papers(request, message)
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            existed_in = questionpaper_remove_from_assigned(pid)
+            if not existed_in:
+                QuestionPaper.objects.get(id=pid).delete()
+                message = ""
+            else:
+                message = "Question paper is already assigned to some candidates cannot be deleted."
+            return question_papers(request, message)
+    return index(request)
 
 
 def show_score(request, cid, pid,tid):
@@ -486,9 +511,9 @@ def remove_question(request, que_id):
             else:
                 message = "Question existed in papers cannot be deleted,\
                     first delete the paper."
-                print(message)
             questions = create_question_object()
-            return render(request, 'Nitor/questions.html', {'questions': questions, 'message': message})
+            return render(request, 'Nitor/questions.html', {'questions': questions,
+                                                            'message': message})
     return index(request)
 
 
@@ -502,8 +527,8 @@ def assign_test2(request, name="ALL"):
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            all_candidate_status = get_all_candidate_status(name)
-            context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all(),\
+            all_candidate_status = get_all_candidate_status()
+            context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all(),
                        "all_candidate_status": all_candidate_status}
             if request.method == 'POST':
                 ids = request.POST.get('candidate')                
@@ -515,11 +540,11 @@ def assign_test2(request, name="ALL"):
                 if assigned_date == "" or assigned_test is None or ids is None:
                     messages.error(request, ' Select all information.')
                     return render(request, 'Nitor/assignTest.html', context)
-                _c = CandidateStatus(candidate=ids, exam_date=assigned_date,\
-                                     question_paper=assigned_test, mcq_ans=mcq_ans, code_ans=code_ans,\
-                                     total_score=total_score, total_code_score=code_score,\
+                _c = CandidateStatus(candidate=ids, exam_date=assigned_date,
+                                     question_paper=assigned_test, mcq_ans=mcq_ans, code_ans=code_ans,
+                                     total_score=total_score, total_code_score=code_score,
                                      total_mcq_score=mcq_score)
                 _c.save()
                 return HttpResponseRedirect('/assignTest/name="ALL"')
             return render(request, 'Nitor/assignTestToCandidate.html', context)
-        return index(request)
+    return index(request)
