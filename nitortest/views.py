@@ -26,9 +26,23 @@ def index(request, next_url=None):
     if user.is_authenticated:
         if user.is_superuser:
             if not next_url:
-                next_url = 'Nitor/adminHome.html'
+                next_url = '/adminHome'
             return HttpResponseRedirect(next_url)
-            #return render(request, next_url)
+            # return render(request, next_url)
+        return HttpResponseRedirect('/candidate')
+    return redirect('/login')
+
+
+def admin_home(request):
+    """
+     Admin home redirection
+    :param request: contains the details of the user who requested the URL
+    :return: returning the user tp its respective URL
+    """
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/adminHome.html')
         return HttpResponseRedirect('/candidate')
     return redirect('/login')
 

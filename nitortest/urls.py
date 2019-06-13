@@ -7,6 +7,7 @@ from nitortest import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^adminHome/$', views.admin_home, name='admin_home'),
     url(r'^addUser/$', views.add_user, name='addUser'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
