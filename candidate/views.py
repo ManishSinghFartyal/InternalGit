@@ -20,9 +20,11 @@ def index(request, next_url=None):
     :return: If user is superuser then redirect to admin home page vis a vis for candidate
     """
     user = request.user
-    if user.is_superuser:
-        return render(request, 'Nitor/adminHome.html')
-    return HttpResponseRedirect('/candidate/candidateHome')
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/adminHome.html')
+        return HttpResponseRedirect('/candidate/candidateHome')
+    return redirect("/login")
 
 
 def candidate_home(request):
@@ -32,9 +34,13 @@ def candidate_home(request):
     :return: Redirect to candidate home page
     """
     user = request.user
-    i_d = get_id(user)
-    tests = get_test(i_d)
-    return render(request, 'candidateHome.html', {'tests': tests})
+    if user.is_authenticated:
+        if user.is_superuser:
+            return render(request, 'Nitor/adminHome.html')
+        i_d = get_id(user)
+        tests = get_test(i_d)
+        return render(request, 'candidateHome.html', {'tests': tests})
+    return redirect('/login')
 
 
 def start_test(request, pid, tid):

@@ -138,37 +138,37 @@
      {%if request.user.is_authenticated%}
      {%if request.user.is_superuser%}
      <li class="nav-item">
-      <a class="nav-link" href="/listCandidate">
+      <a class="nav-link" href="{% url 'list_candidates' %}">
         <i class="material-icons">person</i>
         <p>List candidates</p>
       </a>        
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/addUser">
+      <a class="nav-link" href="{% url 'addUser' %}">
         <i class="material-icons">queue</i>
         <p>Add candidate</p>
       </a>     
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/assignTest/name='ALL'" id='addcode'>
+      <a class="nav-link" href="{% url 'assignTest' name='ALL'%}" id='addcode'>
         <i class="material-icons">code</i>
         <p>Assign test</p>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/questionPapers" id='addcode'>
+      <a class="nav-link" href="{% url 'questionPapers' %}" id='addcode'>
         <i class="material-icons">forum</i>
         <p>Question papers</p>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/listQuestions">
+      <a class="nav-link" href="{% url 'listQuestions' %}">
         <i class="material-icons">list</i>
         <p>Questions</p>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/logout">
+      <a class="nav-link" href="{% url 'logout' %}">
         <i class="material-icons">remove</i>
         <p>Logout</p>
       </a>

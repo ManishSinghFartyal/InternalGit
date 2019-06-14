@@ -41,15 +41,15 @@
               <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/listCandidate" title="Show all candidates"><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span class="font-sheet" style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
+                  <a href="{% url 'list_candidates' %}" title="Show all candidates"><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span class="font-sheet" style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/addUser" title="Add new candidate"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
+                  <a href="{% url 'addUser' %}" title="Add new candidate"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/assignTest/name='ALL'" title="Assign test to candidates"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
+                  <a href="{% url 'assignTest' name='ALL'%}" title="Assign test to candidates"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
                 </div>
               </div>
               <br>
@@ -60,15 +60,15 @@
               <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/questionPapers" title="Show all question paper created"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
+                  <a href="{% url 'questionPapers' %}" title="Show all question paper created"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/listQuestions" title="Show all questions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
+                  <a href="{% url 'listQuestions' %}" title="Show all questions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
                 </div> 
                 <div class="col-md-1"></div>
                 <div class="col-md-3 text-center">
-                  <a href="/addQuestion" title="Add new questions"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
+                  <a href="{% url 'addQuestion' %}" title="Add new questions"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
                 </div>
               </div>
             </div>

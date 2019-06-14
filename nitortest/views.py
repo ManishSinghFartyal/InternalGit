@@ -109,6 +109,7 @@ def login(request):
         if form.is_valid():
             user = form.cleaned_data
             i = auth_login(request, user)
+            print(i)
             return index(request, next_url)
         context = {'form': form}
     return render(request, 'Nitor/loginNew.html', context)
@@ -562,3 +563,12 @@ def assign_test2(request, name="ALL"):
                 return HttpResponseRedirect('/assignTest/name="ALL"')
             return render(request, 'Nitor/assignTestToCandidate.html', context)
     return index(request)
+
+
+def error404(request):
+    return render(request, 'Nitor/error_404.html')
+
+
+def error500(request):
+    return render(request, 'Nitor/error_404.html')
+
