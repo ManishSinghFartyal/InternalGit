@@ -353,41 +353,41 @@ def success_message(request, message):
     return index(request)
 
 
-# def assign_test(request):
-#     """
-#     Code to assign the test for candidates.
-#     :param request: contains the details of the user who requested the URL
-#     :return: redirects to page which is used to assign test to candidate
-#     """
-#     user = request.user
-#     if user.is_authenticated:
-#         if user.is_superuser:
-#             context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all()}
-#             if request.method == 'POST':
-#                 ids = request.POST.getlist('candidate_id')
-#                 if not ids:
-#                     messages.error(request, '**No candidate selected.')
-#                 else:
-#                     for i in ids:
-#                         test_str = i+"-paper"
-#                         date_str = i+"-date"
-#                         assigned_test = request.POST.get(test_str)
-#                         total_score, mcq_score, code_score = get_scores(assigned_test)
-#                         assigned_date = request.POST.get(date_str)
-#                         mcq_ans = {}
-#                         code_ans = {}
-#                         if assigned_date == "" or assigned_test is None:
-#                             messages.error(request, ' Either date of test or exam not selected.')
-#                             return render(request, 'Nitor/assignTest.html', context)
-#                         _c = CandidateStatus(candidate=i, exam_date=assigned_date,
-#                                              question_paper=assigned_test, mcq_ans=mcq_ans,
-#                                              code_ans=code_ans, total_score=total_score,
-#                                              total_code_score=code_score,
-#                                              total_mcq_score=mcq_score)
-#                         _c.save()
-#                     return success_message(request, "Successfully asssigned")
-#             return render(request, 'Nitor/assignTestToCandidate.html', context)
-#         return index(request)
+def assign_test(request):
+    """
+    Code to assign the test for candidates.
+    :param request: contains the details of the user who requested the URL
+    :return: redirects to page which is used to assign test to candidate
+    """
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all()}
+            if request.method == 'POST':
+                ids = request.POST.getlist('candidate_id')
+                if not ids:
+                    messages.error(request, '**No candidate selected.')
+                else:
+                    for i in ids:
+                        test_str = i+"-paper"
+                        date_str = i+"-date"
+                        assigned_test = request.POST.get(test_str)
+                        total_score, mcq_score, code_score = get_scores(assigned_test)
+                        assigned_date = request.POST.get(date_str)
+                        mcq_ans = {}
+                        code_ans = {}
+                        if assigned_date == "" or assigned_test is None:
+                            messages.error(request, ' Either date of test or exam not selected.')
+                            return render(request, 'Nitor/assignTest.html', context)
+                        _c = CandidateStatus(candidate=i, exam_date=assigned_date,
+                                             question_paper=assigned_test, mcq_ans=mcq_ans,
+                                             code_ans=code_ans, total_score=total_score,
+                                             total_code_score=code_score,
+                                             total_mcq_score=mcq_score)
+                        _c.save()
+                    return success_message(request, "Successfully asssigned")
+            return render(request, 'Nitor/assignTestToCandidate.html', context)
+        return index(request)
 
 
 def question_papers(request, message=""):

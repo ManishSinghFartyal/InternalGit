@@ -13746,7 +13746,7 @@ h2.title {
   right: 6px;
 }
 
-.sidebar li>a:hover,
+/*.sidebar li>a:hover,
 .sidebar li>a:focus {
   background-color: transparent;
   outline: none;
@@ -13763,7 +13763,7 @@ h2.title {
   background-color: rgba(200, 200, 200, 0.2);
   color: #3C4858;
   box-shadow: none;
-}
+}*/
 
 .sidebar li.active>[data-toggle="collapse"] i {
   color: #a9afbb;

@@ -73,7 +73,7 @@ def get_candidate_profile(user_id):
     que_paper_assigned = []
     _candidate = {}
     try:
-        _profile = User.objects.get(user_id=user_id)
+        _profile = Profile.objects.get(user_id=user_id)
         print("_profile = ", _profile)
         if CandidateStatus.objects.filter(candidate=user_id).count() >= 1:
             assigned = CandidateStatus.objects.filter(candidate=user_id)
