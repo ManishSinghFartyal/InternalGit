@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="wrapper ">
+  <title>{%block title%}Profile - Nitor infotech{% endblock %}</title>
+  <div class="main-panel">    	
+   <div class="content" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10">
+          <div class="card text-center" >
+           <div class="card-header card-header-primary">
+            <h4 class="card-title">Candidate list</h4>                  
+          </div> 
+          {{candidate.user_id}}
+          <div>
+            <b>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> First Name:{{candidate.fname}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> Last name:{{candidate.lname}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> @email :{{candidate.email}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;">Skilled in :{{candidate.skill}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;">Education :{{candidate.education}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;">Experience :{{candidate.experience}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;">Contact :{{candidate.contact}}</p> 
+              <hr>
+              <p class="lead" style="background: white;font-weight: bolder;padding: 10px 10px 10px 10px;"> Department :{{candidate.department}}</p> 
+              <hr>
+            </b>                  
+            <div class="row">                 
+              <div class="col-sm-12">
+                <a href='/removeCandidate/{{candidate.user_id}}'>
+                  <button type="reset" class="btn btn-danger">Remove</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>            
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}

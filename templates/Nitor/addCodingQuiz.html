@@ -1,0 +1,89 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style type="text/css">
+  strong{
+    font-size: 15px;
+    font-weight: bolder;
+  }
+</style>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css"/>
+<div class="wrapper ">
+    {% include 'Nitor/sidebar.html' %}
+    {% include 'Nitor/navbar.html'  %}
+    <div class="main-panel">    	
+    	<div class="content">           
+        <form action="" method="POST"  novalidate="true"> 
+          <div class="container-fluid">            
+          {% csrf_token %}    
+             <div class="row">
+                 <div class="col-md-12">
+                    <select  id='qtype' class="form-control form-control-lg browser-default custom-select" onchange="showAddQuestion();" name='qtype'>
+                      <option disabled="true" selected="true">Select question type here</option>
+                      <option value="mcq" {% if current == 'mcq' %}selected="true"{%endif%}>Multiple choice question</option>
+                      <option value="ct" {% if current == 'ct' %}selected="true"{%endif%}>Coding test</option>
+                      <option value="tha">Theoretical assignments</option>
+                    </select>              
+                  </div>
+              </div>
+              <!-- *************************Interface for coding test**************************** -->
+               <div class="row">
+                <div class="col-md-11"  style="{%if current == 'mcq'  or not current%}visibility: hidden;{%endif%}position: absolute;" id='addct'>                          
+                    <div class="card"> 
+                        <div class="row">
+                            <div class="col-sm-6">{{form2.title|as_crispy_field}}</div>
+                            <div class="col-sm-6">{{form2.level|as_crispy_field}}</div>                 
+                        </div>
+                         <div class="col-md-l2">{{form2.description|as_crispy_field}}</div>   
+                         <div class="col-md-l2">{{form2.language|as_crispy_field}}</div> 
+                         <div class="col-md-l2">{{form2.snippet|as_crispy_field}}</div>
+                         <div class="col-md-l2">{{form2.total_testcases_count|as_crispy_field}}</div>
+                         <div class="col-md-12" id='tc' style="padding-left: 30px;padding-top: 30px;">
+                         </div>
+                         <div class="col-sm-12">
+                            <button type="button" class="btn btn-sm btn-info" onclick="addTestCase();" id="add_another">Add Test-case</button>
+                          </div>  
+                          <div class="col-md-5"><button type="submit" class="btn btn-success">Add</button></div>                 
+                    </div> 
+                </div>               
+               </div> 
+              <!--****************************** Interface for mcq ******************************-->
+               <div class="row">
+                <div class="col-md-12"  style="{%if current == 'ct' or not current%}visibility: hidden{%endif%};position: absolute;" id='addmcq'>                          
+                  <div class="card">
+                        <div class="col-md-12">{{form1.subject|as_crispy_field}}</div>
+                        <br>
+                        <div class="col-md-12">{{form1.question|as_crispy_field}}</div>
+                        <br>
+                        <div class="col-md-12">{{form1.total_options|as_crispy_field}}
+                            <div class="col-md-12" id='op' style="padding-left: 30px;padding-top: 30px;"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-sm-3">
+                            <button type="button" class="btn btn-sm btn-info" onclick="addOptions();" id="add_another">Add options</button>
+                          </div>
+                        </div>  
+                        <div class="col-md-12">{{form1.correct_option|as_crispy_field}}</div>
+                        <div class="col-sm-6"><button type="submit" class="btn btn-md btn-success">Add</button>   </div>
+                  </div>
+                </div>                    
+               </div>
+          </div>
+          </form>
+      </div>     
+    </div>
+</div>
+
+ <script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
+ <script>  
+   (function() {
+    document.getElementById('id_total_options').value = 0
+    var editor = CodeMirror.fromTextArea(document.querySelector('#id_snippet'), {
+      lineNumbers: true,
+      mode:  "javascript",      
+    });
+  })();
+ </script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.min.js"></script>
+{% endblock %}

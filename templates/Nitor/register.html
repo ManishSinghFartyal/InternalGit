@@ -1,0 +1,68 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load static %}
+<title>{%block title%}Register candidate - Nitor infotech{% endblock %}</title>
+<link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+<div class="wrapper ">   
+    <div class="main-panel">    
+    	<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title">Create New candidate</h4>
+                  <p class="card-category">Complete your profile</p>
+                </div>
+                <div class="card-body">
+                  <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class='row '>
+                      <div class="col-sm-6">
+                         {{form.first_name|as_crispy_field}}
+                      </div>
+                      <div class="col-sm-6">
+                         {{form.last_name|as_crispy_field}}
+                      </div>
+                    </div>  
+                    <div class='row '>
+                      <div class="col-sm-6">
+                         {{form.email|as_crispy_field}}
+                      </div>
+                      <div class="col-sm-6">
+                         {{form.contact|as_crispy_field}}
+                      </div>
+                    </div> 
+                    <div class='row '>
+                      <div class="col-sm-6">
+                         {{form.education|as_crispy_field}}
+                      </div>
+                      <div class="col-sm-6">
+                         {{form.department|as_crispy_field}}
+                      </div> 
+                    </div>          
+                    <div class='row '>
+                      <div class="col-sm-6">
+                         {{form.skill|as_crispy_field}}
+                      </div>
+                      <div class="col-sm-6">
+                         {{form.experience|as_crispy_field}}
+                      </div> 
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+      
+{% endblock %}
+  

@@ -39,7 +39,7 @@ def candidate_home(request):
             return render(request, 'Nitor/adminHome.html')
         i_d = get_id(user)
         tests = get_test(i_d)
-        return render(request, 'candidateHome.html', {'tests': tests})
+        return render(request, 'candidate/candidateHome.html', {'tests': tests, 'home': True})
     return redirect('/login')
 
 
@@ -174,7 +174,7 @@ def test(request, pid, tid):
             request.session['currentpage'] = page
             paginate = _p.page(page)
             pages = dict(paginate)
-        return render(request, 'test.html', {'pid': pid, 'tid': tid, 'paper_details': paper,
+        return render(request, 'candidate/test.html', {'home': True, 'pid': pid, 'tid': tid, 'paper_details': paper,
                                              'paper': question_paper, 'pages': pages,
                                              'paginator': paginate, 'mcq_answered': mcq_answered,
                                              'code_answered': code_answered, 'hour': int(_h),
@@ -200,7 +200,7 @@ def save_test(request, pid, tid):
         try:
             del request.session['testid']
         except KeyError:
-            pass
+            pass        
         candidate_home(request)
     return redirect("/login")
 
@@ -239,7 +239,7 @@ def rules(request, pid, tid):
     if user.is_authenticated:
         if user.is_superuser:
             return index(request)
-        return render(request, 'rules.html', {'pid': pid, 'tid': tid})
+        return render(request, 'candidate/rules.html', {'pid': pid, 'tid': tid})
     return redirect("/login")
 
 

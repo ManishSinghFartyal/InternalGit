@@ -42,18 +42,9 @@ def admin_home(request):
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            return render(request, 'Nitor/adminHome.html')
+            return render(request, 'Nitor/adminHome.html', {'home': True})
         return HttpResponseRedirect('/candidate')
     return redirect('/login')
-
-#
-# def success(request):
-#     """
-#     success : To send user response after Candidate successfully saved
-#     :param request: contains the details of the user who requested the URL
-#     :return: returns to the save candidate success message page
-#     """
-#     return render(request, 'Nitor/saveCandidate.html')
 
 
 def is_admin(user_id):
@@ -109,7 +100,6 @@ def login(request):
         if form.is_valid():
             user = form.cleaned_data
             i = auth_login(request, user)
-            print(i)
             return index(request, next_url)
         context = {'form': form}
     return render(request, 'Nitor/loginNew.html', context)
@@ -264,9 +254,7 @@ def show_add_question(request):
                         question.save()
                         return success_message(request,
                                                "One multiple choice question saved successfully.")
-                    return render(request, 'Nitor/addCodingQuiz.html', {'form1': form1,
-                                                                        'form2': form2,
-                                                                        'current': 'mcq'})
+
             form1 = AddMcqForm()
             form2 = AddCodingTestForm()
             context = {'form1': form1, 'form2': form2, 'current': None}
