@@ -2,25 +2,11 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="{% static 'admin/js/codeTest.js' %}"></script>
 
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <!-- CSS Files -->
-  <link href="{% static 'admin/css/demo.css' %}" rel="stylesheet" />
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<div class="wrapper ">
 
-
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <div class="wrapper ">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-  <script type="text/javascript" src="{% static 'admin/js/codeTest.js' %}"></script>
 <title>{%block title%}Candidate Home - Nitor infotech{% endblock %}</title>
 <div class="wrapper" style="padding: 5px 20px 20px 20px;  background: #fff0 !important;">
   <form>
@@ -41,7 +27,7 @@
                     <br><br>
                     <h4 class="lead">No tests assigned !<br><br> Please contact admin.</h4>
                     {% endif %}
-                    {% for key,value in tests.items %} 
+                    {% for key,value in tests.items %}
                     <div class="row" style="background: #2226; border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 5px 5px 5px 5px;">
                       <div class="col-sm-2" style="background: #fff6;border-top-left-radius:50px;border-bottom-left-radius:50px;padding: 15px 5px 5px 15px;">
                         <img src="{% static 'admin/img/testAssigned.png' %}" width="90px" height="90px">
@@ -92,11 +78,8 @@
                 </div>
               </div>
             </div>
-          </div>        
+          </div>
         </div>
-        <div class="row text-center" style="background: #111; text-align: center;">  
-         {% include 'Nitor/footer.html'  %}
-       </div>
      </div>
    </div>  
  </div>

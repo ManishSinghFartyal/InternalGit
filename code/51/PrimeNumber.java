@@ -4,8 +4,7 @@ public class PrimeNumber
                 public static void main(String args[]) 
              { 
                   int num,b,c; 
-                  Scanner s=new Scanner(System.in); 
-                  System.out.println("Enter A Number"); 
+                  Scanner s=new Scanner(System.in);                  
                   num =s.nextInt(); 
                   b=1; 
                   c=0; 
@@ -16,8 +15,8 @@ public class PrimeNumber
                              b++; 
                       } 
                        if(c==2) 
-                       System.out.println(num +" is a prime number"); 
+                       System.out.println("Number is prime"); 
                        else 
-                       System.out.println(num +" is not a prime number"); 
+                       System.out.println("Number is not prime"); 
              } 
 } 

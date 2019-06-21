@@ -18,11 +18,11 @@
   #result{      
    padding: 5px 15px 5px 15px; 
  }
- #span{
+ .span{
    width: 50px;
    height: 50px;
    text-align: center;
-   color: white;
+   color: #000;
    font-size: 24px;"
  } 
  .loader {
@@ -62,18 +62,7 @@
 }
 </style>
 <title>{%block title%}Exam - Nitor infotech{% endblock %}</title>
-<link href='https://fonts.googleapis.com/css?family=Cabin Sketch' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Cabin Sketch' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Quattrocento Sans' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <div class="wrapper ">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="{% static 'admin/css/material-dashboard.css'%}" rel="stylesheet" />
+
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/lib/codemirror.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/codemirror@5.44.0/theme/eclipse.min.css">
@@ -86,14 +75,14 @@
        <div class="row" style="background: linear-gradient(90deg, #21a5ab73, #d6bcdce0);padding: 5px 5px 5px 5px;border-radius: 10px;">
         <div class="col-sm-8">
           <div class="col-sm-12">
-            <p class="lead" style="color: white;font-weight: bolder;font-size: 27px;"><b>Test will ends in &nbsp;&nbsp;&nbsp;</b></p>
+            <p class="lead" style="color: black;font-weight: bolder;font-size: 27px;"><b>Test will ends in</b></p>
           </div>
           <div class="col-sm-12">
-            <input type="text" name="hours" id="hours" style="background: #1113; width: 50px;height: 50px;text-align: center;color: white;font-size: 24px;border: none;" disabled="true" value="{{hour}}">
-            <span id="span">:</span>
-            <input type="text" name="minutes" id="minutes" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{minute}}">
-            <span id="span">:</span>
-            <input type="text" name="seconds" id="seconds" style="background: #1113;width: 50px;height: 50px;color: white;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{second}}">
+            <input type="text" name="hours" id="hours" style="background: #1113; width: 50px;height: 50px;text-align: center;color: black;font-size: 24px;border: none;" disabled="true" value="{{hour}}">
+            <span class="span">:</span>
+            <input type="text" name="minutes" id="minutes" style="background: #1113;width: 50px;height: 50px;color: black;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{minute}}">
+            <span class="span">:</span>
+            <input type="text" name="seconds" id="seconds" style="background: #1113;width: 50px;height: 50px;color: black;text-align: center;font-size: 24px;border: none;" disabled="true" value="{{second}}">
           </p>
         </div>
       </div> 

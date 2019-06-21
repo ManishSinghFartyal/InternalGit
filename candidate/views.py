@@ -4,12 +4,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
 from nitortest.models import CandidateStatus, Question
+from candidate.compiler import RunCode
 from .service import *
 
-# Extending compilers
-from . import check_code_python as cPython
-from . import check_code_java as cJava
-from . import check_code_node as cNode
 
 
 def index(request, next_url=None):
@@ -190,6 +187,7 @@ def save_test(request, pid, tid):
     :param tid: Test id
     :return: After final submit it saves the test and return to candidate home
     """
+    print("welcome saving test is called")
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -200,30 +198,27 @@ def save_test(request, pid, tid):
         try:
             del request.session['testid']
         except KeyError:
-            pass        
+            pass
+        print("TEST SAVED")
         candidate_home(request)
     return redirect("/login")
 
 
-def ajax_call(request, pid):
+def ajax_call(request, question_id):
     """
     AJAX FUNCTION TO RUN CODE
     :param request:contains the details of the user who requested the URL
-    :param pid:Paper id
-    :return: Compiles the code and returns the output along with the testcases
+    :param question_id: Particular question id (question id)
+    :return: Compiles the code and returns the output along with the test cases
     """
     user_id = get_id(request.user)
     code = request.GET['code']
-    test_id = request.GET['testid']
-    tid = request.GET['tid']
+    question_paper_id = request.GET['testid']
+    candidate_status_id = request.GET['tid']
     language = request.GET['language']
-    if language == 'python':
-        _json = cPython.run_code2(code, user_id, pid)
-    elif language == 'java':
-        _json = cJava.run_code2(code, user_id, pid)
-    elif language == 'javascript':
-        _json = cNode.run_code2(code, user_id, pid)
-    save_code(pid, code, _json, user_id, test_id, tid)
+    obj_run = RunCode(user_id, code, question_paper_id, candidate_status_id, question_id, language)
+    _json = obj_run.execute_code()
+    save_code(question_id, code, _json, user_id, question_paper_id, candidate_status_id)
     return JsonResponse(_json)
 
 

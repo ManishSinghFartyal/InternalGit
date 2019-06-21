@@ -14,7 +14,11 @@ class Factorial
          System.out.println("Not valid");
       else
       {
+         for (c = 1; c <= n; c++)
+            fact = fact*c;
+     
+         System.out.println(fact);
       }
    }
 }
-                      
+
