@@ -69,12 +69,10 @@ def get_candidate_profile(user_id):
     :param user_id:Candidate id for which profile to show
     :return: Candidate details
     """
-    print(user_id)
     que_paper_assigned = []
     _candidate = {}
     try:
         _profile = Profile.objects.get(user_id=user_id)
-        print("_profile = ", _profile)
         if CandidateStatus.objects.filter(candidate=user_id).count() >= 1:
             assigned = CandidateStatus.objects.filter(candidate=user_id)
             for _a in assigned:
@@ -89,31 +87,8 @@ def get_candidate_profile(user_id):
                       'contact': _profile.contact, 'department': _profile.department,
                       'status': c_s, 'que_paper_assigned': que_paper_assigned}
     except ObjectDoesNotExist:
-        print("Exception")
         return _candidate
     return _candidate
-
-
-# def save_mcq(request):
-#     """
-#
-#     :param request:
-#     :return:
-#     """
-#     """ Save MCQ question """
-#     test_options = {}
-#     description = request.POST.get('description')
-#     total_options = int(request.POST.get('total_options'))
-#     if total_options:
-#         total_options += 1
-#         for index in range(1, total_options):
-#             option = 'option_'+str(index)
-#             test_options[option] = request.POST.get(option)
-#     options = test_options
-#     correct_option = request.POST.get('correct_option')
-#     question = Question(qtype=type, description=description, options=options,
-#                         correct_option=correct_option)
-#     question.save()
 
 
 def create_question_object():
@@ -317,6 +292,7 @@ def get_scores(testid):
     total = 0
     mcq = 0
     code = 0
+    key = None
     question = QuestionPaper.objects.get(id=testid)
     try:
         mcqs = ast.literal_eval(question.mcq)

@@ -3,10 +3,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
-from nitortest.models import CandidateStatus, Question
-from candidate.compiler import RunCode
+from compiler import mediator
 from .service import *
-
 
 
 def index(request, next_url=None):
@@ -40,12 +38,12 @@ def candidate_home(request):
     return redirect('/login')
 
 
-def start_test(request, pid, tid):
+def start_test(request, question_paper_id, candidate_status_id):
     """
     Starts test
     :param request: contains the details of the user who requested the URL
-    :param pid: Paper id
-    :param tid: test id
+    :param question_paper_id: Paper id
+    :param candidate_status_id: test id
     :return: Redirect to test_str
     """
     user = request.user
@@ -53,24 +51,30 @@ def start_test(request, pid, tid):
         if user.is_superuser:
             return index(request)
         # If user submit a mcq answer
-        request.session['testid'] = pid
+        request.session['testid'] = question_paper_id
         user_id = get_id(user)
         start_time = timezone.localtime(timezone.now())
-        save_time(start_time, user_id, pid, tid)
-        test_str = "/candidate/test/"+pid+"/"+tid
+        save_time(start_time, user_id, question_paper_id, candidate_status_id)
+        test_str = "/candidate/test/"+question_paper_id+"/"+candidate_status_id
         request.session['currentpage'] = 1
         return HttpResponseRedirect(test_str)
     return index(request)
 
 
-def test(request, pid, tid):
+def test(request, question_paper_id, candidate_status_id):
     """
     Starts a test and save answer, time limit
     :param request:contains the details of the user who requested the URL
-    :param pid: Paper id
-    :param tid: test id
+    :param question_paper_id: Paper id
+    :param candidate_status_id: test id
     :return: To the test page after saving previous answer or login if not logged in
     """
+    paginate = None
+    question_paper = None
+    pages = None
+    _m = None
+    _h = None
+    _s = None
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -79,28 +83,28 @@ def test(request, pid, tid):
         if 'testid' not in request.session:
             return candidate_home(request)
         userid = get_id(user)
-        mcq_answered, code_answered = get_answered(userid, pid, tid)
+        mcq_answered, code_answered = get_answered(userid, question_paper_id, candidate_status_id)
         page = request.GET.get('page', 1)
-        i = pid
+        i = question_paper_id
         paper = get_question_paper(i)
         candidate = CandidateStatus.objects.get(Q(candidate=userid) &
-                                                Q(question_paper=pid) &
-                                                Q(id=tid))
+                                                Q(question_paper=question_paper_id) &
+                                                Q(id=candidate_status_id))
         candidate.attempted = True
         candidate.save()
         if request.method == 'POST':
             if request.GET.get("type") == 'mcq':
                 end_time = candidate.endtime
-                remaining = end_time -  timezone.localtime(timezone.now())
+                remaining = end_time - timezone.localtime(timezone.now())
                 time = remaining.total_seconds()
                 _h, _m, _s = get_remaining_time(time)
                 if request.GET.get('page') and request.POST.get("correct"):
                     ans = request.POST.get("correct")
-                    save_answer(ans, userid, pid, tid)
+                    save_answer(ans, userid, question_paper_id, candidate_status_id)
                     page = int(request.GET.get('page'))
                 else:
                     page = int(request.GET.get('page'))
-                mcq_answered, code_answered = get_answered(userid, pid, tid)
+                mcq_answered, code_answered = get_answered(userid, question_paper_id, candidate_status_id)
                 question = {'mcq': paper['mcq'], 'code': paper["coding"]}
                 question_paper = {}
                 for key, value in question.items():
@@ -125,13 +129,12 @@ def test(request, pid, tid):
                     pages = None
                     request.session['currentpage'] = 1
             elif request.GET.get("type") == 'code':
-                print("Get coding question")
                 end_time = candidate.endtime
                 remaining = end_time - timezone.localtime(timezone.now())
                 time = remaining.total_seconds()
                 _h, _m, _s = get_remaining_time(time)
                 page = int(request.GET.get('page'))
-                mcq_answered, code_answered = get_answered(userid, pid, tid)
+                mcq_answered, code_answered = get_answered(userid, question_paper_id, candidate_status_id)
                 question = {'mcq': paper['mcq'], 'code': paper["coding"]}
                 question_paper = {}
                 for key, value in question.items():
@@ -171,11 +174,11 @@ def test(request, pid, tid):
             request.session['currentpage'] = page
             paginate = _p.page(page)
             pages = dict(paginate)
-        return render(request, 'candidate/test.html', {'home': True, 'pid': pid, 'tid': tid, 'paper_details': paper,
-                                             'paper': question_paper, 'pages': pages,
-                                             'paginator': paginate, 'mcq_answered': mcq_answered,
-                                             'code_answered': code_answered, 'hour': int(_h),
-                                             'minute': int(_m), 'second': int(_s)})
+        return render(request, 'candidate/test.html', {'home': True, 'pid': question_paper_id,
+                                                       'tid': candidate_status_id, 'paper_details': paper,
+                                                       'paper': question_paper, 'pages': pages, 'paginator': paginate,
+                                                       'mcq_answered': mcq_answered, 'code_answered': code_answered,
+                                                       'hour': int(_h), 'minute': int(_m), 'second': int(_s)})
     return redirect("/login")
 
 
@@ -187,7 +190,6 @@ def save_test(request, pid, tid):
     :param tid: Test id
     :return: After final submit it saves the test and return to candidate home
     """
-    print("welcome saving test is called")
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -199,7 +201,6 @@ def save_test(request, pid, tid):
             del request.session['testid']
         except KeyError:
             pass
-        print("TEST SAVED")
         candidate_home(request)
     return redirect("/login")
 
@@ -216,7 +217,7 @@ def ajax_call(request, question_id):
     question_paper_id = request.GET['testid']
     candidate_status_id = request.GET['tid']
     language = request.GET['language']
-    obj_run = RunCode(user_id, code, question_paper_id, candidate_status_id, question_id, language)
+    obj_run = mediator.RunCode(user_id, code, question_paper_id, candidate_status_id, question_id, language)
     _json = obj_run.execute_code()
     save_code(question_id, code, _json, user_id, question_paper_id, candidate_status_id)
     return JsonResponse(_json)

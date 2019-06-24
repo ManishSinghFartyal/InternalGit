@@ -209,7 +209,6 @@ def count_score(user_id, pid, tid):
     :param tid: Test id
     :return: Total score, MCQ score, Code test score
     """
-    print("saving test yo")
     count = 0
     correct = 0
     total = 0

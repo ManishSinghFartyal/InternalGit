@@ -21,7 +21,6 @@ def index(request, next_url=None):
     :param next_url: where to fetch the user after confirmation
     :return: returning the user tp its respective URL
     """
-    print(next_url)
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
@@ -154,7 +153,6 @@ def show_profile(request, profile):
     """
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            print(profile)
             return render(request, 'Nitor/candidateProfile.html', {'candidate': profile})
     return index(request)
 
