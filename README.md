@@ -1,5 +1,5 @@
 # InternalGit<br/>
-## This Project helps in taking online test for the candidates on different coding language and knowledge based MCQ.<br/>
+## This Project helps in taking online test for the candidates on different coding language choosen by candidate itself and knowledge based MCQ.<br/>
 ## Usage<br/>
    This project can replace the manual and typical machine test procedure for a candidate who has came for the interview process. <br/>
    Entering coding test manually to the Computer can be a tediuos task and same for the code evaluation, this test based platform will ease all these restrictions.
