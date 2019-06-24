@@ -2,7 +2,8 @@
 ## This Project helps in taking online test for the candidates on different coding language choosen by candidate itself and knowledge based MCQ.<br/>
 ## Usage<br/>
    This project can replace the manual and typical machine test procedure for a candidate who has came for the interview process. <br/>
-   Entering coding test manually to the Computer can be a tediuos task and same for the code evaluation, this test based platform will ease all these restrictions.
+   Entering coding test manually to the Computer can be a tediuos task and same for the code evaluation, this test based platform will ease all these restrictions.<br>
+   Creating a test report is also a dicey and time consuming so all these processes will be tackeled by the system.
 ## Followings are the functionalities which is provided by the platform :<br/>
 ### (1) From admin point of view admin can:<br/>
         (a) Add and remove candidates.
