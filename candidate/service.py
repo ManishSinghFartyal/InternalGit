@@ -137,7 +137,19 @@ def get_answered(user_id, pid, tid):
     except ValueError:
         mcq_ans = {}
         code_ans = {}
+        get_snippet_for_code(54)
     return mcq_ans, code_ans
+
+
+def get_snippet_for_code(question_id):
+    print("hi")
+    try:
+        question = Question.objects.get(Q(id=question_id))
+        print(question.snippet)
+    except:
+        print("Exception")
+        pass
+
 
 
 def save_time(start_time, user_id, pid, tid):

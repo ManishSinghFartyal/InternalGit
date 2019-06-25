@@ -28,8 +28,13 @@ class JavaCompiler(object):
         compile_command = 'javac ' + compile_code_directory
         run_command = 'java ' + code_directory
         processes.save_code(code, compile_code_directory)
-        answers = processes.get_output_of_code(compile_command)
-        if not answers:
+        # answers = processes.get_output_of_code(compile_command)
+        answers = processes.get_output_of_each_test_case(compile_command, test_cases)
+        error = True
+        for key, value in answers.items():
+            if answers[key]['your_output'] != "":
+                error = False
+        if error:
             answers = processes.get_output_of_each_test_case(run_command, test_cases)
         return answers
 

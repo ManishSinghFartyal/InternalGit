@@ -20,6 +20,7 @@ class CommonProcesses(object):
         _f.close()
 
     def get_output_of_code(self, command, test_case=None):
+        print(command)
         if test_case:
             test_case = str.encode(test_case)
         try:
@@ -36,6 +37,7 @@ class CommonProcesses(object):
             test_case = test_cases[case]['testcase']
             old_output = test_cases[case]['output']
             new_output = self.get_output_of_code(command, test_case)
+            print("Output : ", new_output)
             if new_output.strip() != old_output.strip():
                 answers[case] = {"input": test_case, "result": "incorrect", "your_output": new_output,
                                  "expected_output": old_output}
