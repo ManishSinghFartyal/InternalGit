@@ -41,7 +41,11 @@ def admin_home(request):
     user = request.user
     if user.is_authenticated:
         if user.is_superuser:
-            return render(request, 'Nitor/adminHome.html', {'home': True})
+            return render(request, 'Nitor/adminHome.html', {'home': True, 'count': get_total_candidates(),
+                                                            'assigned': get_total_assigned_test(),
+                                                            'attempted': get_total_attempted_test(),
+                                                            'top_scorer': get_top_scorer()
+                                                            })
         return HttpResponseRedirect('/candidate')
     return redirect('/login')
 
@@ -365,7 +369,7 @@ def assign_test(request):
                         code_ans = {}
                         if assigned_date == "" or assigned_test is None:
                             messages.error(request, ' Either date of test or exam not selected.')
-                            return render(request, 'Nitor/assignTest.html', context)
+                            return render(request, 'Nitor/assignTestToCandidate.html', context)
                         _c = CandidateStatus(candidate=i, exam_date=assigned_date,
                                              question_paper=assigned_test, mcq_ans=mcq_ans,
                                              code_ans=code_ans, total_score=total_score,
@@ -529,8 +533,10 @@ def assign_test2(request, name="ALL"):
     if user.is_authenticated:
         if user.is_superuser:
             all_candidate_status = get_all_candidate_status()
-            context = {'candidates': get_all_candidates(), 'papers': QuestionPaper.objects.all(),
-                       "all_candidate_status": all_candidate_status}
+            context = {'papers': QuestionPaper.objects.all(),
+                       "all_candidate_status": all_candidate_status,
+                       'candidates': User.objects.filter(is_superuser=False),
+                       }
             if request.method == 'POST':
                 ids = request.POST.get('candidate')                
                 assigned_test = request.POST.get("paper")
@@ -540,7 +546,7 @@ def assign_test2(request, name="ALL"):
                 code_ans = {}
                 if assigned_date == "" or assigned_test is None or ids is None:
                     messages.error(request, ' Select all information.')
-                    return render(request, 'Nitor/assignTest.html', context)
+                    return render(request, 'Nitor/assignTestToCandidate.html', context)
                 _c = CandidateStatus(candidate=ids, exam_date=assigned_date,
                                      question_paper=assigned_test, mcq_ans=mcq_ans, code_ans=code_ans,
                                      total_score=total_score, total_code_score=code_score,
@@ -557,4 +563,3 @@ def error404(request):
 
 def error500(request):
     return render(request, 'Nitor/error_404.html')
-

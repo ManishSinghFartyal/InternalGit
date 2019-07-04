@@ -1,6 +1,7 @@
 from . import service
 from django.conf import settings
 MEDIA = settings.MEDIA_ROOT
+from subprocess import STDOUT
 
 
 class JavaCompiler(object):
@@ -35,7 +36,7 @@ class JavaCompiler(object):
             if answers[key]['your_output'] != "":
                 error = False
         if error:
-            answers = processes.get_output_of_each_test_case(run_command, test_cases)
+            answers = processes.get_output_of_each_test_case(run_command, test_cases, None)
         return answers
 
     def get_java_class_name(self, code):

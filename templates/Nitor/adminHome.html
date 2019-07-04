@@ -1,8 +1,8 @@
-{% extends 'main.html' %}
+{% extends 'main2.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% load static %}
-<style>  
+<style>
   .img{
     transition:  1s;
   }
@@ -13,14 +13,14 @@
   .font-sheet{
    font-family: 'Righteous';
    font-size: 30px;
- }  
+ }
   .font-sheet-header{
      font-family: 'Monofett';
      font-size: 50px;
      font-weight: bolder;
   }
   .content{
-  margin-top: -10px !important; 
+  margin-top: -10px !important;
   }
   footer{
   text-align: center !important;
@@ -31,56 +31,130 @@
 
  <form>
   {% csrf_token %}
-  <div class="main-panel">
-   <div class="content"> 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12 ">
-          <div class="card" >
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'list_candidates' %}" title="Show all candidates"><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span class="font-sheet" style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>
+   <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">group</i>
+                  </div>
+                  <p class="card-category">Total Candidates</p>
+                  <h3 class="card-title">{{count}}
+                  </h3>
                 </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'addUser' %}" title="Add new candidate"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'assignTest' name='ALL'%}" title="Assign test to candidates"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="fa fa fa-trash"></i>
+                    <a href="#">Remove candidate</a>
+                  </div>
                 </div>
               </div>
-              <br>
-              <br>
-              <hr>
-              <br>
-              <br>
-              <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'questionPapers' %}" title="Show all question paper created"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                  </div>
+                  <p class="card-category">Total test assigned</p>
+                  <h3 class="card-title">{{assigned}}</h3>
                 </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'listQuestions' %}" title="Show all questions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>
-                </div> 
-                <div class="col-md-1"></div>
-                <div class="col-md-3 text-center">
-                  <a href="{% url 'addQuestion' %}" title="Add new questions"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Assigned
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">thumb_up</i>
+                  </div>
+                  <p class="card-category">Total test attempted</p>
+                  <h3 class="card-title">{{attempted}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">thumb_up</i>Attempt completed
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row text-right">
-            
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <span class="nav-tabs-title">Top scorer:</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-category">Name : {{top_scorer.profile.fname}} {{top_scorer.profile.lname}}</h3>
+                  <h4 class="card-category">email id :  {{top_scorer.profile.email}} </h4>
+                  <h4 class="card-category">Score :  {{top_scorer.status.total_score}} </h4>
+                  <h4 class="card-category"><a href="/showscore/{{top_scorer.status.candidate}}/{{top_scorer.status.question_paper}}/{{top_scorer.status.id}}">View</a></h4>
+              </div>
+            </div>
           </div>
-        </div>            
-      </div>          
-    </div>
-  </div>
-</div>     
+        </div>
+      </div>
+<!--  <div class="main-panel">-->
+<!--   <div class="content">-->
+<!--    <div class="container-fluid">-->
+<!--      <div class="row">-->
+<!--        <div class="col-md-12 ">-->
+<!--          <div class="card" >-->
+<!--            <div class="card-body">-->
+<!--              <div class="row">-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'list_candidates' %}" title="Show all candidates"><img class=img src="{% static 'admin/img/list.png' %}" width="100px" height="100px"><br><span class="font-sheet" style="font-weight: bold;color: #1119;font-size: 16px;">Candidates list</span></a>-->
+<!--                </div>-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'addUser' %}" title="Add new candidate"><img class=img src="{% static 'admin/img/addEmployee.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add candidate</span></a>-->
+<!--                </div>-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'assignTest' name='ALL'%}" title="Assign test to candidates"><img class=img src="{% static 'admin/img/assignTest.jpg' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Assign test</span></a>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <br>-->
+<!--              <br>-->
+<!--              <hr>-->
+<!--              <br>-->
+<!--              <br>-->
+<!--              <div class="row">-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'questionPapers' %}" title="Show all question paper created"><img  class=img  src="{% static 'admin/img/questionPaperList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">List question paper</span></a>-->
+<!--                </div>-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'listQuestions' %}" title="Show all questions"><img class=img src="{% static 'admin/img/questionsList.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Questions list</span></a>-->
+<!--                </div>-->
+<!--                <div class="col-md-1"></div>-->
+<!--                <div class="col-md-3 text-center">-->
+<!--                  <a href="{% url 'addQuestion' %}" title="Add new questions"><img class=img src="{% static 'admin/img/addQuestion.png' %}" width="100px" height="100px"><br><span class="font-sheet"  style="font-weight: bold;color: #1119;font-size: 16px;">Add question</span></a>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row text-right">-->
+
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 </form>
 </div>
 <script type="text/javascript">

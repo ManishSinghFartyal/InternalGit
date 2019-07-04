@@ -40,7 +40,7 @@ def candidate_home(request):
 
 def start_test(request, question_paper_id, candidate_status_id):
     """
-    Starts test
+    Starts test to start activity of candidate
     :param request: contains the details of the user who requested the URL
     :param question_paper_id: Paper id
     :param candidate_status_id: test id

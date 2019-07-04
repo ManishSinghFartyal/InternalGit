@@ -109,9 +109,10 @@
 
                <!-- If question is MCQ type -->
                {% if va.type == 'mcq'%}
-               <textarea class="form-control " style="user-select: none; background: #fff1;font-family: monospace;font-weight: bolder;border: none; color: red;padding: 5px 5px 5px 5px;font-size: 17px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %} 
+               <textarea class="form-control " style="user-select: none; background: #fff6;font-family: monospace;font-weight: bolder;border: none; color: red;padding: 5px 5px 5px 5px;font-size: 17px;" {% if va.desc|length > 250 %} rows="14" {% elif va.desc|length > 180 %}
                 rows = "7" {% elif va.desc|length > 100 %} 
-                rows = "5" {% else %} rows="2" {% endif %} cols="60" disabled="true" style="border: none;background:none;">{{va.desc}}</textarea>
+                rows = "5" {% else %} rows="2" {% endif %} cols="60" disabled="true" style="border: none;background:none;">{{va.desc}}
+               </textarea>
                 {% for k,v in va.options.items %}
                 <br>
                 <div>

@@ -166,6 +166,7 @@ def get_all_candidates():
     for candidate in candidates_list:
         if candidate.role == 2:
             candidate_dict[candidate.id] = get_candidate_profile(candidate.user_id)
+
     return candidate_dict
 
 
@@ -402,8 +403,51 @@ def get_candidate_status2(_id, candidate_id, question_id):
                             'paper_title': title, 'date': i.exam_date, 'attempted': i.attempted,
                             'score': i.score, 'time_taken': i.total_time,
                             'mcq_correct': i.correct_mcq, 'coding_correct': i.correct_ct,
-                            'total_score': i.total_score, 'total_mcq_score':i.total_mcq_score,
+                            'total_score': i.total_score, 'total_mcq_score': i.total_mcq_score,
                             'total_code_score': i.total_code_score, 'max_time': max_time}
     except ObjectDoesNotExist:
         candidate_status = {}
     return candidate_status
+
+
+def get_total_candidates():
+    """
+    Returns number of candidates registered till date
+    :return:
+    """
+    count = Profile.objects.all().count()
+    return count
+
+
+def get_total_assigned_test():
+    """
+
+    :return:
+    """
+    count = CandidateStatus.objects.all().count()
+    return count
+
+
+def get_total_attempted_test():
+    """
+
+    :return:
+    """
+    count = CandidateStatus.objects.filter(attempted=True).count()
+    return count
+
+
+def get_top_scorer():
+    """
+
+    :return:
+    """
+    score = 0
+    top_scorer = None
+    count = CandidateStatus.objects.filter(attempted=True)
+    for candidate in count:
+        if score < candidate.total_score:
+            top_scorer = candidate
+    top_scorer = {'status': top_scorer, 'profile': get_candidate_profile(top_scorer.candidate)}
+    return top_scorer
+
