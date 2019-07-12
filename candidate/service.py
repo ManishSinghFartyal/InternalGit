@@ -243,3 +243,7 @@ def count_score(user_id, pid, tid):
         candidate.correct_ct = total
     candidate.score = candidate.correct_mcq + candidate.correct_ct
     candidate.save()
+
+
+def get_remaining_time_test():
+    return "Manish"

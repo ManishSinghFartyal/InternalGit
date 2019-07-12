@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'nitortest',
     'crispy_forms',
     'candidate',
+    'health_check',                             # required
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'   

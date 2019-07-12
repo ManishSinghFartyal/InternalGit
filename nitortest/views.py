@@ -563,3 +563,9 @@ def error404(request):
 
 def error500(request):
     return render(request, 'Nitor/error_404.html')
+
+
+
+
+
+

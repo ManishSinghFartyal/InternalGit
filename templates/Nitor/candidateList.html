@@ -22,39 +22,37 @@
     }
 </style>
 <title>{%block title%}List of candidates - Nitor infotech{% endblock %}</title>
-<div class="wrapper" id="main">
-      <div class="row">
-        <div class="col-md-12 left" id="main">
-          <div class="card text-center" >
+<div class="row">
+    <div class="col-md-12 left" id="main">
+        <div class="card text-center" >
             <div class="card-header card-header-primary">
-              <h4 class="card-title left">Candidate list</h4>
+                <h4 class="card-title left">Candidate list</h4>
             </div>
             <div class="card-body">
-              {% for key,values in candidates.items %}
-              <div class="row text-left" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 10px 10px 10px 10px;box-shadow: 2px 2px 10px #1119;">
-                <div class="col-md-2" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:10px;border-bottom-right-radius:10px;padding: 10px 10px 10px 10px;">
-                  <img src="{% static 'admin/img/candidate.png' %}" width="60px" height="50px" style="border-radius: 10px;">
-                </div>
-                <div class="col-md-8">
-                  <div class="row text-center">
-                    <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Name : {{values.fname}}&nbsp;{{values.lname}}</font></div>
-                      <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;"><span style="font-family: ubuntu;">email : {{values.email}}</span></font></div>
-                      <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;"><span style="font-family: ubuntu;">contact : {{values.contact}}</span></font></div>
+                {% for key,values in candidates.items %}
+                <div class="row text-left" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:15px;border-bottom-right-radius:15px;padding: 10px 10px 10px 10px;box-shadow: 2px 2px 10px #1119;">
+                    <div class="col-md-2" style="border-top-left-radius:50px;border-bottom-left-radius:50px;border-top-right-radius:10px;border-bottom-right-radius:10px;padding: 10px 10px 10px 10px;">
+                        <img src="{% static 'admin/img/candidate.png' %}" width="60px" height="50px" style="border-radius: 10px;">
                     </div>
-                  </div>
-                  <div class="col-md-2  text-center">
-                    <div class="row text-center" style="margin-top:30px;">
-                      <a class="text-center" href="/candidatestatus/{{values.id}}" title="Show candidate record">
-                       <i class="menu-icon fa fa-eye "></i>
-                     </a>
-                   </div>
-                 </div>
-               </div>
-               <br>
-               {% endfor %}
-             </div>
-           </div>
-         </div>
-       </div>
+                    <div class="col-md-8">
+                        <div class="row text-center">
+                            <div class="col-md-12"><font style="font-family: sans-serif; font-size: 16px;font-weight: bolder;color: black;">Name : {{values.fname}}&nbsp;{{values.lname}}</font></div>
+                            <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;"><span style="font-family: ubuntu;">email : {{values.email}}</span></font></div>
+                            <div class="col-md-12"><font style="font-family: sans-serif; font-size: 13px;color: black;"><span style="font-family: ubuntu;">contact : {{values.contact}}</span></font></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2  text-center">
+                        <div class="row text-center" style="margin-top:30px;">
+                            <a class="text-center" href="/candidatestatus/{{values.id}}" title="Show candidate record">
+                                <i class="menu-icon fa fa-eye "></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

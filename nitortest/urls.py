@@ -4,6 +4,7 @@
 from django.conf.urls import url
 from django.urls import path
 from nitortest import views
+from django.conf.urls import include
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -28,4 +29,5 @@ urlpatterns = [
     path('listQuestions/', views.list_questions, name='listQuestions'),
     path('removeQue/<que_id>', views.remove_question, name='remove_question'),
     path('assignTest/<name>', views.assign_test2, name='assignTest'),
+    path('health/', include('health_check.urls')),
 ]

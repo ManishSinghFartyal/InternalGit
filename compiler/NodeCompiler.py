@@ -3,6 +3,7 @@ from django.conf import settings
 MEDIA = settings.MEDIA_ROOT
 from subprocess import STDOUT
 
+
 class NodeInterpreter(object):
     extension = None
 

@@ -421,7 +421,7 @@ def get_total_candidates():
 
 def get_total_assigned_test():
     """
-
+    returns number of test assigned to candidates
     :return:
     """
     count = CandidateStatus.objects.all().count()
@@ -430,7 +430,7 @@ def get_total_assigned_test():
 
 def get_total_attempted_test():
     """
-
+    returns the number of test attempted by candidates
     :return:
     """
     count = CandidateStatus.objects.filter(attempted=True).count()
@@ -439,7 +439,7 @@ def get_total_attempted_test():
 
 def get_top_scorer():
     """
-
+    Returns the candidate's details whom score is the highest
     :return:
     """
     score = 0
@@ -450,4 +450,6 @@ def get_top_scorer():
             top_scorer = candidate
     top_scorer = {'status': top_scorer, 'profile': get_candidate_profile(top_scorer.candidate)}
     return top_scorer
+
+
 

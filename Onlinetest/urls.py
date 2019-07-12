@@ -15,16 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url,include
+from django.conf.urls import include
 from django.conf.urls import handler404, handler500
 from nitortest import views as nitor_views
 
 urlpatterns = [
 	path('', include('nitortest.urls')),
 	path('candidate/',  include('candidate.urls')),
-	# url('', include('nitortest.urls')),
-	# url('candidate/', include('candidate.urls')),
-    path('admin/', admin.site.urls),
+	path('admin/', admin.site.urls),
+	path('health/', include('health_check.urls')),
 ]
 
 handler404 = nitor_views.error404

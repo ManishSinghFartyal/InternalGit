@@ -2,7 +2,8 @@
 
 from django.conf.urls import url
 from candidate import views
-from django.urls import path
+from django.urls import path, include
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('test/<question_paper_id>/<candidate_status_id>', views.test, name='test'),
     path('candidateHome/', views.candidate_home, name='candidate_home'),
     path('logout/', views.user_logout, name='logout'),
+    path('health/', include('health_check.urls')),
 ]

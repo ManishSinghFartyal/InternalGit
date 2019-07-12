@@ -47,7 +47,7 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="fa fa fa-trash"></i>
-                    <a href="#">Remove candidate</a>
+                    <a href="#" >Remove candidate</a>
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@
                   <h3 class="card-category">Name : {{top_scorer.profile.fname}} {{top_scorer.profile.lname}}</h3>
                   <h4 class="card-category">email id :  {{top_scorer.profile.email}} </h4>
                   <h4 class="card-category">Score :  {{top_scorer.status.total_score}} </h4>
-                  <h4 class="card-category"><a href="/showscore/{{top_scorer.status.candidate}}/{{top_scorer.status.question_paper}}/{{top_scorer.status.id}}">View</a></h4>
+                  <h4 class="card-category"><a class="btn btn-outline-success btn-sm" href="/showscore/{{top_scorer.status.candidate}}/{{top_scorer.status.question_paper}}/{{top_scorer.status.id}}">View</a></h4>
               </div>
             </div>
           </div>

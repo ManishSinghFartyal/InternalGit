@@ -205,17 +205,27 @@ function removeOptions(id1,id2,id3,id4){
 
 // Code to show respective question form when selecting type of question 
 function showAddQuestion(){
-  type=document.getElementById('qtype').value; 
+
+  type=document.getElementById('qtype').value;
   if(type == 'ct')
   {
-    document.getElementById('addct').style.visibility = "visible"    
-    document.getElementById('addmcq').style.visibility = "hidden" 
+    height = document.getElementById("codeTest").offsetHeight;
+    width = document.getElementById("resize").offsetWidth;
+    document.getElementById("resize").style.height = height - 20 +'px';
+    document.getElementById("codeTest").style.width = width - 90 +'px';
+    document.getElementById('addct').style.visibility = "visible"
+    document.getElementById('addmcq').style.visibility = "hidden"
     document.getElementById('id_question').setAttribute('required','false')
     document.getElementById('id_title').setAttribute('required','true')
     document.getElementById('id_description').setAttribute('required','true')
     document.getElementById('id_snippet').setAttribute('required','true')
   }    
   else if(type == 'mcq'){
+
+    height = document.getElementById("mcqTest").offsetHeight;
+    width = document.getElementById("resize").offsetWidth;
+    document.getElementById("resize").style.height = height - 20 +'px';
+    document.getElementById("mcqTest").style.width = width - 90 +'px';
     document.getElementById('addmcq').style.visibility = "visible" 
     document.getElementById('addct').style.visibility = "hidden"
     document.getElementById('id_title').setAttribute('required','false')

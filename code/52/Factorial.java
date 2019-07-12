@@ -5,6 +5,7 @@ class Factorial
    public static void main(String args[])
    {
       int n, c, fact = 1;
+
       Scanner in = new Scanner(System.in);
      
       n = in.nextInt();
@@ -19,5 +20,4 @@ class Factorial
          System.out.println(fact);
       }
    }
-}
-                              
+}		
